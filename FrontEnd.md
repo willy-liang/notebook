@@ -1,0 +1,8278 @@
+# 网络请求
+
+## HTTP
+
+### http状态码
+
+#### **`1XX`：信息状态码**
+
+- `100 Continue` 继续，一般在发送`post`请求时，已发送了`http header`之后服务端将返回此信息，表示确认，之后发送具体参数信息。
+
+#### **`2XX`：成功状态码**
+
+- `200 OK` 正常返回信息。
+- `201 Created` 请求成功并且服务器创建了新的资源。
+- `202 Accepted` 服务器已接受请求，但尚未处理。
+- `204 No Content` 响应数据没有实体主体部分。
+
+#### **`3XX`：重定向**
+
+- `301 Moved Permanently`请求的网页已永久移动到新位置。
+- `302 Found` 临时性重定向。
+- `303 See Other` 查看其它地址。与301类似。使用GET和POST请求查看
+- `304 Not Modified`自从上次请求后，所请求的资源未修改过。
+
+#### **`4XX`：客户端错误**
+
+- `400 Bad Request` 服务器无法理解请求的格式，客户端不应当尝试再次使用相同的内容发起请求。
+- `401 Unauthorized` 请求未授权。
+- `403 Forbidden` 禁止访问。
+- `404 Not Found` 找不到如何与 URI 相匹配的资源。
+- `405 Method Not Allowed` 客户端请求中的方法被禁止。
+- `410 Gone` 客户端请求的资源已经不存在。
+
+#### **`5XX`: 服务器错误**
+
+- `500 Internal Server Error`最常见的服务器端错误。
+- `501 Not Implemented` 不支持请求功能。
+- `502 Bad Gateway` 作为网关或者代理工作的服务器尝试执行请求时，从远程服务器接收到了一个无效的响应。
+- `503 Service Unavailable` 服务器端暂时无法处理请求（可能是过载或维护）。
+- `504 Gateway Time-out` 网关超时，未及时获取请求。
+
+## webSocket
+
+- `WebSocket`是`HTML5`提供在单个`TCP`上连接进行 **全双工通讯**的协议
+- 很多网站为了实现数据推送，所用的技术都是ajax轮询。轮询是在特定的时间间隔，由浏览器主动发起请求，将服务器的数据拉回来。轮询需要不断的向服务器发送请求，会占用很多带宽和服务器资源。WebSocket建立TCP连接后，服务器可以主动给客户端传递数据，能够更好的节省服务器资源和带宽，实现更实时的数据通讯。
+
+```js
+// 创建 WebSocket 对象
+var Socket = new WebSocket(url, [protocol] ); 
+
+// WebSocket 属性
+Socket.readyState // 只读属性readyState表示连接状态
+// 0 - 连接尚未建立
+// 1 - 连接已建立，可以进行通信
+// 2 - 连接正在进行关闭
+// 3 - 连接已经关闭或者连接不能打开
+
+// WebSocket 事件
+Socket.onopen // 连接建立时触发
+Socket.onmessage // 客户端接收服务端数据时触发
+Socket.onerror // 通信发生错误时触发
+Socket.onclose // 连接关闭时触发
+
+// WebSocket 方法
+Socket.send(JSON.stringify()) // 使用连接发送数据	注意：因为数据需要JSON对象格式，所以需要转换
+Socket.close() // 关闭连接
+```
+
+# HTML
+
+## 通用
+
+### HTML的优先级别
+
+优先级由高到低：!important>行内样式>ID选择器>类选择器>标签选择器>继承样式
+
+### 通用类名
+
+![HTML_通用类名](image/HTML_通用类名.png)
+
+### 标签语义化
+
+概念：根据内容的结构化（内容语义化），选择合适的标签（代码语义化）
+含义：
+         1:网页结构合理
+    2:有利于seo:和搜索引擎建立良好沟通，有了良好的结构和语义，网页内容自然容易被搜索引擎抓取；
+    3:方便其他设备解析（如屏幕阅读器、盲人阅读器、移动设备）
+    4:便于团队开发和维护
+注意事项：
+         1：尽可能少的使用无语义的标签div和span；
+         2：在语义不明显时，既可以使用div或者p时，尽量用p。要使用有语义的标签。
+         3：不要使用纯样式标签，如：b、font、u等，改用css设置。
+         4：需要强调的文本，可以包含在strong或者em标签中strong默认样式是加粗（不要用b），em是斜体（不用i）；
+
+### 图标字体 icontfont
+
+一般使用阿里巴巴的图库：www.icontfont.cn
+
+## 标签
+
+### meta
+
+语法：<meta charset="utf-8"> 防止页面乱码           charset:字符集    utf-8:编码格式
+
+作用：是HTML语言头部的一个辅助性标签，我们可以定义页面编码语言、搜索引擎优化、自动刷新并指向新的页面、控制页面缓冲、响应式视窗等
+
+注意：该标签中的关键字不是给用户看的
+
+### link
+
+1、 链接外部文件，比如css文件
+
+2、 设置网页图标
+
+### 列表`ul、ol、il`
+
+有序列表ol>li      无序列表:ul>li      自定义列表:dl>dt>dd   (dt中只能包含行内元素span/a)
+
+列表项的标志类型：list-style-type: decimal;
+
+列表标志位置：list-style-position: inside;//包含向右缩进到文本内部
+
+列表项图像：list-style-image: url(arr.gif);
+
+### 表格table
+
+- cellspacing 设置td与td之间的距离
+
+- cellpadding 设置内容与td左侧的距离
+
+- caption:表格标题
+
+- 合并边框border-collaspe:collapse;
+
+- 文本对齐： text-align 属性设置水平对齐方式 ；vertical-align 属性设置垂直对齐方式
+- 给tr或者td设置align属性，可以让其内容居中
+- 合并单元格： ☞ 横向合并：colspan         ☞ 纵向合并：rowspan
+
+> 注意：   给table标签设置align属性，只能让整个标签居中，内容不会居中；
+
+```html
+表格结构：<thead></thead>		<tbody></tbody>		<tfoot></tfoot>
+```
+
+![表格、输入框总结](image/%E8%A1%A8%E6%A0%BC%E3%80%81%E8%BE%93%E5%85%A5%E6%A1%86%E6%80%BB%E7%BB%93.png)
+
+### form
+
+- 作用：收集用户数据
+
+- 组成：提示信息 | 表单控件    | 表单域
+
+**1、表单域：<form></form>**
+
+- action : 设置后台处理数据的后台程序    
+- method：提交数据给后台程序的方式
+- get提交数据： 会将数据显示在地址栏中
+- post提交数据： 会通过后台提交数据（安全性）
+
+2、**表单控件**
+
+![image-20200919201520926](image/image-20200919201520926.png)
+
+分组控件和标题如下：
+
+![image-20200919201642575](image/image-20200919201642575.png)
+
+### 内联框架iframe
+
+### animation
+
+@keyframes关键帧动画
+
+### 盒子模型 `div`
+
+**盒子边框问题：**
+
+原本两个盒子都占有边距，如果相邻，则需要把右盒子定义margin:（负值边框宽度）;
+
+**盒子大小计算问题：**
+
+原本盒子大小是盒子内容（即是定义的宽度width跟高度height）+盒子边框大小（盒子边距border）
+如果想改变盒子计算方式，让其总大小为盒子内容大小，则需定义 box-sizing:border-box;
+
+**计算盒子宽度：calc()函数**
+
+### 弹性模型 `display：flex`
+
+- 可在不同方向排列元素；重新排列元素的显示顺序；更改元素的对齐方式；动态地将元素装入容器。
+
+- > 弹性布局默认不改变项目的宽度，但是它默认改变项目的高度。如果项目没有显式指定高度，就将占据容器的所有高度。
+
+![image-20210525110650024](image/image-20210525110650024.png)
+
+![image-20210525110836359](image/image-20210525110836359.png)
+
+## H5
+
+### 变形transform（旋转、缩放、移动、倾斜）
+
+- 旋转rotate(<angle>)    //angle为旋转角度，用deg作单位，如为负数，则表示逆时针旋转
+- 缩放`scale(x,y)     scaleX(x)      scaleY(y)      //x,y为缩放倍数，值>1为放大，值<1为缩小
+- 移动translate(x,y)      translateX(x)  translate(y)   //x,y为x轴y轴移动的距离
+- 扭曲skew(x,y)     skewX(x)      skewY(y)      //x,y为数值，以deg作单位，水平/垂直
+- 矩阵matrix(n,n,n,n,n,n)      matrix3d(n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n)      //2d为6值，3d为16值
+- 3D  translate3d(x,y,z)    scale3d(x,y,z)    rotate3d(x,y,z,angle)
+- perspective(n)     // 为3D 转换元素定义透视视图
+
+```css
+{//解决transform的兼容性问题    transform多个属性可以并写且不区分前后
+	transform:rotate(7deg) scale(2,2) translate(100px,100px);
+	-ms-transform:rotate(7deg) scale(2,2) translate(100px,100px); /* IE 9 */
+	-moz-transform:rotate(7deg) scale(2,2) translate(100px,100px); /* Firefox */
+	-webkit-transform:rotate(7deg) scale(2,2) translate(100px,100px); /* Safari and Chrome */
+	-o-transform:rotate(7deg) scale(2,2) translate(100px,100px); /* Opera */
+}
+```
+
+### canvas画布
+
+rect(上,右,下,左) 裁剪
+
+```js
+var canvas = document.getElementById("canvas");
+canvas.width = 800;
+canvas.height = 600;
+canvas.style.border = "1px solid #000";
+
+// 创建画笔
+var context = canvas.getContext("2d");
+
+//绘制圆形
+/*  context.arc(x,y,radius,startAngle,endAngle,bAntiClockwise);	
+	x,y表示圆心，radius表示半径
+	startAngle开始的度数（弧度）,endAngle结束的度数
+	bAntiClockwise：true表示逆时针,false顺时针	*/
+
+context.arc(400,300,100,Math.PI/3,3*Math.PI/2,true);
+context.arc(200,300,100,0,2*Math.PI,false);
+context.moveTo(100,100);
+context.lineTo(400,100);
+context.lineTo(400,200);
+context.lineTo(100,200);
+context.closePath();
+// context.stroke();
+// context.rect(100,100,300,100);
+// context.strokeRect(100,100,300,100);
+//裁剪区域clip():没有描边的路径
+context.clip();
+// 填充矩形
+context.fillRect(0,0,800,600);
+```
+
+### SVG
+
+### 滤镜：filter（过渡效果）
+
+```css
+// filter:函数(); 
+filter:blur(5px);  //blur模糊处理，数值越大越模糊
+Filter : .8s ; //代表过渡时间为0.8s
+```
+
+## CSS
+
+介绍
+
+- css指的是层叠样式表，也称级联样式表。
+- CSS引入方式：行内式、嵌入式、链接式。
+
+### **CSS优先级**
+
+- !important > 内联样式 > id > class > 标签 > 通配符 > 继承 > 默认
+- 内联样式'1000'；ID选择器'100'；类、伪类和属性选择器'10'；标签选择器和伪元素选择器'1'；通用选择器(*)、子选择器(>)、相邻同胞选择器(+)权值为0；且在同权重下，前面的会被后面的样式覆盖。
+
+### **图片背景background**
+
+```css
+//背景平铺
+background-repeat:repeat|no-repeat|repeat-x|repeat-y;
+
+//背景图片位置	方位名词有：top|center|bottom|left|right
+background-position:x y;
+
+//背景图像固定
+background-attachment:scroll|fixed;
+
+//背景复合写法background:背景颜色 背景图片地址 背景平铺 背景图像滚动 背景图片位置
+background:transprent url('img.jpg') repeat-y fixed top;	//背景透明，图像固定，图片在位置上方，向y轴平铺
+```
+
+### **边框:border**
+
+- border:border-width | border-style | border-color;
+
+- border-collapse控制浏览器绘制表格边框方式。border-collapse:collapse;//表示香菱边框合并一起。
+
+- 边框会额外增加盒子的实际大小。解决方案：①测量盒子时不量边框；②如果测量时包含边框，则需width/height减去边框宽度。
+
+
+```css
+//CSS绘制三角形
+.triangle{
+    width:0;
+    height:0;
+    border-right:100px solid transparent;
+    border-left:100px solid transparent;
+    border-bottom:100px solid #3f6a6a;
+}
+
+//HTML
+<div>用边框绘制三角形</div>
+<div class="triangle"><div>
+```
+
+### **内边距:padding**
+
+内边距为设置边框与内容之间的距离。
+
+- 问题：当给盒子指定padding值后，内容和边框有了距离，添加了内边距；padding影响了盒子实际的大小。
+- 解决方案：如果保证盒子跟效果图大小保持一致，则让width/height减去多出的内边距大小。
+
+### 外边距margin
+
+外边距为控制盒子和盒子之间的距离。
+
+**外边距让块级盒子水平居中的条件：**
+
+- ①盒子必须制定宽度width；
+- ②盒子的左右外边距都设置为值auto。
+
+**使用margin属性定义块元素的垂直边距时，可能会出现外边距的合并**，主要有两种情况：
+
+- ①相邻元素垂直外边距的合并（尽量不给上下相邻两盒子都设置外边距）；
+- ②嵌套块元素垂直外边距的塌陷
+  - 1.可为父元素定义上边框；
+  - 2.可为父元素定义上内边距；
+  - 3.可谓父元素添加overflow:hidden。
+
+**清除内外边距：padding:0;margin:0;**
+
+**事先定义盒模型的尺寸解析方式box-sizing**
+
+- box-sizing:content-box | border-box | inherit
+- content-box：默认值，实际的宽度和高度=border+padding+设置内容的宽高;
+- border-box:设置的内容宽度=实际的宽度和高度；
+- inherit：此值使元素继承父元素的盒模型模式。
+
+### 浮动float
+
+#### **清除浮动方式**
+
+```css/html
+//1.额外标签法也称隔墙法，是W3C推荐做法；
+<div style="clear:both"></div>
+
+//2.父级添加overflow属性；(会无法显示溢出部分)
+overflow:hidden/scroll/auto;
+
+//3.父级添加after伪元素；双伪元素清除浮动
+.clearfix:before,.clearfix:after{
+	content:'';
+	display:table;
+}
+.clearfix:after{
+	clear:both;
+}
+.clearfix{
+	zoom:1;
+}
+
+//4.父级添加双伪元素。
+.clearfix:after{
+	content:'';
+	display:block;
+	height:0;
+	cleat:both;
+	visibility:hidden;
+}
+.clearfix{
+	zoom:1;
+}
+```
+
+- 定位：position:relative | absolute | fixed;
+
+  - 定位叠放次序：z-index:（数值越大，盒子越靠上）---只有定位的盒子才能使用
+
+### 元素的显示模式转换display
+
+`display:block/inline/inline-block;`
+
+![HTML_CSS_display](image/HTML_CSS_display.png)
+
+### lang属性
+
+设置lang属性的好处：
+
+- 根据lang属性来设定不同语言的css样式，或者字体
+- 告诉搜索引擎做精确的识别
+- 让语法检查程序做语言识别
+- 帮助翻译工具做识别
+- 帮助网页阅读程序做识别等等 
+
+### font属性
+
+font顺序 : font-style | font-variant | font-weight | font-size | line-height | font-family
+
+-->翻译为样式、异体、粗细、大小/行高（一般设置为size+10px）、字体系列
+
+**注**：简写时，font-size和line-height只能通过斜杠/组成一个值，不能分开写。其中不需要设置的属性可省略（取默认值为normal），但必须保留font-size和font-family属性，否则font属性将不起作用。
+
+**`600<=font-weight<=900`时，字体会自动加粗**
+
+`p {font: italic bold 20px/24px "微软雅黑";}`
+
+### 文本属性text
+
+```
+1、字间距：letter-spacing和word-spacing
+	-->letter-spacing为每个字符之间的空白距离，word-spacing为单词之间的空白距离
+
+2、行高：line-height（一般设置为size+10px）
+
+3、文本书写方向：direction：规定文本的方向 / 书写方向。
+	-->ltr 默认。文本方向从左到右。      rtl 文本方向从右到左
+
+4、文本轮廓：text-shadow:2px 2px 2px #fff
+		-->X轴，Y轴，模糊程度(不可是负值)，阴影颜色 ；4个参数中，X和Y是必须的
+
+5、添加到文本的修饰：text-decoration（下划线、上划线、删除线等）
+text-decoration:overline/line-through/underline
+
+5、文本排列：text-align:left/center/right
+
+7、段落首行缩进：text-indent
+
+8、控制文本大小写：text-transform
+
+9、指定元素内的空白怎样处理：white-space: pre/nowrap
+```
+
+### 计量单位
+
+#### **CSS常见单位**
+
+```
+1. px：绝对单位。像素的大小是固定的，页面按照精准样式展示。
+
+2. em：相对单位。基准点为父节点字体的大小，值不固定，会继承父级元素的字体大小，代表倍数；
+em = 希望得到的像素大小 / 父元素字体像素大小
+浏览器的默认字体高都是 16px，未经调整的浏览器显示1em=16px。
+
+3. ex：相对长度单位。相对于字符**“x”的高度。通常为字体高度的一半**。
+
+4. rem：相对单位，值并不是固定的，始终是基于根元素 <html> 的，也代表倍数。
+
+5. vw：viewpoint width，视窗宽度，1vw等于视窗宽度的1%。
+
+6. vh：viewpoint height，视窗高度，1vh等于视窗高度的1%。
+
+7. %:百分比
+```
+
+#### **字体尺寸**
+
+```
+1. xx-small最小
+2. x-small较小
+3. small小
+4. medium中等
+5. large大
+6. x-large较大
+7. xx-large最大
+```
+
+#### **单行文字垂直居中**
+
+如故宫行高小于盒子高度，文字会偏上，如果行高大于盒子高度，则文字偏下。
+
+### CSS选择器
+
+- 简单选择器：{根据名称、id、类来选取元素}
+- 组合选择器：{根据他们之间的特定关系来选取元素}
+- 伪类选择器：{根据特定的状态选取元素}
+- 伪元素选择器：{选取元素的一部分并设置其样式}
+- 属性选择器：{根据属性或属性值来获取元素}，如 a[target]
+
+#### 样式选择器
+
+```
+1、td[title="a"]
+	-->title属性值为a的td元素会被选择
+
+2、td[title~="c"]  
+	-->title属性值包含“c，且c前后只能有空格”的td元素会被选择
+
+3、td[title|="h"]  
+	-->title属性值为“h开头，且h只能为独立单词，后面可跟连字符”的td元素会被选择
+
+4、td[title^="l"]
+	-->title属性值为“l开头”的td元素会被选择
+
+5、td[title$="o"]
+	-->title属性值为“o结尾”的td元素会被选择
+
+6、td[title*="x"]
+	-->title属性值“包含x”的td元素会被选择
+```
+
+#### 属性选择器
+
+```
+1、CSS并集选择器    
+
+2、CSS交集选择器 
+
+3、CSS派生选择器
+	-->	子代：p > em{}    
+		兄弟：p+em{} p    
+		后代：p em{}      
+		元素1~元素2：
+
+4、CSS伪类选择器    
+	-->必须按顺序写：a:link，a:visited， a:hover，	a:active；还有其他伪类：li:first-child       input:focus
+
+5、伪元素选择器
+	-->h1:before，h2:afte， p:first-line
+
+6、兄弟选择器：
+-->元素1~元素2：第1 个元素之后所有的元素2 都会被选择，且这些元素和第一个元素拥有同一个父元素（两个元素之间不一定要相邻）
+```
+
+## 定位
+
+1. 作用： 通过定位可以移动元素位置。
+2. 使用场景：当页面中出现盒子压盒子的效果时，推荐使用定位。
+3. 特点：定位体现的是元素之间的层级关系
+4. 分类：静态定位      绝对定位       相对定位       固定定位
+5. 定位问题：要设置坐标，必须先脱离文档流（即设置定位）
+
+### 静态定位
+
+ 语法：  position: static;
+以下语法不能使用：  left: 10px； top: ;  bottom: ;   right:;
+特点：
+		◇ 静态定位不能移动元素位置
+		◇ 静态定位的元素就是标准流元素的显示方式
+
+### 绝对定位
+
+语法： position: absolute;
+绝对定位的位置移动特点：
+		☞如果一个元素设置了绝对定位，如果该元素的父元素设置了静态定位或者没有定位，那么当前子元素是以body(浏览器)左上角为参照进行位置移动。
+		☞如果一个子元素设置了绝对定位，如果该子元素的父元素设置了除静态定位以外的其他定位，那么当前绝对定位的子元素会以父元素左上角为参照进行位置移动。
+特点：
+		☞ 绝对定位的元素脱标不占位置
+		☞ 绝对定位可以实现模式转换
+
+### 相对定位
+
+语法：position: relative;
+特点：
+		 ☞ 相对定位元素是以元素原来的位置为参照设置定位。
+		☞ 相对定位的元素占位置。
+		☞ 不能实现模式转换
+		☞ 一般情况下要设置 子绝父相
+
+### 固定定位
+
+语法：position: fixed;
+特点：
+		☞固定定位的元素脱标不占位置
+		☞固定定位的元素可以实现模式转换
+		☞ 固定定位的元素始终是以body(浏览器)可视区域（在可以看到的区域内，滑动到下面，还是固定在那个位置）为参照设置定位。
+
+### z-inde
+
+定位元素的特点：
+
+​       ☞ 只有（除静态定位）定位的元素有层级关系
+
+​       ☞ 通过z-index属性改变层级关系
+
+​    层级关系特点：
+
+​       ☞ 当给一个元素设置了定位，那么该元素默认的层级z-index值是auto(0)
+
+​       ☞ 当z-index值相同的情况下，那么最后的定位元素层级要高于前面的定位元素。【后来居上原则】
+
+​       ☞ 当z-index值不同的情况下，那么z-index值越大该元素的层级越高。
+
+​       ☞ 如果元素的父元设置了z-index值,那么父元素的z-index值越大，那么该元素的层级越高。
+
+越高的显示在越在上层。
+
+### 定位盒子居中
+
+盒子居中：margin: 0 auto;==》标准流的盒子居中显示
+
+绝对定位的盒子居中显示：
+
+​    Left:50%;       父元素高度的一半
+
+​    Margin-left:元素自己宽度的一半
+
+### vertical-align属性
+
+☞ text-align   水平对齐
+☞ vertical-align  垂直对齐
+☞ 默认行内块元素（img,input）,有默认的vertical-align属性值。table标签也可以设置。
+vertical-align: baseline(默认值)       top(顶部对齐)      middle(中部对齐)      bottom(底部对齐)
+
+### 网页布局如何规避脱标流
+
+1. 网页布局优先考虑标准流
+2. 然后考虑使用浮动
+3. 最后使用定位
+4. 元素模式转换必须使用display
+
+###  CSS元素的可见性
+
+即：如何把元素隐藏起来
+
+```css
+overflow:hidden;	//将溢出的部分隐藏
+visibility:hidden;	//元素隐藏（隐藏的内容占位置一般用于)
+display:none;		//元素隐藏（隐藏的内容不占位置一般用于导航栏部分内容的隐藏)
+display:block;		//显示元素
+```
+
+## 案例
+
+### logo内容移除
+
+1. 将a标签的背景background作为logo使用，所以点击图片也可以跳转。
+2. 可以在logo中设置文字，但是要将文字移除给用户更好的体验。
+3. （1）使用text-ident设置一个负值来移除logo中的内容，使用em也可以。
+   （2）字体大小调为0    font-size:0px;
+   （3）文字设置为透明色   color:transparent;
+
+### 盒子阴影
+
+div盒子添加 box-shadow 属性，多边阴影需要用逗号隔开
+
+```css
+语法：box-shadow: h-shadow v-shadow blur spread color inset;
+```
+
+![image-20200921124214162](image/image-20200921124214162.png)
+
+```css
+//添加阴影最常见写法：
+div{ box-shadow: 10px 5px #888888; }
+
+// 例1、三边阴影
+div{ box-shadow: 0 0 0 gray,
+        		5px 5px 5px gray,
+        		0 5px 5px gray,
+        		-5px 5px 5px gray; }	
+
+// 例2、内阴影：塌陷
+div{ box-shadow: 0 0 15px black inset; }
+```
+
+### 精灵图
+
+首先精灵图是一张普通的图片,并且图片上**包含了若干张背景图片**
+作用：设置元素的背景图片,为了减少网络 (http) 请求图片的次数
+使用：
+		1.先将精灵图作为盒子的背景图片
+		2.通过background-position 在水平方向和垂直方向移动背景图片（移动距离可以用ps测（推荐），QQ截图也可以等
+
+```css
+background-position: left 10px top 15px;
+//水平方向移动的距离 = 所显示图片在精灵图中的横坐标
+//垂直方向移动的距离 = 所显示图片在精灵图中的纵坐标
+```
+
+### 滑动门
+
+作用：可以制作导航（使用背景图片制作）
+注意：使用背景图片导航的内容区域不能设置固定宽度，不然无法随内容变化。一定要使用内容将导航撑开
+
+1. 制作网页导航
+2. 滑动门导航使用背景图片制作
+3. 内容只能定义高度，不能定义宽度（为了随内容增多也不会溢出）
+
+## 问题
+
+### **图片自动为父元素大小**
+
+设置图片高度为：inherit，就是让图片高度为父元素高度
+
+### **为什么第一个子元素设置margin-top父元素会跟着移动**
+
+问题：有时当我们设置子元素的margin-top，但是却发现子元素没有出现上外边距的效果，反而是父元素出现了上外边距的效果
+
+原因：边距重叠：一个盒子和其子孙的边距重叠。根据规范，一个盒子如果没有上补白和上边框，那么它的上边距应该和其文档流中的第一个孩子元素的上边距重叠。
+
+解决方案1、为父元素设置padding。2、为父元素设置border。3、为父元素设置 overflow: hidden 。4、父级或子元素使用浮动或者绝对定位absolute
+
+### 文字环绕图片
+
+把图片浮动，为防止文字/单词超出内容框，需要给文字设置word-break:break-all;
+
+### 消除父代与子代间距
+
+- **table消除 td 之间的间距：**
+
+  有两种方式可以实现
+
+  1.`<table cellspacing="0">   `
+
+  2.css 的`border-collapse:collapse`样式
+
+- **消除两个 li 之间重叠的边距：**
+
+  `margin-left：-（减去定义的border边距）px;`
+
+### **DIV的高度随着内容的增加而增加**
+
+
+
+### 页面或者按钮为什么会抖一下？
+
+**（1）节点位置样式引起的**
+
+这个很好弄，就是两者用差不多一样的CSS样式，保证位置不会因为在切换导致变化。还有一点就是要注意加载图片有的时候会引起这种状况。还有就是选择一些有自适应的框架组件，比如说小程序里面图片的image组件中的mode属性，每次切换一下会计算一下适应的方位，这种计算的也会导致会抖一下，因为会出现这种“抖动”。
+
+**（2）boder-box引起的**
+
+boder-box这个属性可以避免很多兼容性的问题，就是那种一个手机一个样的尴尬情况。
+
+他主要的作用就是让这个 div 或者 view 的 boder 边框和 padding 的距离向里面扩展。使这个 div 不会拉伸所在的父节点。但是也会遇到问题，就是我遇到一个“抖动“问题，就是由于状态切换的两个css样式都是设置的boder-box，但是一个有边框一个没有。切换的时候就会出现“抖动”，因为boder会向里面“挤”，还是那种东南西北都往里挤你设置的边框宽度的距离。
+
+（3）由于设置了横向滑动条 over-flow:auto; 的原因.
+
+解决方法:1.去掉滑动条    2.或者将弹出层或父级div宽度加大点. 不要刚刚好.
+
+### CSS解决border影响元素宽高的问题（box-sizing属性）
+
+​    一、按照变化修改元素的宽高属性（不推荐）
+
+​    二、将 box-sizing 设置为 border-box ，然后给元素添加border宽度
+
+### a标签内容超出问题
+
+**1、内容超出换行**
+
+在html的a标签中，当内容过多的时候 ，如果是英文不会造成换行，如果希望内容换行，在a标签的样式中加入`word-wrap:break-word;`
+
+如果是中文会造成换行，如果不希望内容换行，在a标签的样式中加入`white-space:nowrap;`
+
+**2、a标签超出以后显示省略点**
+
+```css
+display:block;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+
+//两行超出隐藏
+overflow: hidden;
+text-overflow:ellipsis;
+display:-webkit-box;
+-webkit-box-orient:vertical;
+-webkit-line-clamp:2;
+```
+
+### 把文字下滑线与文字距离宽一点
+
+```css
+text-decoration:none;border:1px solid;
+```
+
+### 内容框的输入法不能转换，固定输入法：`ime-mode:disabled； `
+
+语法： me-mode : auto | active | inactive | disabled
+参数：
+	auto : 不影响IME的状态。与不指定ime-mode属性时相同
+	active : 指定所有使用IME输入的字符。即激活本地语言输入法。用户仍可以撤销激活IME
+	inactive : 指定所有不使用IME输入的字符。即激活非本地语言。用户仍可以撤销激活IME
+	disabled : 完全禁用IME。对于有焦点的控件（如输入框），用户不可以激活IME
+
+解析：我们给输入项添加属性style并将其值置为'ime-mode:disabled'，这样当在输入该项数据时就不能进行输入法转换了。如果当前是中文输入法输入的仍是英文字母。
+
+### table隐藏tr/td时，显示错乱问题
+
+1、当表格为多列的情况下，属性为”display:block”行的内容宽度仅与第一列宽度相同，也就是说无论你使colspan的属性值为多少，剩余列的空间都不进行解析。 
+
+2、同一行反复的在”display:none;”与”display:block;”两个状态间切换时，表格的底部会持续的产生多余的空白空间以至于造成页面布局的扭曲。
+
+解决方法： 
+
+1、用`display:table-row`属性来调试，发现者FireFox下正常了(只针对单列显示,多列会出现换行情况.如果多列建议第二个方法)，但IE是不支持改属性的，怎么办呢？用JS来做判断，然后做兼容吧。 
+
+2、另外一个很简单也很可行的方法，就是用` display: ' '`
+
+### 取消表单项聚焦时产生的黄色边框
+
+```css
+input,button,select,textarea{ outline:none;}
+textarea{ font-size:13px; resize:none;}
+```
+
+## meta标签详解
+
+### HTML5前
+
+- `<meta>`标签是HTML语言头部的一个辅助性标签
+- 作用：可以定义页面编码语言、搜索引擎优化、自动刷新并指向新的页面、控制页面缓冲、响应式视窗等
+
+
+	属性					值					描述
+	charset( H5 New)	character_set		定义文档的字符编码。
+	content				text				定义与 http-equiv 或 name 属性相关的元信息。
+	http-equiv			content-type		属性关联到 HTTP 头部。
+						default-style		
+						refresh	把 content
+	name				application-name	把content 属性关联到一个名称。		
+						author
+						description
+						generator
+						keywords	
+	scheme(H5 删除)		format/URI			HTML5不支持。 定义用于翻译 content 属性值的格式。
+	整体来看，HTML5之前，meta标签只有两个主要属性，分别是 name 属性和 http-equiv 属性。 HTML5新添加"charset".
+
+#### name
+
+​	name属性主要用于描述网页，对应属性是 content ，以便于搜索引擎机器人查找、分类（目前几乎所有的搜索引擎都使用网上机器人自动查找meta值来给网页分类）。
+​	语法：`<meta name="参数" content="参数值" />`
+
+1.Keywords（为搜索引擎提供的关键字列表）
+
+```
+<meta name="keywords" content="程序员,程序猿,攻城狮"/>
+```
+
+2.Description（告诉搜索引擎你的网站主要内容）
+
+```
+<meta name="description" content="meta标签是HTML中的一个重要标签，位于HTML文档头部的<HEAD>标签和<title>标签间"/>
+```
+
+3.robots（机器人向导）
+
+```
+说明：robots用来告诉搜索机器人哪些页面需要索引，哪些页面不需要索引。
+语法：<meta name="robots" content=""/>
+
+content的参数值有all,none,index,noindex,follow,nofollow，默认值是all。
+参数说明：
+	all：文件将被检索，且页面上的链接可以被查询； 
+	none：文件将不被检索，且页面上的链接不可以被查询； 
+	index：文件将被检索； 
+	follow：页面上的链接可以被查询； 
+	noindex：文件将不被检索，但页面上的链接可以被查询； 
+	nofollow：文件将被检索，但页面上的链接不可以被查询；
+```
+
+4.author（标注网页的作者）
+
+```
+<meta name="author" content="TG,TG@qq.com"/>
+```
+
+5.copyright（标注版权）
+
+```
+<meta name="copyright" content="本网站版权归TG所有"/>
+```
+
+6.generator（说明网站采用什么编辑器制作）
+
+```
+<meta name="generator" content="你所用的编辑器"/>
+```
+
+7.revisit-after（网站重访）
+
+```
+<meta name="revisit-after" content="7days"/>
+```
+
+#### http-equiv
+
+​	http-equiv类似于HTTP的头部协议，它回应给浏览器一些有用的信息，以帮助正确和精确地显示网页内容。
+​	与之对应的属性值为content，content中的内容其实就是各个参数的变量值。
+
+```
+语法：<meta http-equiv="参数"  content="参数值"/>
+```
+
+**参数说明：**
+	1.Expires（期限）
+
+````
+说明：指定网页在缓存中的过期时间，一旦网页过期，必须到服务器上重新传输。
+语法：<meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT"/>
+
+注意：必须使用GMT的时间格式，或者直接设为0（数字表示多久后过期
+````
+
+2.Pragma（cache模式）
+
+```
+说明：禁止浏览器从本地计算机的缓存中访问页面内容。
+语法：<meta http-equiv="Pragma" content="no-cache"/>
+
+注意：网页不保存在缓存中，每次访问都刷新页面。这样设定，访问者将无法脱机浏览。
+```
+
+3.Refresh（自动刷新并指向新页面）
+
+```
+<meta http-equiv="refresh"content="5; url=http://www.baidu.com/"/>
+	其中的5表示5秒后自动刷新并调整到URL新页面。
+```
+
+4.Set-Cookie（cookie设定）
+
+```
+说明：浏览器访问某个页面时会将它存在缓存中，下次再次访问时就可从缓存中读取，以提高速度。
+当你希望访问者每次都刷新你广告的图标，或每次都刷新你的计数器，就要禁用缓存了。
+如果网页过期，那么存盘的cookie将被删除。
+	
+语法：<meta http-equiv="Set-Cookie"  content="cookievalue=xxx; expires=Wednesday,21-Oct-98 16:14:21 GMT; path=/">
+
+注意：必须使用GMT的时间格式
+```
+
+5.Window-target（显示窗口的设定）
+
+```
+说明：强制页面在当前窗口以独立页面显示
+语法：<meta http-equiv="Window-target" content="_top"/>
+可以用来防止别人在框架里调用你的页面。
+```
+
+6.content-Type（显示设定页面使用的字符集）
+
+```
+<meta http-equiv="content-Type" content="text/html;charset=utf-8"/>
+	
+其他参数值：
+	GB2312			简体中文
+	BIG5			繁体中文
+	iso-2022-jp		日文
+	ks_c_5601		韩文
+	ISO-8859-1		英文
+	UTF-8			世界通用的语言编码；
+在HTML5中，我们一般都是：<meta charset="utf-8"/>
+```
+
+7.content-Language（显示语言的设定）
+
+```
+<meta http-equiv="Content-Language" content="zh-cn"/>
+```
+
+8.http-equiv="imagetoolbar"
+
+```
+<meta http-equiv="imagetoolbar" content="false"/>
+指定是否显示图片工具栏，当为false代表不显示，当为true代表显示。
+```
+
+### HTML 5新增
+
+#### name
+
+1.viewport（屏幕的缩放）
+
+```
+说明：能优化移动浏览器的显示（屏幕的缩放）
+
+语法：<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+
+参数值：
+width viewport的宽度[device-width | pixel_value]width如果直接设置pixel_value数值，大部分的安卓手机不支持，但是ios支持；   
+height – viewport 的高度 （范围从 223 到 10,000 ）   
+user-scalable [yes | no]是否允许缩放   
+initial-scale [数值] 初始化比例（范围从 > 0 到 10）   
+minimum-scale [数值] 允许缩放的最小比例   
+maximum-scale [数值] 允许缩放的最大比例   
+```
+
+2.format-detection（忽略电话号码和邮箱）
+
+```
+语法：<meta name="format-detection" content="telephone=no">//忽略页面中的数字识别为电话号码
+<meta name="format-detection" content="email=no"/>//忽略页面中的邮箱格式识别为邮箱
+也可以写成：<meta name="format-detection" content="telphone=no, email=no"/>  
+```
+
+3、浏览器内核控制：国内浏览器很多都是双内核（webkit和Trident），webkit内核高速浏览，IE内核兼容网页和旧版网站。而添加meta标签的网站可以控制浏览器选择何种内核渲染。（仅限360浏览器）
+
+```
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+若页面需默认用极速核，增加标签：<meta name="renderer" content="webkit">
+若页面需默认用ie兼容内核，增加标签：<meta name="renderer" content="ie-comp">
+若页面需默认用ie标准内核，增加标签：<meta name="renderer" content="ie-stand">
+```
+
+```
+各渲染内核的技术细节
+内核			   Webkit	  IE兼容	  IE标准
+内核版本		  Chrome45   IE6/7	  IE9/IE10/IE11(取决于用户的IE)
+HTML5支持		    YES	       NO	    YES
+ActiveX控件支持	   NO		 YES	   YES
+```
+
+4、WebApp全屏模式
+
+```
+<meta name="apple-mobile-web-app-capable" content="yes" /> 
+<!-- 启用 WebApp 全屏模式 -->
+```
+
+5、隐藏状态栏/设置状态栏颜色：只有在开启WebApp全屏模式时才生效。content的值为default | black | black-translucent 。
+
+```
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+```
+
+6、不同浏览器
+
+```
+<!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->  
+<meta name="HandheldFriendly" content="true">  
+
+<!-- 微软的老式浏览器 -->  
+<meta name="MobileOptimized" content="320">  
+
+<!-- uc强制竖屏 -->  
+<meta name="screen-orientation" content="portrait">  
+
+<!-- QQ强制竖屏 -->  
+<meta name="x5-orientation" content="portrait">  
+
+<!-- UC强制全屏 -->  
+<meta name="full-screen" content="yes">  
+
+<!-- QQ强制全屏 -->  
+<meta name="x5-fullscreen" content="true">  
+
+<!-- UC应用模式 -->  
+<meta name="browsermode" content="application">  
+
+<!-- QQ应用模式 -->  
+<meta name="x5-page-mode" content="app">  
+
+<!-- windows phone 点击无高光 -->  
+<meta name="msapplication-tap-highlight" content="no">
+```
+
+#### http-equiv
+
+```
+1、优先使用 IE 最新版本和 Chrome
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />  
+
+<!-- 关于X-UA-Compatible -->  
+<meta http-equiv="X-UA-Compatible" content="IE=6" ><!-- 使用IE6 -->  
+<meta http-equiv="X-UA-Compatible" content="IE=7" ><!-- 用于在IE8版本浏览器中使用IE7渲染来避免出错 -->  
+<meta http-equiv="X-UA-Compatible" content="IE=8" ><!-- 使用IE8 -->
+
+
+2、转码申明：用百度打开网页可能会对其进行转码（比如贴广告），避免转码可添加如下meta
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+```
+
+#### charset
+
+	<meta charset="UTF-8">
+	其他参数值：
+	GB2312			简体中文
+	BIG5			繁体中文
+	iso-2022-jp		日文
+	ks_c_5601		韩文
+	ISO-8859-1		英文
+	UTF-8			世界通用的语言编码；
+	在HTML5中，我们一般都是：<meta charset="utf-8"/>
+
+# JS
+
+## JS理念
+
+### JS是什么？
+
+- 解析执行，轻量级解析型，一行一行解析的。
+
+- 是一种运行在客户端的脚本语言，不需编译，运行过程中由js解释器(js引擎)逐行进行解释并执行；
+- js来源：借鉴了c语言、java语言等-->(简化式)函数式编程+（简化式）面向对象编程；
+- ES6既是一个历史名词，也是泛指5.1版本后的js的下一个标准。
+
+### js组成
+
+- ECMAScript(js语法规范)、Web API（BOM页面文档对象模型、DOM浏览器对象模型）。
+- BOM:onload页面加载事件、window顶级对象；定时器；location、history
+- DOM:获取页面元素、注册事件；属性、样式操作；节点属性、节点层级；动态创建元素
+
+### js引入方式
+
+行内式、内嵌式、外部引入式。
+
+### js输出方式
+
+alert（浏览器警示框）、console.log（控制台打印）、prompt（浏览器输入框）
+
+### JS特点：
+
+- 解释性：C语言为编译性
+- 基于对象：什么是对象
+- 事件驱动：onclick、onmouseover、onmouseout
+- 跨平台性：只跟浏览器有关
+- 安全性：不允许访问硬盘，不能对网络文件进行修改和删除
+
+### Document 和 body 之间的区别
+
+整体和部分的关系，body只包含网页的局部
+
+## DOM
+
+### script属性
+
+```js
+<script type="text/javascript" src=""  async></script>
+//async:异步		defer：延时执行
+//注意： 该属性指的是浏览器将外部js文件下载完成后，立马执行。
+```
+
+**1、节点元素：**父（parent）、子（child）和同胞（sibling）
+
+**2、元素的属性**（包括对应标签的属性）
+
+- 非表单元素的属性：id、src、title、href、alt
+- 表单元素的属性：name、value、type、disabled、checked、selected
+- 超链接-->取消默认行为的执行 ：return false;
+
+### DOM节点属性
+
+**nodeName**	--> nodeName 属性规定节点的名称，仅只读
+
+- 元素节点的 nodeName 与标签名相同
+- 属性节点的 nodeName 与属性名相同
+- 文本节点的 nodeName 始终是 #text
+- 文档节点的 nodeName 始终是 #document
+
+**nodeType** 	-->  nodeType 属性返回节点的类型。仅只读
+
+| 元素类型 | NodeType |
+| -------- | -------- |
+| 元素     | 1        |
+| 属性     | 2        |
+| 文本     | 3        |
+| 注释     | 8        |
+| 文档     | 9        |
+
+**nodeValue** 	-->  nodeValue 属性规定节点的值
+
+- 元素节点的 nodeValue 是 undefined 或 null
+- 文本节点的 nodeValue 是文本本身
+- 属性节点的 nodeValue 是属性值
+
+### DOM方法
+
+get(获取)、set(设置)、remove(移除)、create(创建)、insert(插入)、replace(替代)、append(添加)
+
+- getElementById(id) - 获取带有指定 id 的节点（元素）
+- appendChild(node) - 插入新的子节点（元素）
+- removeChild(node) - 删除子节点（元素）
+- createAttribute() - 创建属性节点
+
+### DOM属性
+
+- innerHTML - 节点（元素）的文本值
+- parentNode - 节点（元素）的父节点
+- childNodes - 节点（元素）的子节点
+- attributes - 节点（元素）的属性节点
+
+因为不可以直接输出自定义的属性，所以有了以下方法
+
+- 获取标签对应的属性：getAttribute(“”); //属性可以是自定义，也可以是本身已有的
+- 设置标签属性的值setAttribute(“属性名”，“属性值”);
+- 移除标签属性 removeAttribute(“属性名”);
+
+### DOM访问
+
+- document.getElementById
+- document.getElementByClassName
+- document.getElementsByTagName
+- document.getElementsByName
+
+因为id是单数，所以不用s，name等可以多个，为复数，所以需要s
+
+H5中query查询Selector选择器：querySelctor()
+
+querySelctorAll(标签名/类名/id名等等)
+
+### DOM修改（操作样式）
+
+**操作样式：**设置类样式class 、设置行内样式style
+
+```js
+document.getElementById('ul').style.color = "lightgray";
+```
+
+**动态创建元素**（innerHTML、document.write、inerText）:动态创建元素优点-->提高网页性能，降低流量使用
+
+**innerHTML 和 innerText 区别**
+
+- innerHTML 返回的是标签内的html内容，包含里层的html标签
+- inerText 返回的是标签的文本值，不包含html标签
+- innerHTML 和 innerText，如果两个都写，下面的内容会把上面的内容覆盖
+
+**document.write()**      //比如弹出新框的在线客服
+
+当页面加载时，会产生输出流，这个输出流在页面加载完毕时关闭
+
+如果输出流关闭后执行document.write()，它会开启一个新的输出流，页面会被覆盖
+
+使用建议：使用document.write只可以在页面加载中，可以使用在弹出新窗口时
+
+**innerHTML**
+
+在设置时会覆盖原来的内容，但是可以通过+=去解决
+
+**inerHTML 和 document.write 区别**
+
+- innerHTML 是将内容写入某个DOM节点，不会导致页面全部重绘
+- document.write 是直接将内容写入页面的内容流，会导致页面全部重绘
+
+### DOM事件
+
+onclick：点击事件				onfocus：获取聚焦事件    
+
+onblur：失去焦点事件		onkeyup 当键盘弹起时   
+
+onload用户进入页面			onunload用户离开页面
+
+![image-20200920123626894](image/image-20200920123626894.png)
+
+**事件三要素：**
+
+事件源(触发的事件的元素 btn)-->事件名称(click )-->  事件处理程序(function)
+
+![JS_DOM节点关系表](image/JS_DOM%E8%8A%82%E7%82%B9%E5%85%B3%E7%B3%BB%E8%A1%A8.png)
+
+```js
+var li = document.getElementById('ul');
+li. firstChild;			//获取第一个子节点	li.lastChild;			//最后的子节点
+li.firstElementChild;	//获取第一个子元素	li.lastElementChild;	//最后的子元素
+li.children;			//获取所有子元素	li.parentNode;			//获取父元素
+li.childNodes；			//获取所有子节点
+li.nextSibling;			//下一个兄弟节点		li.nextElementSibling;	//下一个兄弟元素（有兼容问题）
+li.previousSibling;		//下一个兄弟节点		li.previousElementSibling;//下一个兄弟元素（有兼容问题）
+
+```
+
+### DOM实例
+
+![image-20200920124121803](image/image-20200920124121803.png)
+
+### DOM event 对象
+
+Event对象代表事件的状态，比如事件在其中发生的元素、键盘按键的状态、鼠标的位置、鼠标按钮的状态。
+
+事件句柄（Event Handlers）-àdom事件
+
+鼠标/键盘属性
+
+![image-20200920124221765](image/image-20200920124221765.png)
+
+```js
+var oEvent=ev||event;   //此为兼容各个浏览器，在需要获取和事件相关的信息时使用
+```
+
+- 获取键盘按下或弹起的按键
+- 获取鼠标的位置坐标
+- 获取出发改事件的元素
+- 获取事件名称
+- 获取事件当前的传播阶段
+- 获取事件生成的日期时间
+
+## BOM
+
+使用 window 下的成员  window 可以省略
+
+window.document
+
+对话框：window.alert();   window.prompt();  window.confirm();
+
+```js
+//  window 对象本身具有name和top两个属性 其中top属性是只读的
+var name = 123;	var top = 123;
+console.log(typeof name);
+console.log(top);
+```
+
+### **onload && onunload**
+
+onload 页面加载完毕执行 （DOM元素加载完毕，当外部文件加载完毕）
+
+onload = function () {}     
+
+当关闭网页的时候执行    onunload = function () {}
+
+### mouseover、mouseente
+
+- onmouseover、onmouseout：鼠标经过时自身触发事件，经过其子元素时也触发该事件；（父亲有的东西，儿子也有）
+- onmouseenter、onmouseleave：鼠标经过时自身触发事件，经过其子元素时不触发该事件。（父亲的东西就是父亲的，不归儿子所有）
+
+> 总结：这四个事件两两配对使用，onmouseover、onmouseout一对，onmouseenter、onmouseleave一对，不能混合使用。
+
+### 定时器
+
+**1.  定时器setTimeout**
+
+```js
+//设置定时器：
+var timer = setTimeout(function () {
+   location.href = 'http://www.baidu.com'//location：跳转网页
+  }, 5000); 	// 5秒以后跳转
+
+//清除定时器：
+clearTimeout(timer);
+```
+
+**2.  间隔定时器setInterval**
+
+```js
+// 间隔时间内做
+var timerId = setInterval(function () {
+  var date = new Date();
+  console.log(date);
+}, 1000);		//隔1秒做这个实践
+clearInterval(timerId);
+```
+
+**3.  倒计时定时器**
+
+```js
+getInterval(start,end)
+setInterval(函数，时间)
+```
+
+**定时器执行的原理，先后顺序**
+
+1. setTimeout允许设置一个超时对象，超时后执行这个对象，但是只执行一次，无周期
+2. setInternval允许设置一个超时对象，超时后执行这个对象，周期等于超时对象指定的时间，周期为无限循环
+
+```js
+// 案例：
+setTimeout("alert('定时器!')",0);alert("测试");		//运行先出现测试，然后再出现定时器
+```
+
+原因:：JS是单线程的，会先阻塞等待定时器执行完后再执行下面的语句，
+
+异步机制：浏览器的多线程—>对于浏览器来说，JS的执行只不过是在浏览器众多现成中的一条，称之为JS引擎线程，而浏览器其他线程则是通过JS引擎在执行过程到某个特定的功能后指定给浏览器的对应线程。
+
+JS引擎线程先执行回调函数块，然后执行点击事件回调，接着是执行定时器的线程，最后再执行其他的线程。
+
+案例中JS先读取到 setTimeout 定时器，，这个时候就会执行浏览器的线程，然后跳过定时器继续执行，这时就看到弹出框的内容为测试，然后因为定时器的时间为0，所以一执行定时器线程就会即可将弹出框为定时器字样的任务添加到主线程（JS引擎线程）的队列之后，等待JS引擎的调用，这个时候我们看到的结果是先弹出测试，然后再弹出定时器
+
+另外要注意在 HTML5 规范中规定定时器的定时时间不能小于4ms，如果是小于4ms，则默认为4ms，所以在这个例子中的0，默认的是4ms，但是这个在不通过的浏览器中的表现是不同的，但是这个一般在项目中是没有什么印象的，这个只是仅做了解即可。
+
+![JS_DOM_线程执行](image/JS_DOM_%E7%BA%BF%E7%A8%8B%E6%89%A7%E8%A1%8C.png)
+
+
+
+定时器在项目中除了可以作为定时的作用外还可以用来做耗时代码的优化：
+ 我们假设有这样的一个场景，就是在某个页面中要渲染50万个节点，这个时候对于一般的项目中，直接渲染是不可取的，因为这个时候会占用过多的内存，导致浏览器出现了卡死的状态，用户误以为是页面卡死而 直接关闭浏览器或者杀死进程，即使是用户不关闭页面这样给用户的体验也是不好的，这个时候我们要怎样来解决这个问题呢，我们可以利用定时器来优化这个问题首先我们可以把50万个节点分成多组，每组渲染  的节点数不要过多，然后通过setInterval来进行循环这个既不阻塞JS引擎线程的运行，又不可以提高渲染的消耗时间。从而达到最终的优化渲染。
+
+如果是项目中有对个定时器的参与那么记得在一个定时器执行结束的时候记得要调用clearInterval或clearTimeout这两个方法来清除定时器，以免定时器之间互相干扰出现一些抓摸不定的现象
+
+### location 对象
+
+location 属性 href（跳转地址） search（） hash
+
+location 方法 assign reload（重新加载） replace
+
+### **history对象**  
+
+作用：抑制页面后退back()/抑制页面前进forward()   //使后退   /前进按钮失效
+
+```js
+// back()      加载 history 列表中的前一个 URL   window.history.back() 
+
+//forward()     加载 history 列表中的下一个 URL window.history.forward()
+
+ // go()        加载 history 列表中的某个具体页面 window.history.go(-1)   //负数为后退，正数为前进，数字为前进/后退数
+
+//History.pushState()方法用于在历史中添加一条记录。
+window.history.pushState({page:1},“title”, '?page=1');
+
+//History.replaceState()方法用来修改 History 对象的当前记录
+history.replaceState({page:1},“title”, '?page=2');
+
+state：一个与指定历史记录相关联的状态对象，当popstate事件触发时，会把该对象传入回调函数。如果不需要用到，可以传null。
+title：页面的标题。但当前大多数浏览器都不支持或忽略这个值。可以传null。
+url：添加或修改的history的网址。为了安全性，必须保持与当前URL同一个域。 
+简而言之，两个方法的区别只是pushState添加一个最新的历史记录，而replaceState则是把当前的页面的历史记录替换掉。他们最大的特点是添加或替换历史记录后，浏览器地址栏会变成你传的地址，而页面并不会重新载入或跳转。
+```
+
+### popstate事件
+
+当活动历史记录条目更改时，将触发popstate事件。如果被激活的历史记录条目是通过对history.pushState（）的调用创建的，或者受到对history.replaceState（）的调用的影响，popstate事件的state属性包含历史条目的状态对象的副本。
+
+需要注意的是调用history.pushState()或history.replaceState()不会触发popstate事件。只有在做出浏览器动作时，才会触发该事件，如用户点击浏览器的回退按钮（或者在Javascript代码中调用history.back()或者history.forward()方法）
+
+不同的浏览器在加载页面时处理popstate事件的形式存在差异。页面加载时Chrome和Safari通常会触发(emit )popstate事件，但Firefox则不会。
+
+![image-20200921181305551](image/image-20200921181305551.png)
+
+### **Navigator对象**
+
+-->包含有关浏览器的信息
+
+```js
+navigator.userAgent	User-agent用户代理	//浏览器F12中network的（request-Headers）最底下。
+navigator.appCodeName 		//返回浏览器的代码名
+navigator.appName 			//返回浏览器的名称
+navigator.appVersion 		//返回浏览器的平台和版本信息  
+navigator.cookieEnabled 	//返回指明浏览器中是否启用 cookie 的布尔值  
+navigator.platform 			//返回运行浏览器的操作系统平台  
+navigator.userAgent 		//返回由客户机发送服务器的user-agent 头部的值 
+navigator.javaEnabled() 	//指定是否在浏览器中启用Java  
+navigator.taintEnabled() 	//规定浏览器是否启用数据污点(data tainting) 
+```
+
+## 函数
+
+- toSource()返回该对象的源代码。 
+- toString()把逻辑值转换为字符串，并返回结果。 
+- valueOf() 返回 Boolean 对象的原始值。
+- tagName返回元素的标签名    // document.children[0].tagName;//会返回HTML
+
+**1、NaN属性：-->用于引用特殊的非数字值**
+
+(英译为： Not a Number  ，表示不是一个数字)
+
+isNaN() 来判断一个值是否是数字。原因是 NaN 与所有值都不相等，包括它自己。  
+
+==>  isNaN(x)-->true:代表不是数字；false:代表是数字
+
+**2、prompt()方法-->用于显示可提示用户进行输入的对话框**
+
+```js
+prompt("请输入您的姓名"); //接受用户输入的信息
+```
+
+**3、confirm()方法（确认框）-->可以通过这个来判断用户是否确定输入数据**
+
+```js
+//函数返回值是布尔型的，点击确定，返回值为true，点击取消返回值为false
+// 1、主要用于删除单挑信息确认
+function del() { 
+ var msg = "您真的确定要删除吗？\n\n请确认！"; 
+ if (confirm(msg)==true){ 
+ 	return true; 
+ }else{return false;} 
+}
+
+// 2、JS删除确认框
+<a href="javascript:if(confirm('确定删除吗?'))location='jb.php?id='">删除</a>
+
+// 3、主要用于批量的确认提示
+<input name="Submit" type="submit" class="inputedit" value="删除"
+ onclick="{if(confirm('确定纪录吗?')){
+  this.document.formname.submit();
+  return true;}return false;}"> 
+<input name="按钮" type="button" ID="ok" onclick="{if(confirm('确定删除吗?')){
+ window.location='Action.asp?Action=Del&TableName=Item&ID=<%=ID%>';
+ return true;
+}return false;}" value="删除栏目" />
+```
+
+### 转义字符
+
+（在输出字符串时候要是想带上引号，需要运用到转义字符）
+
+```js
+ \" -->转双引号			\' -->转单引号
+ \r -->回车符			\n -->换行符
+```
+
+### console
+
+```js
+// 1、浏览器控制台打印出信息.输出获取元素对应的标签内容
+console.log(x);
+
+// 2、可以显示一个对象的所有属性和方法
+console.dir(x);
+
+// 3、typeof不能获取对象的具体类型,获取对象类型始终返回object
+console.log(typeof x); 
+
+// 4、认为构造函数就是对象的类型
+console.log(arr.constructor);	
+
+//5、会计算里边运行代码所需事件
+console.time(x);-->在里边运行的代码-->console.timeEnd(x);	
+
+```
+
+### void关键字
+
+```js
+void 0 = undefined     // 一般用void 0替代undefined，除了防止被重写，还可减少字节
+
+javascript:void()    // void会执行()里面的语句或表达式，返回值为undefined
+
+javascript:void(0)   // 为执行js函数，0表示不执行函数，返回数值为undefined
+
+javascript:void fun()  //此为执行fun函数，括号内可传参
+
+```
+
+## 数据类型
+
+push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
+
+通过typeof运算符来确定JS变量的数据类型
+
+```js
+typeof "Bill"                 // 返回 "string"
+typeof 3.14                   // 返回 "number"
+typeof NaN                    // 返回 "number"
+typeof false                  // 返回"boolean"
+typeof [1,2,3,4]              // 返回 "object"
+typeof {name:'Bill', age:62}  // 返回 "object"
+typeof new Date()             // 返回 "object"
+typeof function () {}        //返回"function"
+typeof myCar                 //返回"undefined" 
+typeof null                   // 返回 "object"
+```
+
+### undefine类型
+
+如果一个变量的值是undefined 或者 定义了一个变量，没有给该变量赋值。那么该变量的数据类型就是undefined。
+
+### 数据类型转换
+
+**转换为字符串类型：**x.toString()或String(x)
+
+```js
+String(x)         // 从数值变量 x 返回字符串
+String(123)       // 从数值文本 123 返回字符串
+String(100 + 23)  // 从表达式中的数值返回字符串
+```
+
+```js
+x.toString()
+(123).toString()
+(100 + 23).toString()
+```
+
+**转换为数字类型：**Number(x)、paseIntI(x)、paseFloat(x)
+
+- Number(x)：特点：通过该方法转化的数字类型保留原来值的内容
+- paseIntI(x)：特点：通过该方法只能保留整数部分（返回的是一个整数）
+- paseFloat(x)：特点：可以保留原来值内容，如果是非数字的字符串，直接保留数字部分
+
+**转换为布尔类型：**Boolean(x)
+
+### **数字Number**
+
+![image-20210331160629187](image/image-20210331160629187.png)
+
+![image-20210331160240361](image/image-20210331160240361.png)
+
+### **字符串String**
+
+- 数字0、NaN、空字符串""、false、undefined、null都会被识别为false。
+- undefined：未定义或未初始化的变量，都为undefined。
+- undefined和null的区别：如果变量为null，说明变量存在，只不过值是空值null。
+
+![image-20210331160948708](image/image-20210331160948708.png)
+
+### **算数运算符**
+
+- 浮点数精度问题：浮点数值最高精度是17位小数，但进行算数计算时其精确度远不如整数。
+
+```js
+const result = 0.1 + 0.2；	//结果为0.30000000000000004
+const mul = 0.07*100;		//结果为7.000000000000001
+```
+
+### 数组
+
+- 数组转换
+  - 将string数组转换为number数组：`strArr.map(Number);`
+  - 将number数组转换为string数组：`numArr.map(String);`
+
+### 可变参 arguments
+
+- 虽然arguments对象并不是一个数组，但是访问单个参数的方式与访问数组元素的方式相同.
+- 在js中 不需要明确指出参数名，就能访问它们。
+- arguments是一个伪数组，存放所有的参数
+
+```js
+function test() {
+ let s = "";
+ for (let i=0;i<arguments.length;i++){
+ 	console.log(arguments[i]);
+ 	s += arguments[i] + ",";
+ }
+ return s;
+}
+test("name","age");	//输出name,age
+```
+
+```js
+//不定长可变参
+function sum(...num){//可以给多个参数到sum函数里面
+    console.log(num);
+}
+sum(1,2,3,4,5,6,7,8,9,0);
+```
+
+### JSON
+
+a、JSON指的是JavaScript对象表示法（javascript object notation）
+
+b、JSON是轻量级的文本数据交互格式，并不是编程语言
+
+c、JSON独立于语言存在
+
+d、JSON具有自我描述性，更容易理解
+
+e、JSON可以将JavaScript对象中表示的一组数据转换为字符串，然后就可以在函数之间轻松地传递这个字符串，或者在异步应用程序中将字符串从Web客户机传递给服务器端程序。
+
+**对象结构和数组结构**
+
+Json简单说就是JavaScript中的对象和数组
+
+- 对象表示为键值对，数据由逗号分隔，属性值的类型可以是数字、字符串、数组、对象
+- 花括号保存对象，`{key:value,key:value,...}`
+- 方括号保存数组，`['a', 'b', 'c']`
+
+**JSON与对象的区别**
+
+JSON 是 JavaScript 对象的字符串表示法，它使用文本表示一个 JS 对象的信息，本质是一个字符串。
+
+```
+var obj = {a: 'Hello', b: 'World'}; //是一个对象，注意键名也可以用引号包裹
+var json = '{"a": "Hello", "b": "World"}'; //是一个 JSON 字符串，本质是一个字符串
+```
+
+**JSON 和 JavaScript 对象互转**
+
+从JSON字符串转换为JavaScript 对象，使用 `JSON.parse() `方法：
+
+```
+var obj = JSON.parse('{"a": "Hello", "b": "World"}');
+//结果是 {a: 'Hello', b: 'World'}
+```
+
+从JavaScript 对象转换为JSON字符串，使用` JSON.stringify() `方法：
+
+```
+var json = JSON.stringify({a: 'Hello', b: 'World'});
+//结果是 '{"a": "Hello", "b": "World"}'
+```
+
+## **对象**
+
+- 对象由属性(事物的特征，常用名词)和方法（事务的行为，常用动作，通常是继承的属性）组成。
+- 创建对象三种方式：对象直接法、关键字 new 和 Object.create() 函数来创建对象。
+
+### this
+
+```js
+// 函数中this --> window对象
+function fn(){
+    console.log(this);
+}
+fn();
+//方法中this --> 是调用该方法的独享
+var obj = {
+    name: 'zs',
+    say: function(){
+        console.log(this);
+    }
+}
+obj.say();
+//构造函数中this --> 当前对象
+
+//事件处理函数中this --> 触发事件的对象 事件源
+```
+
+### `Math`对象
+
+- Math对象不是构造函数，它具有数学常数和函数的属性和方法。跟数学相关的运算（求绝对值、取整、最大值等）可使用。
+
+```js
+Math.PI	//圆周率		Math.abs()	//绝对值
+Math.floor()//向下取整	Math.ceil()	//向上取整
+Math.round()//四舍五入，注意-3.5 结果为-3
+Math.max()	//最大值	Math.min()	//最小值
+```
+
+- Date对象是构造函数，需实例化后才能使用，Date实例用来处理日期和时间。
+
+### `Array`对象
+
+#### 数组调用方法
+
+- push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
+- pop() 方法用于删除并返回数组的最后一个元素。
+- unshift() 方法可向数组的开头添加一个或更多元素，并返回新的长度。
+- Shift() 方法可向数组的开头删除一个或更多元素，并返回新的长度。
+- sort() 方法用于对数组的元素进行排序。
+- join() 方法用于把数组中的所有元素放入一个字符串。
+- a.concat(b); 把b数组添加到a数组最后面
+
+#### Array prototype函数（数组原型）
+
+- prototype函数允许向Array()对象添加新属性和方法。
+- 构造属性时，将为所有数组提供属性及其值，作为默认值。
+- 构造方法时，所有数组将使用此方法。
+
+**注意**：
+
+- Array.prototype不是指单个数组，而是指Array()对象本身。
+- prototype是一个全局对象构造函数，可用于所有JavaScript对象。
+
+#### JS遍历数组方法：
+
+--> map()、forEach和filter
+
+#### `map()`遍历数组
+
+- map() 方法返回一个新数组，数组中的元素为原始数组元素调用函数处理后的值。
+- map() 方法按照原始数组元素顺序依次处理元素。
+- **注意：** map() 不会对空数组进行检测，不会改变原始数组。
+
+```js
+// 1、获取超链接
+var link = document.getElmentById("link");
+var flag = 1; //flag=1，此时显示a.png；flag=2，显示b.png
+// 2、给超链接注册点击事件
+link.onclick = function(){
+    //3、(local var)img:HTMLElement
+    var img = document.getElementById('img');
+    if(flag === 1){
+        flag = 2;
+        img.src = 'img/b.png';
+    } else {
+       flag = 1;
+       img.src = 'img/a.png'; 
+    }
+}
+```
+
+#### `new Array().fill()`创建数组并赋值
+
+```js
+// 默认 为undefined
+let b = new Array(8).fill()
+let a = new Array(8).fill(0)	// [0, 0, 0, 0, 0, 0, 0, 0]
+```
+
+## 内置对象
+
+### `proxy`代理对象
+
+- 在我们访问对象前添加一层拦截，可以过滤自定义的操作（代理完成对数据的处理、对构造函数的处理，对数据的验证）
+- `let p = new Proxy(target, handler);`
+  - 代理实例中没有指定的`handler`，实际就是操作原对象`target`。
+  - `target`：需要使用`Proxy`包装的目标对象（可以是任何类型的对象，包括原生数组、函数、甚至是另一个代理）
+  - `handler`：一个对象，其属性是当执行一个操作时定义代理的行为函数（可理解为某种触发器）
+
+```js
+let willy = {
+    name: "willy",
+    age: 22
+};
+willy = new Proxy(willy, {
+    get(target, key) {
+        let result = target[key];
+        if (key === 'age')
+            result += "岁";
+        return result;
+    },
+    set(target, key, value) {
+        if (key === 'age' && typeof value != 'number') {
+            // throw Error("age字段必须为number类型");
+            console.log("age字段必须为number类型");
+        }
+        return Reflect.set(target, key, value); // target[key] = value;
+    }
+});
+console.log(`我叫 ${willy.name}，今年 ${willy.age}。`);
+willy.age = "a";
+```
+
+`Reflect`拦截
+
+`Reflect`是一个内置对象，它提供拦截`JavaScript`操作的方法。这些方法与`Proxy handlers`的方法相同。
+
+> `Reflect`不是一个函数对象，因此它是不可构造的。
+
+因为不是构造函数，所以不能通过`new`来对其进行调用，或作为一个函数来调用。
+`Reflect`的所有属性和方法都是静态的。
+
+## 零碎
+
+### offset、scroll、client
+
+- 网页可见区域高：document.body.clientHeight
+- 网页正文全文高：document.body.scrollHeight
+
+- 网页可见区域高（包括边线的高）：document.body.offsetHeight
+
+- 网页被卷去的高：document.body.scrollTop
+- 屏幕分辨率高：window.sreen.height
+
+clientHeight 和 offsetHeight 属性和元素的滚动、位置没有关系它代表元素的高度
+
+**clientHeight/clientWidth**：**包括padding但不包括border、水平滚动条、margin的元素的高度**。对于inline的元素这个属性一直是0，单位px，只读元素。
+
+**offsetHeight/offsetWidth**：**内容+padding+border**.包括padding、border、水平滚动条，但不包括margin的元素的高度。对于inline的元素这个属性一直是0，单位px，只读元素。
+
+![image-20200920125228504](image/image-20200920125228504.png)![image-20200920125235120](image/image-20200920125235120.png)
+
+**滚动条情况**
+
+当本元素的子元素比本元素高且overflow=scroll时，本元素会scroll。
+
+**scrollHeight/scrollWidth:** 因为子元素比父元素高，父元素不想被子元素撑的一样高就显示出了滚动条，在滚动的过程中本元素
+
+有部分被隐藏了，scrollHeight代表包括当前不可见部分的元素的高度。而可见部分的高度其实就是clientHeight，即scrollHeight>=clientHeight恒成立。在有滚动条时讨论scrollHeight才有意义，在没有滚动条时scrollHeight==clientHeight恒成立。单位px，只读元素。
+
+**scrollTop/scrollLeft:** 代表在有滚动条时，滚动条向下滚动的距离也就是元素顶部被遮住部分的高度。在没有滚动条时scrollTop==0恒成立。单位px，可读可设置。
+
+![image-20200920125155892](image/image-20200920125155892.png)
+ **offsetTop/offsetLeft:** 当前元素顶部距离最近父元素(offsetParent)顶部的距离,和有没有滚动条没有关系。单位px，只读元素。(获取的相对于offsetParent的距离)
+
+![image-20200920125120950](image/image-20200920125120950.png)
+
+**offsetParent/parentNode**:最近的脱离文档流的父元素，如果没有脱离文档流的父元素 就是body
+
+## 语法运用
+
+### 获取随机索引值
+
+```js
+function getRandomIntInclusive(min,max){
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max -min + 1)) + min;
+}
+```
+
+### 提取非行间样式
+
+- currentStyle 适用于火狐浏览器
+- getComputedStyle 适用于IE浏览器
+
+### 自制滚动条
+
+先把系统滚动条隐藏
+
+根据内容大小设置滚动条高度（设置的滚动条内容高度越高，滚动条越小）
+
+当拖动滚动条时候，移动内容（滚动条跟着鼠标走）
+
+### 局部放大
+
+### 遮罩层
+
+### 定义选择到框内的状态
+
+形如：input[type=text] 选择input标签中的文本类型的
+
+Checkbox的checked 为选中状态
+
+取反则是为非：!   形如：获取的变量.checked=!获取的变量.checked
+
+### 替换内容问题
+
+变量名.replace(“被替换内容”,“替换内容”);
+
+替换类名：变量名.className = 变量名.className.replace(“被替者”,“替换者”);
+
+//只是替换了replace的内容，class中定义的其他类名还是存在的，
+
+比如class="aa bb cc"，当你relpace("aa","dd")，其他两个bb,cc的类名仍然存在
+
+### 阻止事件冒泡
+
+1、阻止事件冒泡在事件结尾处添加cancelBubble=true;
+oEvent.cancelBubble = true; //取消事件冒泡（否则点击按钮后，会冒泡到最后一层上即document）
+
+```html
+<div id='div' onclick='alert("div");'>
+	<ul onclick='alert("ul");'>
+		<li onclick='alert("li");'>test</li>
+	</ul>
+</div>
+```
+
+当我点击test的时候，先会弹出 li ->ul ->div。从下往上冒泡。就比如小鱼儿在海底冒泡，小泡泡从海底往海面冒泡，越来越大。html文档中最后的一个泡 document
+
+2、event.stopPropagation()方法
+这是阻止事件的冒泡方法，不让事件向documen上蔓延，但是默认事件任然会执行，当你掉用这个方法的时候，如果点击一个连接，这个连接仍然会被打开，
+
+3、event.preventDefault()方法
+这是阻止默认事件的方法，调用此方法是，连接不会被打开，但是会发生冒泡，冒泡会传递到上一层的父元素；
+
+4、return false;
+阻止浏览器默认事件à在函数结尾处 return false;
+这个方法比较暴力，他会同事阻止事件冒泡也会阻止默认事件；写上此代码，连接不会被打开，事件也不会传递到上一层的父元素；可以理解为return false就等于同时调用了event.stopPropagation()和event.preventDefault()
+
+# JQ
+
+## 理念
+
+### load 和 ready 谁先执行？
+
+```js
+window.onload = function(){}
+$(document).ready(fcuntion(){})
+```
+
+**DOM文档加载步骤：**
+
+1. 解析 HTML 结构
+2. 加载外部脚本和样式表文件
+3. 解析并执行脚本代码
+4. 构造 HTML DOM 模型（ready 方法执行）
+5. 加载图片、视频等外部文件
+6. 页面加载完毕（load 方法执行）
+
+注意：onload 只执行一次，若有多次，则最后一次覆盖前面的
+
+​			ready 可以执行多次，不会覆盖
+
+## 选择器
+
+### 基本选择器
+
+```js
+$("#div1")		//按id属性选择元素
+$(".class1") 	//按class属性选择元素
+$("div")		//按元素名称选择元素
+$("*")			//选择所有元素
+$("#div2,span")	//并列选择元素
+```
+
+### 层次选择器
+
+```js
+$("body div") //选择body所有的div后代元素
+$("body>div") //选择body所有的直接div后代元素
+$("#div1+div") //选择id值为div1的元素的后面相邻的兄弟元素
+$("#div1~div") //选择id值为div1的元素的后面所有的兄弟元素
+```
+
+### 基本过滤选择器
+
+```js
+$("div:first")	//选择第一个div元素
+$("div:last")	//选择最后一个div元素
+$("div:eq(4)")	//选择第五个div元素
+$("div:gt(5)") 	//选择所有索引值大于5的div元素
+$("div:lt(5)") 	//选择所有索引值小于5的div元素
+$("div:even")	//选择所有索引值为偶数的div元素
+$("div:odd")	//选择所有索引值为奇数的div元素
+$("div:not(.class1)") //选择不包含class属性值为class1的所有div元素
+$(":header")	//选择所有的标题元素
+$(":focus")		//选择成为焦点的元素
+$(":animated")	//选择所有动画元素
+```
+
+### 内容过滤选择器
+
+```js
+$("div:contains(class为class1)") //改变所有包含文本"class为class1"的div元素
+$("div:has('.subClass1')") //改变所有包含class值为subClass1子元素的div元素
+$("div:empty")//改变所有不包含子元素的div元素
+$("div:parent")//改变所有包含子元素的div元素
+```
+
+### 属性过滤选择器
+
+```js
+$("div[title]") //改变所有有title属性的div元素
+$("div[title=title1]") //改变所有有title属性为title1的div元素
+$("div[title!=title1]") //改变所有有title属性不为title1的div元素
+$("div[title^=ti]") //改变所有有title属性值以ti开头的div元素
+$("div[title$=1]") //改变所有有title属性以1结尾的div元素
+$("div[title*=Pre]") //改变所有有title属性值包含Pre的div元素
+$("div[id],[title]") //改变包含属性为id和属性为title的div元素
+//注意："[],[]"是并集，"[][]"是交集（两个条件间隔一个空格）
+```
+
+### 可见过滤选择器
+
+```js
+$("div:visible") //改变所有可见的的div元素
+$("div:hidden").show(3000);//显示所有不可见的的div元素背景色
+```
+
+### 子元素过滤选择器
+
+```js
+$("div.class1 :nth-child(2)") ;//选择所有class属性值为class1的div元素的第二个子元素
+$("div.class1 :first-child") //改变所有class属性值为class1的div元素的第1个子元素
+$("div.class1 :last-child") //改变所有class属性值为class1的div元素的最后1个子元素
+$("div.class1 :only-child") //改变所有class属性值为class1的div元素的唯一一个子元素
+```
+
+# ES6
+
+### 面向对象
+
+- 面向对象编程
+  - 特性：封装性、继承性、多态性
+  - 优点：易维护、易复用、易扩展，由于面向对象有封装、继承、多态的特性，可以设计出低耦合的系统，使系统更加灵活、易于维护。
+- 面向过程
+  - 优点：性能比面向对象高，适合跟硬件联系很紧密的东西，如单片机。
+  - 缺点：没有面向对象易维护、易复用、易扩展
+
+###类
+
+- `constructor`构造函数
+
+  - `constructor()`方法是类的构造函数(默认方法)，用于传递参数，返回实例对象，通过`new`命令生成对象实例时自动调用该方法。如果没显示，类内部会自动创建一个。
+  - 不可通过构造函数访问实例成员。
+  - 静态成员只能怪通过构造函数访问
+
+- 创建、调用类
+
+  1. 通过`class`关键字创建类
+  2. 类中有`constructor函数`(构造函数)，可接受传递来的参数同时返回实例对象；
+  3. `constructor函数`只要`new`生成实例时，就会自动调用这个函数，如果不写这个函数，类也会自动生成这个函数；
+  4. 生成实例`new`不能省略；
+
+- 类的继承与`super`
+
+  - `super`必须在子类`this`之前调用
+
+  - `super`作为函数调用时，代表父类的构造函数。
+
+  - > ES6要求，子类的构造函数必须执行一次`super`函数。注意：`super()`作为函数时，`super()`只能在子类的构造函数之中，用在其他地方就会报错。
+
+```index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button>点击</button>  
+<script>
+    class Father{
+        constructor(name, age) {
+            console.log(this)
+            //constructor里面的 this 指向的是创建的实例对象
+            this.name = name;
+            this.age = age;
+            this.btn = document.querySelector('button');
+            //这个this指向的是 btn 这个按钮，因为该按钮调用了sing函数
+            this.btn.onclick = this.sing('小星星2号');
+        }
+        sing(song) {
+            console.log(this.name + '唱：' + song);
+        }
+    }
+    class Son extends Father {
+        constructor(x, y) {
+            super(x,y);
+            this.x = x;
+            this.y = y;
+
+            this.btn = document.querySelector('button');
+            //这个this指向的是 btn 这个按钮，因为该按钮调用了sing函数
+            this.btn.onclick = this.sing('大星星');
+        }
+        sing(song) {
+            console.log(this.x + '唱：' + song);
+        }
+    }
+    let willy = new Father('willy', 23);
+    willy.sing('小星星1号');
+    let son = new Son('son', 22);
+</script>
+</body>
+</html>
+```
+
+### 原型
+
+#### 原型对象`prototype`
+
+- 作用：共享方法；解决构造函数多命名，防止冲突问题。
+- 原型对象中有个属性：`constructor`为了让对象/实例获取到创建该对象的构造函数。
+
+- `方法名.prototype.对象名=值/function(){}`
+- 原型对象中`this`指向的是实例对象。
+
+#### 对象原型`__proto__`
+
+- 对象都有一个属性`__proto__`指向构造函数的`prototype`原型对象，之所以我们可使用构造函数`prototype`原型对象的属性和方法，就是因为对象有`__proto__`原型存在。
+- `__proto__`对象和原型对象`prototype`是等价的。
+- `__proto__`对象原型的意义是存在于为对象的查找提供一个方向/路线，但是它是非标准属性，因此实际开发中，不可以使用该属性，它只是内部指向原型对象`prototype`。
+
+```
+function Star(name, age){
+    this.name = name;
+    this.age = age;
+}
+//很多情况下，需手动的利用constructor这个属性只会原来的构造函数
+Star.prototype.sing = function(){
+    console.log(this.name+ '我会唱歌');
+}
+Star.prototype = {
+    //如果我们修改了原来的原型对象，给原型对象赋值的是一个对象，则必须手动利用construtor指回原来的构造函数
+    constructor: Star,
+    song: function() { console.log('song') },
+    movie: function() { console.log('movie') }
+}
+let ldh = new Star('willy', 22);
+console.log(ldh.sing);
+console.log(ldh.__proto__ === Star.prototype);  //true
+
+console.log(Star.prototype);    //{constructor: [Function: Star], song: [Function: song], movie: [Function: movie]}
+console.log(ldh.__proto__);
+
+console.log(Star.prototype.constructor);    //[Function: Star]
+console.log(ldh.__proto__.constructor);
+
+console.log(Star.prototype.__proto__ === Object.prototype)  //ture
+console.log(Object.prototype.__proto__) //null
+```
+
+#### `constructor`构造函数、构造函数原型和对象三者关系
+
+![image-20210422130809294](image/image-20210422130809294.png) 
+
+#### 原型链
+
+![image-20210422131258473](image/image-20210422131258473.png)
+
+>注意： 当重新设置构造函数的prototype，一定要重新设置constructor属性
+
+#### 扩展内置对象
+
+- 可以通过原型对象，给原来的内置对象进行扩展自定义的方法。如给数组增加自定义求和的功能。
+
+- > 注意：数组和字符串内置对象不能给原型对象覆盖操作 `Array.prototype = {}`，只能是`Array.protype.xxx = function(){}`的方式。
+
+- 案例：贪吃蛇。随机方块
+
+```js
+//给数组添加求和方法
+//Array.prototype = {sum: function(){}}//这是错误的书写方式
+Array.prototype.sum = function() {
+    let sum = 0;
+    for(let i = 0; i < this.length; i++){
+        sum += this[i];
+    }
+    return sum;
+}
+let arr = [1, 2, 3];
+console.log(arr.sum());
+
+let arr1 = new Array[11, 22, 33];
+console.log(arr1.sum());	//66
+```
+
+
+### ES5中新增的方法
+
+#### 迭代遍历方法：`forEach()、map()、some()、every()`
+
+- **`forEach()、map()`方法->迭代数组**：**对数组的每个元素执行一次提供的函数**
+
+  - `array.forEach(function(currentValue数组当项的内容, index索引, arr数组本身))`
+  - `map()`会分配内存空间存储新数组并返回新的数组；`forEach()`允许callback更改原始数组的元素，不会返回数据。
+
+- **`filter()`方法->创建数组：主要用于筛选数组**
+
+  - `array.filter(function(currentValue, index, arr))`
+
+  - `filter()`方法创建一个新的数组，新数组中的元素时通过检查指定符合条件的所有元素。
+
+  - > 注意：它会直接返回一个新数组
+
+- **`some()、every()`方法->检测数组：查找数组中是否有满足条件的元素**
+
+  - `array.some(function(currentValue, index, arr))`
+  - some()方法，遍历数组的每一项，若其中一项为 true，则返回true；every()方法，遍历数组每一项，若全部为true，则返回true.
+
+```js
+let arr = [12, 1, 30, 22];
+for(let i=0; i<arr.length; i++){
+    console.log("for:"+arr[i]);
+}
+
+//arr.forEach(console.log)
+let sum = 0;
+arr.forEach(function(value, index, array){
+    array[index] == value;	//true
+    sum += value;
+})
+
+let newArr = arr.filter(function(value, index){
+    return value >= 20;
+})
+console.log(newArr);
+
+let arr2 = ['a', 'b', 'c'];
+let flag = arr2.some(function(value){
+    return value == 'a';
+})
+console.log(flag);
+```
+
+#### `trim()`两侧去空格
+
+```js
+let str = '  an dy   ';
+console.log(str.trim());	//an dy
+```
+
+#### `Object.defineProperty()`
+
+- `Object.defineProperty()`定义对象中新属性或修改原有的属性。
+
+- `Object.defineProperty(obj目标对象, prop需定义或修改的属性名字, descriptor目标属性所拥有的特性)`
+
+- ![image-20210425193715820](image/image-20210425193715820.png)
+
+- ```js
+  let obj = {
+      id: 1,
+      name: 'mi',
+      price: 22
+  };
+  Object.defineProperty(obj, 'num', {
+      value: 1000,
+      configurable: true
+  });
+  Object.defineProperty(obj,'price',{
+      value: 222
+  })
+  delete obj.id;
+  console.log(Object.keys(obj));
+  console.log(obj)
+  ```
+
+### 函数的定义、调用与`this`的指向
+
+- 所有函数都是Function构造函数的实例对象。
+
+![image-20210425195525649](image/image-20210425195525649.png)
+
+
+
+```js/html
+//1、普通函数 this指向window
+function fn() {
+    console.log("普通函数this：" + this);
+}
+window.fn();
+
+//2、对象的方法 this指向是对象本身
+let obj = {
+    say: function(){
+        console.log("对象的方法的this：" + this);
+    }
+}
+obj.say();
+
+//3、构造函数  this指向的是willy实例对象，原型对象里面的this指向的也是willY实例对象
+function Star() {}
+Star.prototype.sing = function() { }
+let willy = new Star();
+
+//4、绑定事件函数  this指向是函数的调用者 btn按钮对象
+let btn = document.querySelector("button");
+btn.onclick = function() {
+    console.log("绑定事件函数的this："+ this);
+}
+ 
+//5、定时器函数 this指向window
+setTimeout(function(){
+    console.log('定时器函数的this：'+ this);
+},1000);
+
+//6、立即执行函数 this指向window
+(function(){
+    console.log("立即执行函数的this：" + this);
+}())
+```
+
+### 改变函数内部`this`指向
+
+#### 借用构造函数继承父类型属性、方法-->`call()` 
+
+- ES6之前并没有`extends`继承，我们可以通过构造函数+原型对象模拟实现继承，被称为组合继承。
+
+- 核心原理：通过`call()`把父类型的`this`指向子类型的`this`，这样就可实现子类型继承父类型的属性。
+
+- ````js
+  function Father(name, age){
+      //this指向父构造函数的对象实例
+      this.name = name;
+      this.age = age;
+  }
+  Father.prototype.money = function(){
+      console.log(1000);
+  }
+  function Son(name, age){
+      //this 指向子构造函数的对象实例
+      Father.call(this, name, age);
+  }
+  // 继承父构造函数的方法->直接赋值：（通过让父子共用相同地址来实现），如果修改子原型对象，父原型对象会跟着改变
+  //Son.prototype = Father.prototype;	
+  
+  //继承父构造函数的方法->new：不会共用相同地址，修改子原型对象，父原型对象不会改变
+  Son.prototype = new Father();
+  Son.prototype.constructor = Son;    //利用对象形式修改原型对象，需利用constructor指回原来的构造函数
+  
+  Son.prototype.exam = function() {
+      //子构造函数专门的方法
+      console.log('儿子要考试~');
+  }
+  
+  let son = new Son('willy',11);
+  console.log(son);
+  console.log(Father.prototype);
+  console.log(Son.prototype.constructor);
+  ````
+
+- ES6后通过`extends、super()`来实现继承。
+
+#### 改变函数内部的`this`指向
+
+- `call() `可调用函数，改变函数的this指向，
+
+  主要作用是**实现继承**
+
+- `apply()` 可调用函数，可改变函数的this指向
+
+  但`apply()`的参数必须是数组（伪数组）
+
+  主要应用**借助于数学内置对象求最大最小值**
+
+- `bind() `不会调用函数，但能改变函数内部this指向
+  返回的是原函数改变this之后产生的新函数
+  **如果有的函数我们不需要立即调用，但又想改变这个函数内部的this指向**，则用bind
+
+```js
+//改变函数内this的指向 call() apply() bind()
+//1、call() 可调用函数，改变函数的this指向，call()主要作用是实现继承
+function Father(name, age, sex) {
+    this.name = name;
+    this.age = age;
+    this.sex = sex;
+    console.log(this);  //this通过call()方法调用后指向son
+}
+function Son(name, age, sex) {
+    Father.call(this, name, age, sex);
+}
+let son = new Son('willy', 22, '男');
+
+
+/* 2、apply() 可调用函数，可改变函数的this指向，
+但是apply()的参数必须是数组（伪数组）
+apply()主要应用 借助于数学内置对象求最大最小值 */
+let obj = {
+    name: 'willy'
+}
+function fn(arr) {
+    console.log(this);
+    console.log(arr);
+}
+fn.apply(obj, ['red']);
+
+let arr = [1, 55, 33, 22, 66];
+let max = Math.max.apply(null, arr);
+let min = Math.min.apply(null, arr);
+console.log(max, min);
+
+
+/* 3、bind() 不会调用函数，但能改变函数内部this指向
+返回的是原函数改变this之后产生的新函数
+如果有的函数我们不需要立即调用，但又想改变这个函数内部的this指向，则用bind，如定时器函数  
+fun.bind(thisArg, arg1, arg2, ...)  
+thisArg:在fun函数运行时指定的this值，argn传递的其他函数，返回值由指定的this值和初始参数改造的原函数拷贝*/
+let o = {
+    name: 'andy'
+}
+let f = fn.bind(obj, o);
+f();
+btn.onclick = function() {
+    this.disabled = true;
+    setTimeout(function() {
+        this.disabled = false;
+    }.bind(this),3000);
+}
+```
+
+#### `call()、bind()、apply()`的区别和使用
+
+**相同点：**
+
+- `call，apply和bind`都是`Function`原型`Function.prototype`中的方法，而所有的函数都是`Function`的实例。
+- 都可以改变函数内部的`this`指向。
+
+**区别点：**
+
+- `call()和apply()`会调用函数，并且改变函数内部`this`指向；
+- `call()和apply()`传递的参数不一样，`call()`传递参数`aru1、aru2形式`，`apply()`必须数组形式`[arg]`；
+- `bind()`不会调用函数，可以改变函数内部`this`指向。
+
+**主要应用场景：**
+
+- `call`主要用做继承。
+- `apply`经常跟数组有关，如借助数学对象实现最大值最小值。
+- `bind`不调用函数，但会改变`this`指向，如改变定时器内部的`this`指向。
+
+### 严格模式
+
+- 可分`为脚本开启严格模式`和`为函数开启严格模式`两种情况。
+- 为脚本开启严格模式：为整个脚本开启严格模式，需要在所有语句之前放一个特定语句**"use strict";**。
+- 严格模式的变化：
+  - 在全局作用域函数中的`this`指向`window`-->`在全局作用域函数中的this`为`undefined`。
+  - 构造函数不加`new`也可以调用，当普通函数，`this`指向全局对象-->如果构造函数不加`new`调用`this`会报错。
+  - `new`实例化的构造函数指向创建的对象实例。
+  - 定时器中的`this`指向`window`。
+  - 事件、对象还是指向调用者。
+- 函数变化
+  - 函数不能有重名的参数。
+  - 函数必须声明在顶层，不允许在非函数的代码块内声明函数。
+
+```js
+'use strict';
+// 1、变量必须先声明再使用
+let num = 19;
+
+// 2、不可随意删除已经声明的变量
+// delete num;  //报错
+
+// 3、全局作用域函数下的this是undefined
+function fn() {
+    console.log(this); //undefined
+}
+fn();
+
+// 4、构造函数不加new调用，this会报错
+function fun() {
+    console.log(this); //fun{}
+    this.sex = '男';
+}
+let willy = new fun();
+console.log(willy.sex);
+
+// 5、定时器的this还是指向window
+setTimeout(function(){
+    console.log(this);  //window
+},1000);
+
+//函数里面的参数不允许有重名
+/* function fna(a,a){console.log(a+a);}  //函数重名，ERROR
+fna(1,2); */
+```
+
+### 高阶函数
+
+- 高阶函数是对其他函数进行操作的函数，它接受函数作为参数或将函数作为返回值输出。
+- 函数也是一种数据类型，可作为参数传递给另一个参数使用。如：回调函数。
+
+```html/JS
+<div style="width: 200px;height: 200px;position: absolute;background-color: pink;"></div>
+
+<script src="../lib/jquery-3.2.1.js"></script>
+<script>
+function fn(a, b, callback) {
+    console.log(a + b);
+    callback && callback();
+}
+fn(1, 2, function() {
+    console.log("我是最后调用的");
+});
+$("div").animate({left: 500}, function(){
+    $("div").css("background","purple");
+})
+```
+
+### 预解释
+
+1. 解释变量和函数（函数解释时只把他当成字符串来解释，调用时才开始翻译）
+
+2. 预解释值发生在当前的作用域下，开始只对 window 下的进行预解释，函数只在执行时才会对函数中的进行预解释
+
+3. 对于带var和function关键字的预解释作用是不一样的
+
+   1）var->在预解释时只是提前声明
+
+   2）function->在预解释时提前的声明和定义都完成了
+
+```js
+console.log(num);	//-->undefine
+var num = 12;
+console.log(num);	//-->12
+
+var obj = {name: "myName", age: 7};
+fn(100,200);
+function fn(num1,num2){
+    var total = num1 + num2;
+    console.log(total);
+}
+```
+
+### JS中内存的分类
+
+**1、内存存储**
+
+- 当对象被需要的时候就会为其分配内存空间，如声明、定义变量的时候
+- 在对象已经分配了内存的对象的时候再做对内存的读取操作
+- 对象销毁是在这个对象不再被需要的时候，就会释放这个对象的内存，对象就会被销毁
+- 全局变量：浏览器关闭的时候就会被销毁
+
+**2. 数据的存储原理**
+
+基本类型在传递过程中传递的是内容
+
+引用类型在传递的时候传递过程中的是地址
+
+注解： -->栈：小而快
+
+**3. 栈内存和堆内存**
+
+- 栈内存：用来提供一个供JS代码执行的环境->作用域（全局作用域/私有作用域）
+- 堆内存：用来存储引用数据类型的值->对象存储的是属性名和属性值，函数存储的是代码字符串（JS所有的数据都是存放在堆内存中）
+
+**4. 内存泄露（垃圾回收机制BUG）**
+
+JS中存在垃圾回收机制，其原理是：使用引用计数法，就是语言引擎有一张“引用表”，保存了内存里面所有的资源的引用次数，如下：
+
+![image-20200921174129923](image/image-20200921174129923.png)
+
+但是如果一个值不在需要了，引用数却不为零，垃圾回收机制是无法释放这块内存，从而导致了“内存泄露”，如：
+
+![image-20200921174421861](image/image-20200921174421861.png)
+
+### 作用域
+
+**1. 公有作用域、私有作用域**
+
+外部的为全局变量，内部的为局部变量
+
+**2. var 和没有 var 的区别**
+
+- 加var为局部变量（在方法内），不加var为全局变量（当方法使用后才能生效）
+- 全局变量可以不用声明var，函数内变量必须声明var；
+- 在定义局部变量时加或不加var关键字没什么影响；但在定义局部变量时如果不加var关键字JS解释程序会将其解释为全局变量。
+
+```js
+var a = 1;
+function aa(){b=2;};
+console.log(a);	//1
+//console.log(b); //b uis no defind
+aa();
+console.log(b); //2
+```
+
+![image-20200921174900757](image/image-20200921174900757.png)
+
+![image-20200921174923845](image/image-20200921174923845.png)
+
+#### 块作用域（ES6新增）
+
+- 块作用域由`{}`包括，if语句和for语句里面的`{}`也属于块作用域。
+- JS中使用var来声明一个变量时，变量的作用域主要是和函数的定义有关
+- 针对于其他块定义来说是没有作用域的，如:`if、for`等
+
+
+### 闭包
+
+- 闭包指有权访问另一个函数作用域中变量的函数，即一个作用域可以访问另一个函数内部的局部变量。
+
+- 闭包里面函数用自己的作用域，调用外面的变量，在闭包里面执行/改变变量，不会影响外面的变量。
+
+- 闭包主要作用：**延伸了变量的作用范围-->执行完所有调用的函数，才会销毁函数里面的变量**
+
+- >闭包灵活，但不好用，无奈之下才使用
+
+```html
+<h1>经典案例：点击li，显示对应的li</h1>
+<ul>
+    <li>消息1</li>
+    <li>消息2</li>
+    <li>消息3</li>
+    <li>消息4</li>
+</ul>
+<script>
+    //利用动态添加属性的方式
+    let lis = document.querySelectorAll('li');
+    /* for(let i=0;i<lis.length;i++) {
+        lis[i].index = i;
+        lis[i].onclick = function() {
+            console.log(this.index);
+        }
+    } */
+
+    //利用闭包获得当前li的索引号
+    for(let i = 0; i < lis.length; i++) {
+        // 利用for循环创建4个立即执行函数，立即执行函数也成为小闭包
+        (function(i) {
+            lis[i].onclick =  function() {
+                console.log(i);
+            }
+        })(i);
+    }
+</script>
+<script>
+    function fn() {
+        let num = 10;
+        function fun(){
+            console.log(num);
+        }
+        fun();
+    }
+    let f = fn();
+    f();   //延伸变量作用范围，当f()执行完，才会销毁num变量
+    //等价： let f = function fun() { console.log(num); }
+</script>
+```
+
+### 递归
+
+#### **递归遍历多层`json`数据**
+
+```js
+let data = [{
+    id: 1,
+    name: '家电',
+    goods: [{
+        id: 11,
+        gname: '冰箱',
+        goods: [{
+            id: 111,
+            gname: '海尔'
+        },{
+            id: 112,
+            gname: '美的'
+        }]
+    },{
+        id: 12,
+        gname: '洗衣机'
+    }]
+},{
+    id: 2,
+    name: '服饰'
+}]
+//输入id号，返回数据对象
+function getID(json, id) {
+    let o = {};
+    json.forEach(function(item) {
+        if(item.id == id) {
+            o = item;
+            console.log(item);
+        } else if (item.goods && item.goods.length > 0) {
+            o = getID(item.goods, id);
+        }
+    });
+    return o;
+}
+getID(data, 2);
+getID(data, 11);
+getID(data, 112);
+```
+
+#### 深拷贝与浅拷贝
+
+- 深拷贝和浅拷贝是只针对`Object`和`Array`这样的引用数据类型的。
+
+- **浅拷贝：**浅拷贝只是拷贝一层，更深层次对象级别的只拷贝引用。（只复制指向某个对象的指针，而不是复制本身，新旧对象还是共享同一块内存）
+- **深拷贝：**深拷贝拷贝多层，每一级别的数据都会拷贝。（会另外创造一个一模一样的对象，新对象跟原对象不共享内存，修改新对象不会改变原来对象的值）
+- es6新增方法浅拷贝：`Object.assign(targe, ...sources)`
+
+```js
+let obj = {
+    id: 1,
+    name: 'willy',
+    msg: {
+        age: 17,
+        address: '广州'
+    }
+};
+let o = {};
+/* console.log('-----浅拷贝------------------');
+for(let item in obj) {
+    o[item] = obj[item];
+}
+o.msg.age = 20;
+console.log(o, '\n', obj); */
+
+/* console.log('-----es6 浅拷贝 语法糖---------');
+Object.assign(o, obj);
+o.msg.age = 12;
+console.log(o, '\n', obj); */
+```
+
+##### 浅拷贝的实现方式
+
+1、Object.assign()
+
+Object.assign()方法可以把任意多个的原对象自身的可枚举属性拷贝给目标对象，然后返回目标对象。但是Object.assign()进行的是浅拷贝，拷贝的是对象的属性的引用，而不是对象本身。
+
+```js
+let obj = {a: {a: 'willy', b: 22}};
+let initalObj = Object.assign({}, obj);
+initalObj.a.a = 'ice';
+console.log(obj.a.a);	//ice
+```
+
+注意：当object只有一层时为深拷贝。
+
+```
+let obj = {a: 'willy'};
+let obj2 = Object.assign({}, obj);
+obj2.a = 'ice';
+console.log(obj); //{a: 'willy'}
+```
+
+2、Array.prototype.concat()
+
+```js
+let arr = [1, 2, {a: 'willy'}];
+let arr2 = arr.concat();
+arr2[2].a = 'ice';
+console.log(arr[2].a);	//修改新对象会修改到原对象
+```
+
+3、Array.prototype.slice()
+
+```js
+let arr = [1,3, {a: 'willy'}];
+let arr2 = arr.slice();
+arr2.a = 'a';
+console.log(arr.a);
+```
+
+> `Array`的`slice`和`conca`方法不修改原数组，只会返回一个浅复制了原数组中的元素的一个新数组。
+
+##### 深拷贝的实现方式
+
+1、JSON.parse(JSON.stringjfy())
+
+```js
+let arr = [1,3, {a: 'willy'}];
+let arr4 = JSON.parse(JSON.stringify(arr));
+arr4[2].a = 'ice';
+console.log(arr[2].a, arr4[2].a);
+```
+
+原理：用JSON.stringify将对象转成JSON字符串，再用JSON.parse()把字符串解析成对象，由此新的对象产生了，而且对象会开辟新的栈，实现深拷贝。(只能实现数组或对象深拷贝，不能处理函数)
+
+2、手写递归方法（递归方法实现深度克隆原理：遍历对象、数组直到里面都是基本数据类型，然后再赋值，就是深度拷贝）
+
+```js
+let obj = {
+    id: 1,
+    name: 'willy',
+    msg: {
+        age: 17,
+        address: '广州'
+    }
+};
+let o = {};
+console.log('-----深拷贝-------------------');
+function deepCopy(newobj, oldobj) { //封装函数
+    for(let i in oldobj) {
+        let item = oldobj[i];   // 获取属性值
+        if(item instanceof Array) { // 判断此值是否为数组
+            newobj[i] = [];
+            deepCopy(newobj[i], item);
+        } else if (item instanceof Object) {// 判断此值是否为对象
+            newobj[i] = {};
+            deepCopy(newobj[i], item);
+        } else {    //属于简单数据类型
+            newobj[i] = item;
+        }
+    }
+}
+deepCopy(o, obj);
+o.msg.age = 12;
+console.log(o, '\n', obj);
+```
+
+3、函数库lodash
+
+函数库lodash有提供`.cloneDeep`用来作Deep Copy（需要`npm i lodash`安装lodash库）
+
+```js
+let _ = require('lodash');
+let obj1 = {
+    a: 1,
+    b: {f: {g: 1}},
+    c: [1, 2, 3]
+};
+let obj2 = _.cloneDeep(obj1);
+console.log(obj1.b.f === obj2.b.f);
+```
+
+### let`、`var`、`const
+
+- 尽量少写`var`，写变量时用`let`，写常量时用`const`
+- const：
+  - const：一旦声明必须赋值,不能使用null占位；声明后值不能再修改；如果声明的是复合类型数据，可以修改其属性。
+  - 常量的含义是指向的对象不能修改，但是可以改变对象内部的属性-->即保存的知识内存的地址，而不是保存内容；栈和堆-->栈有地址的指向，堆存放数据。
+- **`let`、`var`、`const`的区别：**
+  - var：其作用域为该语句所在的函数内，且存在变量提升现象。
+  - let：其作用域为该语句所在的代码块内，不存在变量提升。
+  - const：声明的是常量，声明后值不可变。
+
+#### `let`、`var`、`const`叙述
+
+1. var声明的变量会挂载在window上，而let和const声明的变量不会
+
+```js
+var a = 100;
+console.log(a,window.a);    // 100 100
+let b = 10;
+console.log(b,window.b);    // 10 undefined
+const c = 1;
+console.log(c,window.c);    // 1 undefined
+```
+
+2. var声明变量存在变量提升，let和const不存在变量提升
+
+```js\
+console.log(a); // undefined  ===>  a已声明还没赋值，默认得到undefined值
+var a = 100;
+console.log(b); // 报错：b is not defined  ===> 找不到b这个变量
+let b = 10;
+console.log(c); // 报错：c is not defined  ===> 找不到c这个变量
+const c = 10;
+```
+
+3. let和const声明形成块作用域
+
+```js
+if(1){ var a = 100; let b = 10; const c = 1; }
+console.log(a); // 100
+console.log(b)  // b is not defined
+console.log(c)  // c is not defined
+```
+
+4. 同一作用域下let和const不能声明同名变量，而var可以
+
+```js
+var a = 100;
+var a = 10;
+let a = 100;
+let a = 10; // 报错：识符a已经被声明
+```
+
+5. let/const存在 暂存死区
+
+````js
+var a = 100;
+if(1){
+    a = 10;	// Error:a is not defined，当前块作用域存在a变量在此语句调用之后声明
+    let a = 1;
+}
+````
+
+### ES6新增语法
+
+#### **函数和属性增项写法**
+
+```js
+const name = 'Kobe';
+const age = 17;
+//ES5
+const obj = {
+    name: name,
+    age: age,
+    run: function(){},
+    eat: function(){}
+}
+
+//ES6
+const obj = {
+    name,
+    age,
+    run(){},
+    eat(){}
+}
+```
+
+#### 解构赋值
+
+- 数组解构允许我们按照一一对应的关系从数组中提取值，然后将值赋值给变量。
+- 可给数组赋别名。
+
+```js
+let [a, b, c, d] = [1, 2, 3];
+console.log(a, d);  // 1 undefined
+
+let person = {name: 'willy', age: 20};
+let {name: myName, age: myAge} = person;    //赋别名
+```
+
+#### 剩余参数
+
+剩余参数语法允许将一个不定数量的参数表示为一个数组。
+
+```js
+const sum = (...args) => {
+    let total = 0;
+    args.forEach(item => total += item );
+    console.log(total);
+    return total;
+}
+sum(10, 29, 39);
+sum(20, 19);
+```
+
+#### arguments
+
+- 使用特殊对象 arguments，开发者无需明确指出参数名，就能访问它们。
+
+- 引用属性 arguments.length检测函数的参数个数
+
+- 用 arguments 对象判断传递给函数的参数个数，即可模拟函数重载
+
+- > 箭头函数无法调用arguments
+
+```js
+function doAdd() {
+  if(arguments.length == 1) {
+    alert(arguments[0] + 5);
+  } else if(arguments.length == 2) {
+    alert(arguments[0] + arguments[1]);
+  }
+}
+doAdd(10);	//输出 "15"
+doAdd(40, 20);	//输出 "60"
+```
+
+#### 剩余参数和 `arguments`对象的区别
+
+- 剩余参数只包含那些没有对应形参的实参，而 arguments 对象包含了传给函数的所有实参。
+- `arguments`对象不是一个真正的数组，而剩余参数是真正的` Array`实例，也就是说你能够在它上面直接使用所有的数组方法，比如 `sort，map，forEach或pop`。
+- `arguments`对象还有一些附加的属性 （如callee属性：返回当前函数的引用(匿名函数可以使用该属性实现递归调用)）。
+
+#### 剩余参数与结构配合
+
+```js
+let arr1 = ['a', 'b', 'c'];
+let [s1, ...s2] = arr1;
+console.log(s2);  //[ 'b', 'c' ]
+```
+
+#### 扩展运算符
+
+- 用于取出参数对象中的所有可遍历属性，拷贝到当前对象之中
+
+```js
+//合并、复制数组
+let ary1 = [1, 2, 3];
+let ary2 = [4, 5, 6];
+let ary3 = [...ary1, ...ary2];	//等价于 let ary3 = ary1.push(...ary2);
+let ary4 = [...ary1];
+console.log(ary3, ary4);
+
+//遍历、拷贝数组
+let bar = { a: 1, b: 2 };
+let baz = { ...bar }; // 等价于 az = Object.assign({}, bar);
+
+//将数组转换为参数数列
+function add(x, y){
+    return x + y;
+}
+const numbers = [4, 38];
+add(...numbers) // 42
+
+//将伪数组(字符串)转为真正的数组
+let a = 'hello';
+console.log(a, '=>', ...a);
+```
+
+>**如果将扩展运算符用于数组赋值，只能放在参数的最后一位，否则会报错**
+
+#### Array的扩展方法
+
+##### **构造函数方法**
+
+**Array.from()**-->将类数组或可遍历对象转化为真正的数组
+
+```js
+const array1 = {
+    "0": "1",
+    "1": "2",
+    "2": "4",
+    "length": 3
+}
+let array11 = Array.from(array1);
+let array12 = Array.from(array1, item => item * 2)	//方法还可以接收第二个参数，作用类似于数组的map方法，用来对每个元素进行处理，将处理后的值放入返回的数组
+console.log(array11, array12) // [ '1', '2', '4' ] [ 2, 4, 8 ]
+```
+
+##### **实例方法**
+
+- **find()**：用于找出第一个符合条件的数组成员，如果没有找到返回undefined
+- **findIndex()**：用于找出第一个符合条件的数组成员的位置，如果没什么找到返回-1
+- **includes()**：表示某个数组是否包含给定的值，返回布尔值
+
+```js
+const aryString1 = [{
+    id: 1,
+    name: '张三'
+}, {
+    id: 2,
+    name: '李四'
+}];
+let target = aryString1.find((item,index) => { return item.id == 1 });
+console.log(target)   //{id: 1,name: '张三'}
+
+let aryNumber1 = [10, 20, 50];
+let index = aryNumber1.findIndex((item,inedx) => {return item > 15});
+let result = aryNumber1.includes(10)
+console.log(index,result)  // 1 true
+```
+
+#### String的扩展方法
+
+##### 模板字符串
+
+- `starsWith()`：表示参数字符串是否在原字符串的头部，返回布尔值
+- `endsWith()`：表示参数字符串是否在原字符串的尾部，返回布尔值
+- `repeat()`：表示将原字符串重复n次，返回一个新的字符串
+
+```js
+//模板字符串解析变量
+let name = `willy`;
+let obj = { //模板字符串换行
+    name: 'willy',
+    age: 22,
+    sex: '男'
+}
+const sayHello = () => `hello, my name is ${name}`; //在模板字符串调用函数
+let str = `${name}-->name:${obj.name},age:${obj.age},sex:${obj.sex},${sayHello()}`
+console.log(str);
+
+let start = str.startsWith('willy');	//头部是否为willy
+let end = str.endsWith('willy');	//尾部是否为willy
+let strCpoy = str.repeat(1);	//重复一次
+console.log(start, end, strCpoy);    //true true
+```
+
+#### Set数据结构
+
+- `Set数据结构`类似于数组，但是成员值都是唯一、不重复。（可用于**搜索关键词、数组去重**）
+- `Set`本身是构造函数，用来生成`Set`数据结构，`Set`函数可以接受一个数组作为参数，用来初始化。
+- 实例方法
+  - `add(value)`
+  - `delete(value)`
+  - `has(value)`：返回布尔值，表示该值是否为Set的成员
+  - `clear()`：清除所有成员，没有返回值
+- 遍历Set：
+
+```js
+//const s = new Set();
+const s1 = new Set([1, 2, 3, 4, 2, 1]);	//数组为1,2,3,4
+const set = new Set(["a","b","a","b"]);	//{ 'a', 'b' }
+const arr = [...set];	//把set结构转换为数组结构 [ 'a', 'b' ]
+console.log(set,arr);	//{ 'a', 'b' } [ 'a', 'b' ]
+
+//遍历set数据结构
+set.forEach(value => { console.log(value) })	//a b
+```
+
+### 箭头函数
+
+- 箭头函数表达式的语法比函数表达式更简洁，**并且没有自己的this**，arguments，super或new.target。箭头函数表达式更适用于那些本来需要匿名函数的地方，并且它不能用作构造函数。
+
+```js
+//基础语法
+(param1, param2, …, paramN) => { statements } 
+
+//1、函数代码块中只有返回值：(param1) =>{ return expression; }
+(param1) => expression
+const mul = (num1, num2) => num1 * num2
+console.log(mul(20, 30));	//600
+
+// 2、当只有一个参数时，圆括号可省略：(singleParam) => { statements }
+singleParam => { statements }
+
+// 3、没有参数的函数应该写成一对圆括号。
+() => { statements }
+
+//高级语法
+// 1、加括号的函数体返回对象字面量表达式：
+params => ({foo: bar})
+
+// 2、支持剩余参数和默认参数
+(param1, param2, ...rest) => { statements }
+(param1 = defaultValue1, param2, …, paramN = defaultValueN) => { 
+statements }
+
+//3、同样支持参数列表解构
+let f = ([a, b] = [1, 2], {x: c} = {x: a + b}) => a + b + c;
+f();  // 6
+```
+
+**箭头函数中的this**
+
+- 箭头函数中的 this 引用的是函数定义位置的上下文this（最近作用域中的 this）。
+- 箭头函数中的 this 查找方式是：向外层作用域中，一层层查找this，查到this的定义
+- 只要上级或自己是function，this则为匿名函数的window对象；上级和自己都是箭头函数，this则为自定义对象obj
+
+```js
+/*  第二个是在第一个里面，所以找的是第一个里面的this
+第四个是在aaa函数里面所以找的是obj对象的this   */
+const obj = {
+    a() {
+        setTimeout(function() {
+            setTimeout(function() {
+                console.log(this);  //window
+            })
+            setTimeout(() => {
+                console.log(this);  //window
+            })
+        })
+        setTimeout(() => {
+            setTimeout(function() {
+                console.log(this);  //window
+            })
+            setTimeout(() => {
+                console.log(this);  //obj.aaa()
+            })
+        })
+    }
+}
+obj.a();
+```
+
+###正则表达式
+
+- 正则表达式通常被用来检索、替换符合某个模式（规则）的文本，还常用于过滤页面内容中的一些敏感词（替换），或从字符串中获取特定部分（提取）等。
+
+- 创建正则表达式：
+
+  - 通过调用`RegExp`对象的构造函数创建：`let 变量名=new RegExp(/表达式/);`
+  - 通过字面量创建：`let 变量名=/表达式/;`
+
+- 测试正则表达式：`test()`正则对象方法，用于检测字符串是否符合该规则，为boolean型。`regxObj.test(str要测试的文本)`
+
+- 替换正则表达式：`replace()`用于替换正则表达式的内容。
+
+  `replace(正则表达式/被替换字符串, 替换的字符串);`
+
+  > `replace()`方法只执行一次，所以在正则表达式后面加上`/g`来执行多次。
+
+### Promise对象
+
+- `Promise`是异步编程的一种解决方案。
+- 处理异步事件：（如常见的应用场景：网络请求）
+  - 封装一个网络请求函数，因不能立即拿到结果，所以往往会传入另一个函数，在数据请求成功时，将数据通过传入的函数回调出去（网络请求复杂，会耗时过长）。
+- 什么情况下会用到`Promise`？==》一般情况下进行异步操作时，使用`Promise`对这个异步操作进行封装。
+- new：构造函数（1.保存一些状态信息；2.执行传入的函数）
+
+#### Promise对象的特点
+
+1、对象的状态不受外界影响。Promise 对象代表一个异步操作，有三种状态：
+
+- pending: 等待状态，不是成功或失败状态。
+- fulfilled: 满足状态，当我们主动回调resolve时，处于该状态，并且会回调`.then()`
+- rejected: 拒绝状态，当我们主动回调了reject时，处于该状态，并且会回调`.catch()`
+
+只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态。这也是 Promise 这个名字的由来，它的英语意思就是「承诺」，表示其他手段无法改变。
+
+2、一旦状态改变，就不会再变，任何时候都可以得到这个结果。Promise 对象的状态改变，只有两种可能：从 Pending 变为 Resolved 和从 Pending 变为 Rejected。只要这两种情况发生，状态就凝固了，不会再变了，会一直保持这个结果。就算改变已经发生了，你再对 Promise 对象添加回调函数，也会立即得到这个结果。这与事件（Event）完全不同，事件的特点是，如果你错过了它，再去监听，是得不到结果的。
+
+#### Promise 优缺点
+
+有了 Promise 对象，就可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。此外，Promise 对象提供统一的接口，使得控制异步操作更加容易。
+
+Promise 也有一些缺点。首先，无法取消 Promise，一旦新建它就会立即执行，无法中途取消。其次，如果不设置回调函数，Promise 内部抛出的错误，不会反应到外部。第三，当处于 Pending 状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）。
+
+#### Promise创建
+
+Promise 构造函数包含一个参数和一个带有 resolve（解析）和 reject（拒绝）两个参数的回调。在回调中执行一些操作（例如异步），如果一切都正常，则调用 resolve，否则调用 reject。
+
+```js
+new Promise((resolve, reject) => {
+    //在执行传入的回调函数时，会传入两个参数resolve, reject，本身又是函数
+    setTimeout((data) => {
+        resolve(data)
+    },1000)
+}).then((data) => {	//即回调
+    //执行成功后处理的代码 resolve处理
+}).catch(err => {
+    //捕获抛出异常 reject处理
+})
+```
+
+```js
+new Promise((resolve, reject) => {
+    setTimeout(() => {
+        // resolve("Nice to meet you!");
+        reject("goodbye~");
+    },1000)
+}).then((data) => {
+    console.log(data);
+},(err) => {
+    console.log(err)
+})
+```
+
+#### `Promise.prototype.then`方法：链式操作
+
+```js
+/*
+a 第一次执行处理代码
+a111 第二此执行处理代码
+a111222 第三次执行处理代码
+*/
+new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve('a')
+    },1000)
+}).then(res => {
+    console.log(res, "第一次执行处理代码")
+    return Promise.resolve(res + '111')
+    // return Promise.reject('error message（返回异常）');
+    // throw "error message（抛出异常）";
+}).then(res => {
+    console.log(res, "第二此执行处理代码")
+    return Promise.resolve(res + '222')
+}).then(res => {
+    console.log(res, "第三次执行处理代码")
+}).catch(err => {
+    console.log(err)
+})
+```
+
+![image-20210504005059567](image/image-20210504005059567.png)
+
+#### Promise Ajax
+
+```js
+function ajax(URL) {
+    return new Promise(function (resolve, reject) {
+        var req = new XMLHttpRequest(); 
+        req.open('GET', URL, true);
+        req.onload = function () {
+        if (req.status === 200) { 
+                resolve(req.responseText);
+            } else {
+                reject(new Error(req.statusText));
+            } 
+        };
+        req.onerror = function () {
+            reject(new Error(req.statusText));
+        };
+        req.send(); 
+    });
+}
+var URL = "/try/ajax/testpromise.php"; 
+ajax(URL).then(function onFulfilled(value){
+    document.write('内容是：' + value); 
+}).catch(function onRejected(error){
+    document.write('错误：' + error); 
+});
+```
+
+#### `Promise.all`方法，`Promise.race`方法
+
+- Promise.all(arr): 其中arr是多个Promise对象实例，只用当里面的所有实例有返回值时，Promise.all才会有返回值（其值是一个数组）。
+- Promise.race(arr): 其中arr是多个Promise对象实例，就是race这个单词的意思一样，意思是哪个跑得快，哪个就输出，当只要有一个Promise实例有返回值时，Promise.race的返回值就是这个值。通常我们再http请求时，做超时判断时可以这样使用，设置一个定时器，当定时器时间到了时就在UI上提醒请求超时。
+
+````js
+Promise.all([
+    new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve({name:"willy", age: 11})
+        },2000)
+    }),
+    new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve({name:'william', age: 22})
+        },3000)
+    })
+]).then(results => {
+    // console.log(results[0],results[1]);
+    console.log(results);
+})
+````
+
+# TypeScript
+
+### 安装/运行编译
+
+- 安装TypeScript：`npm install typescript -g`
+- 安装ts-node：`npm install -g ts-node`
+- 通过`npm config ge prefix`配置ts-node的环境
+- 编译法①：先通过`tsc filename.ts`转化为js文件，然后通过`node filename.js`运行文件。
+- 编译法②：通过安装`ts-node`来借以运行：`ts-node filename.ts`。相对于①会慢一点。
+
+### 概述
+
+- TypeScript = Type + JavaScript(为js添加了类型系统)。
+- TypeScript是微软开发的开源编程语言，设计目标是开发大型应用,可以在任何浏览器、计算机、操作系统上运行。
+- TypeScript相对JS的优点：类型化思维方式，减少改BUG时间；类型系统提高了代码可读性，并使维护和重构代码更容易。
+- TypeScript 是一门静态类型、弱类型的语言，是js的超集（js有的ts都有）。
+
+- 静态类型：一旦定义就不可改变。（类型注解：是一种为变量添加类型约束的方式）
+  - let 变量名 : 数据类型 = 赋值;    //静态类型不可改变，写其他类型的值，会报错。
+- 优点：代码即注释
+
+### 数据类型
+
+- 常用的基本数据类型：`number / string / boolean / undefined /null / void`
+- 除加号外，其他算数运算符值只能是number类型独自使用。其他类型需要将字符串类型转换为number类型。如：console.log(2 - +'1')    //+'1'表示将'1'(string) -->1(number)，即2 - +'1'=2-1=1。
+
+#### **数字**
+
+二进制：0b1010；八进制：0o744；十六进制：0xf00d；都会被通过Number型转化为十进制。
+
+#### **字符串**
+
+使用双引号`"string content"`或单引号`'string content'`表示字符串；还可以使用模板字符串定义多行文本和内嵌表达式，被反引号包围(`)，并且以 ${ expr }  这种形式嵌入表达式。
+
+```
+let firstName: string = 'Mike';
+let age: number = 12;
+let message: string = `Hello, ${firstName},your age is ${age}`;	//通过``包围内容
+```
+
+#### **任意值（any）**
+
+如果是一个普通类型，在赋值过程中改变类型是不被允许的；但如果是 `any` 类型，则允许被赋值为任意类型。
+
+弊端：检查变量时不能快速知道类型。（应避免使用）
+
+````
+let test1: any = 'seven';
+test1 = 7;
+````
+
+#### **null 和 undefined **
+
+null和undefined是所有类型的子类型。
+
+#### **void**
+
+void类型像是与any类型相反，它表示没有任何类型。当一个函数没有返回值，通常其返回值类型是void。声明一个void类型的变量没作用，因为只能给它赋undefined和null。
+
+**联合类型**
+
+通过竖线`|`分割每个类型，所以 `number | string | boolean` 表示一个值可以是number,string或boolean。如果一个值是联合类型，我们只能访问此联合类型的所有类型公有的成员。(写不包含在里面类型的数据，会报错)
+
+```
+let numberOrString: number |string;
+numberOrString = 111;
+numberOrString = 'abc';
+```
+
+### **数组**
+
+- 数组中只能出现该类型的值，否则会报错。
+
+- 在数组最后添加数组：`数组名[数组名.length] = 值`
+- 定义数组：
+  - let arrayName: 元素类型[] = [值]
+  - let arrayName: Array<元素类型> = [值]
+
+```
+//let names: string[] = new Array('abc','def','ijk')
+//相当于（更推荐下面的写法）
+let names: string[] = ['abc','def','ijk']
+names[names.length]="willy"		//在数组最后面添加元素
+names[names.length]="willy1"
+console.log(names[names.length-1])	//输出最后数组最后一个元素
+
+/*数组泛型 Array<elemType>*/
+let fibonacci: Array<number> = [1,2,3,4,5];
+
+/*接口表示数组*/
+interface NumberArray{
+	[index: number]: number;}
+let fibonacci: NumberArray = [1,2,3,4,5];
+```
+
+#### **类数组（伪数组）**
+
+类数组（伪数组）不是数组类型，不能赋值给数组，也不调用数组的一些方法。常见的伪数组如 `arguments`。
+
+```
+//function sum() { let args: number[] = arguments; }
+function sum() {
+    let args: {
+        [index: number]: number;
+        length: number;
+        callee: Function;
+    } = arguments;
+}
+```
+
+#### **any在数组中的应用**
+
+如用`any`表示数组中允许出现任意类型
+
+```
+let list: any[] = ['xxx',24,{website:'https://willy.com'}];
+```
+
+### **元组**
+
+组类型允许表示一个已知元素数量和类型的数组，各元素的类型不必相同。
+
+```
+let user: [string, number] = ['Willy', 17];	//长度跟数据类型要一一对应
+```
+
+### 接口
+
+```
+interface Person {
+	name: string;
+	age: number;
+	getName:(name: string) => void
+}
+let willy: Person = {
+	name: 'willy',
+	age: 16,
+	getName: (name: string) => {console.log(name)}
+}
+```
+
+**可选属性**
+
+```
+interface Person {
+	name: string;
+	age?: number;
+	getName?:(name: string) => void
+}
+let willy: Person = {
+	name: 'willy'
+};
+```
+
+**只读属性**
+
+一些对象属性只能在对象刚创建时改其值。可在属性名前用`readonly`来指定只读属性
+
+```
+interface Person {
+	readonly id: number;
+	name: string;
+}
+let willy: Person = {
+	id: 124,
+	name: 'willy'
+};
+//willy.id = 1324;	//ERROR，会报错
+```
+
+const和readyonly的区别：const是用来定义变量的；readonly是用来定义属性的
+
+### 函数
+
+在 TypeScript 的类型定义中，`=>` 用来表示函数的定义，左边是输入类型，需要用括号括起来，右边是输出类型。（与ES6中的=>不一致）
+
+```
+function sum(x: number, y: number): number { return x + y; }
+sum(1, 2);
+
+/*
+let mySum = function (x: number, y: number): number {
+    return x + y;
+};*/
+//与上面的一致，=> 用来表示函数的定义，左边是输入类型，需要用括号括起来，右边是输出类型。
+let mySum: (x: number, y: number) => number = function (x: number, y: number): number {
+    return x + y;
+};
+```
+
+#### **可选参数**
+
+与接口中的可选属性类似，我们用 `?` 表示可选的参数。
+
+> 可选参数必须接在必须参数后面，（即可选参数后面不允许再出现必须参数，否则会报错）
+
+```
+function buildName(firstName: string, lastName?: string) {
+    if (lastName) {
+        return firstName + ' ' + lastName;
+    } else {
+        return firstName;}
+}
+let tomcat = buildName('Tom', 'Cat');	//lastName属性写
+let tom = buildName('Tom');	//lastName属性不写
+```
+
+#### **参数默认值**
+
+在ES6中，允许给函数的参数添加默认值，TypeScript会将添加了默认值的参数识别为可选参数。
+
+```
+function buildName(firstName: string, lastName: string = 'Cat') {
+    return firstName + ' ' + lastName;
+}
+let fun1 = buildName('Tom', 'Cat');
+let fun2 = buildName('Tom');
+let fun3 = buildName(undefined,'Cat');
+let fun3 = buildName('Tom',undefined);
+```
+
+#### **类型推论**
+
+在赋值过程中，存在某些变量没有明确被定义，被推测出是一个函数类型：`(x:number, y:number, z?:number)=>number`
+
+```
+const myadd = function(x: number, y:number, z:number = 10){
+	if(typeof z === 'number') return x*y*z;
+	return x*y;
+}
+const myadd2: (x:number, y:number, z?:number) => number = myadd;
+```
+
+### Class类
+
+定义一切事物的抽象特点，包含属性和方法；具有封装、继承、多态的特点。
+
+**封装**
+
+封装了一个类，在引用任何一个类成员时用this来表示我们访问的是类的成员。最后通过new关键字实例封装类。
+
+```
+class Animal {
+	name: string;
+	constructor(name: string){ this.name = name; }
+	run() { return `${this.name} is running`; }
+}
+const snake = new Animal('willy');
+console.log(snake.run());	//willy is running
+```
+
+**继承**
+
+使用extends关键字，创建子类。通过`new`关键字实例化子类后，可以在其中调用父类与子类的属性和方法。
+
+```
+class Animal {
+	name: string;
+	constructor(name: string){ this.name = name; }
+	run() { return `${this.name} is running`; }
+}
+
+class Dog extends Animal {
+	bark() { return `${this.name} is barking`; }
+}
+const xiaohua = new Dog('xiaohua');
+console.log(xiaohua.run());	//xiaohua is running
+console.log(xiaohua.bark()); //xiaohua is barking
+```
+
+**多态**
+
+子类重写父类的构造函数，在访问this的属性前，必须调用super()
+
+```
+class Animal {
+	name: string;
+	constructor(name: string){ this.name = name; }
+	run() { return `${this.name} is running`; }
+}
+
+class Cat extends Animal {
+	gender: string;
+	constructor(name, gender: string){ 
+		super(name);
+		this.gender = gender;
+	}
+	run() { return `Meow, ${this.gender},${super.run()}`; }
+}
+const maomao = new Cat('maomao','female');
+console.log(maomao.run());	//Meow,female,maomao is running
+```
+
+**修饰符**
+
+- 修饰符有puiblic、protected、private。
+- public修饰符的属性和方法是公有的，任何地方都可以访问到。默认情况下所有属性和方法都是Public修饰。
+- 当成员被标记成`private`时，它不能在声明它的类的外部访问。
+- 当成员被标记成`protected`时，只有子类和父类里可以访问。和private的区别是成员可继承。
+
+**类中的static**
+
+类中定义`static`的静态成员变量，这些属性存在于类本身上而不是类的实例上。类直接访问属性和方法。
+
+**抽象类**
+
+抽象类作为其他派生类的基类使用，它们一般不会直接被实例化。`abstract`关键字是用于定义抽象类和在抽象类内部定义抽象方法。
+
+```
+abstract class Animal {
+	readonly name: string;
+	constructor(name: string) { this.name = name; }
+	abstrat run(): void;
+}
+class Dog extends Animal {
+	run() { return `${this.name} is running`; }
+}
+const xiaobao = new Dog('xiaobao');
+console.log(xiaobao.run());
+```
+
+ **类与接口**
+
+接口可以用于对对象的形状进行抽象，也可以对类的一部分行为进行抽象。
+
+①、将类之间共有的特性提取成接口，用implements关键字来实现。
+
+```
+/* class Car { switchRadio(){} }
+class CellPhone { switchRadio(){} } */
+interface Radio { switchRadio(trigger:boolean): void }
+class Car implements Radio { switchRadio(){} }
+class CellPhone implements Radio { switchRadio(){} }
+```
+
+②、接口之间也有继承关系
+
+```
+interface Radio { switchRadio(trigger:boolean): void }
+interface RadioWithBattery extends Radio { checkBatteryStatus() }
+class Car implements Radio{ switchRadio(){} }
+class CellPhone implements RadioWithBattery{
+	switchRadio(){}
+	checkBatteryStatus(){}
+}
+```
+
+### enum枚举
+
+常量时执行程序中不会改变的值，有些取值是在一定范围内的一系列常量，如一周内的七天等。
+
+```
+/*var Direction;
+(function (Direction){
+	Direction[Direction["Up"] = 0] = "UP";
+	Direction[Direction["Down"] = 1] = "DOWN";
+	Direction[Direction["Left"] = 2] = "LEFT";
+	Direction[Direction["Right"] = 3] = "RIGHT";
+})(Direction || (Direction = {}));*/
+/*--- 与下列的枚举写法等价，但推荐下列的简便写法  ---*/
+enum Direction {
+	Up,		//Up的值是0
+	Down,	//Down的值是1
+	Left,	//Left的值是2
+	Right	//Rigth的值是3
+}
+console.log(Direction.Up);
+console.log(Direction[0]);
+```
+
+常量枚举可以提高性能，会内联枚举的用法，但是不会把枚举编译成任何JavaScript的代码。
+
+```
+const enum Direction {
+	Up = 'UP',
+	Down = 'DOWN',
+	Left = 'LEFT',
+	Right = 'RIGHT'
+}
+const value = 'UP';
+if(vaule === Direction.Up){ console.log("go up!") }
+```
+
+> 只有常量值才可以进行常量枚举。如：`const enum Direction{Up =1+1}`这是错误的写法
+
+### **泛型**
+
+- 定义函数、接口或类时，不预先指定具体类型，而在使用时指定类型，定义时用一个未确定的类型变量代替具体的类型，通过在使用时传入的类型决定该为确定类型的具体类型。
+
+- 泛型像一个类型占位符。
+- 在函数内部使用泛型变量时，由于事先不知道变量的类型，所以不能随意的来操作它的属性和方法。-->然而可用extends关键字来约束传入的泛型，只允许传入包含length属性的类型的变量。
+
+```error.ts
+function echo<T>(arg: T): T {
+    return arg;
+    //console.log(arg.lenth);   //因为事先不知其变量类型，无法计算
+}
+//const result: string = echo(123);   //传入类型与传出类型不一致
+```
+
+```
+//用extends关键字来约束传入的泛型，只允许传入包含length属性的类型的变量
+interface WithLength { length: number }
+function echoWithLength<T extends WithLength>(arg: T): T {
+	console.log(arg.length);
+	return arg;
+}
+const str = echoWithLength('str');
+const obj = echoWithLength({length: 10});
+const arr = echoWithLength([1,2,3]);
+```
+
+**在接口中使用泛型**
+
+```
+interface KeyPair<T,U> {
+	key: T;
+	value: U;
+}
+let kp1: KeyPair<number, string> = {key:1, value:'str'};
+let kp2: KeyPair<string, number> = {key:'test', value:123};
+
+//Array是TS自带的interface
+const arr3: Array<number> = [1,2,3];
+```
+
+### 类型别名
+
+```
+type NameResolver = () => string;
+type NameOrResolver = string | NameResolver;
+function getName(n:NameOrResolver): string {
+	if(typeof n === 'string') return n;
+	else return n();
+}
+```
+
+### 类型断言
+
+联合类型只能访问共用的属性和方法。借助类型断言，可以告诉编辑器，你没办法判断我的代码，我比你更清楚。
+
+在变量前面加上一个尖括号也可以完成断言。
+
+```
+//方法一：
+function getLength(input: string | number): number {
+	const str = input as String;
+	if(str.length) return str.length;
+	else {
+		const number = input as Numbe·r;
+		return number.toString().length;
+	}
+}
+
+/*-------------------分隔符----------------------*/
+//断言方法二：在变量前面加上一个尖括号
+function getLength(input: string | number): number {
+	if((<string>input).length) return (<string>input).length;
+	else return (<number>input).toString().length;
+}
+```
+
+### 声明文件
+
+想使用第三方库，如 jQuery，在ts中需要需要使用 `declare var` 来定义它的类型。
+
+```
+declare var jQuery: (selector: string) => any;
+jQuery('#foo');
+```
+
+# less
+
+### `less`安装/引入
+
+```
+#node端安装
+npm install less -g		/* 全局安装 */
+npm i less --save-dev	/* 项目文件夹安装 */
+```
+
+```html
+//导入less.js文件，js必须在less后引用
+<script src="less.js" type="text/javascript"></script>
+
+//html文件引用less文件，需将rel设置为stylesheet/less
+<link rel="stylesheet/less" type="text/css" href="css/style.less" />
+```
+
+- less是预处理语言，最终解析成css样式
+- 变量/混合/嵌套/运算/转义/函数/映射/作用域/注释/导入
+
+#### 在vue项目中使用less
+
+```cmd
+#在项目中安装 less-loader 依赖
+#需要注意webpack版本与less-loader版本，可能会产生不兼容现象
+npm install --save less less-loader
+```
+
+### `less`编译成`wxss`文件
+
+1. 在`VScode`安装`Easy-less`插件
+
+2. 打开vscode安装目录所在的位置`C:\用户\用户名\ .vscode\extensions找到mrcrowl.easy-less-1.6.3`复制到微信开发者工具扩展工具的目录下
+
+3. 打开微信开发者工具，top 栏，设置>扩展设置>扩展>自定义扩展点击开启`easy-less`插件的使用
+
+4. 配置`VScode`的`setting-json`
+   ![image5](image/image5.jpg)
+
+5. ```setting.json
+   // 添加配置，使less输出wxss的文件（默认输出是css）
+   "less.compile": {
+       "outExt": ".wxss"
+   }
+   ```
+
+### 变量`Variables`
+
+使用`@`符号定义变量。格式为：`@变量名:变量值;`
+
+````less
+@width: 10px;
+@height: @width + 10px;
+
+#header {
+	width: @width;
+	height: @height;
+}
+````
+
+编译为：
+
+```css
+#header {
+    width: 10px;
+    height: 20px;
+}
+```
+
+### 混合`Mixins`
+
+混合是将一组`CSS`属性，允许将一个类的属性用于另一个类，并且包含类名作为其属性。
+
+```less
+#p1 { color: yellow; }
+.p2 { background: blue; }
+.p3 {
+    font-size: 2px;
+    #p1();
+    .p2();
+}
+```
+
+编译为：
+
+```css
+#p1 {
+  color: yellow;
+}
+.p2 {
+  background: blue;
+}
+.p3 {
+  font-size: 2px;
+  color: yellow;
+  background: blue;
+}
+```
+
+### 嵌套`Nesting`
+
+通过嵌套来代替层叠或与层叠结合的使用的能力。
+还可将 伪选择器 与 混合 一同使用。
+**& 表示当前选择器的父级**
+
+```less
+#header {
+    color: yellow;
+    .nav {
+        font-size: 12px;
+    }
+    .log {
+        width: 200px;
+    }
+    &:after {
+        content: '111';
+    }
+}
+```
+
+编译成：
+
+```css
+#header {
+  color: yellow;
+}
+#header .nav {
+  font-size: 12px;
+}
+#header .log {
+  width: 200px;
+}
+#header:after {
+  content: '111';
+}
+```
+
+### @规则嵌套和冒泡
+
+@规则（如`@media 或 @supports`）可以与选择器以相同的方式进行嵌套。
+@规则会被放在前面，同一规则集中的其它元素的相对顺序保持不变——这叫冒泡。
+**如果在里面，则是 and ，外面的参数如果跟里面参数一致，则里面的慧覆盖外面的参数值。**
+
+```less
+.component {
+    width: 300px;
+    @media (min-width: 768px) {
+        width: 600px;
+        @media (min-resolution: 192dpi) {
+            background: green;
+        }
+    }
+    @media (min-width: 1280px) {
+        width: 800px;
+    }
+}
+```
+
+编译成：
+
+```css
+.component {
+  width: 300px;
+}
+@media (min-width: 768px) {
+  .component {
+    width: 600px;
+  }
+}
+@media (min-width: 768px) and (min-resolution: 192dpi) {
+  .component {
+    background: green;
+  }
+}
+@media (min-width: 1280px) {
+  .component {
+    width: 800px;
+  }
+}
+```
+
+### 运算`Operations`
+
+算术运算符（+`、`-`、`*`、`/ ）可以对任何数字、颜色或变量进行运算。
+算数运算符在加减或比较之前会进行单位换算，乘法和除法不作转换。
+计算的结果以最左侧操作数的单位类型为准。
+如果单位换算无效或失去意义，则忽略单位。（如px 到 rad 到 % 的转换是无效的）
+
+```less
+@con1: 5cm + 9mm; // 5.9cm
+@con2: 2 - 3cm -5mm; // -1cm -5mm
+@con3: 2 + 5px - 3cm; // -106.38582677px
+@base: 2cm *3mm; // 6cm
+p1{ width:@con1; }
+p2{ width:@con2; }
+p3{ width:@con3; }
+p3{ width:@base; }
+```
+
+### `calc()`特例
+
+`calc()`函数用于动态计算长度值。（注意：运算符前后都需要保留一个空格）
+`less`中的`calc()`函数并不对数学表达式进行计算，但在嵌套函数中会计算变量和数学公式的值。
+
+> 变量一定要用`@{}`包裹起来；
+
+```less
+div {
+	@diff : 30px;
+    @containerHeight: 500px;
+	@inputHeight: 50px;
+	width : calc(~"100% - @{diff}");
+    top: ~"calc(@{containerHeight}/2 - @{inputHeight}/2 + 10px)";
+}
+```
+
+```css
+div {
+  width: calc(100% - 30px);
+  top: calc(500px/2 - 50px/2 + 10px);
+}
+```
+
+### 转义`Escaping`
+
+允许你使用任意字符串作为属性变量值。任何`~"anything"`或`~'anything'`形式的内容都将原样输出，除非`interpolation`。
+在`less 3.5+，许多引号转义都不需要了`
+
+```less
+@min768: ~"(min-width: 768px)";
+.element {
+    @media @min768 {
+        color: red;
+    }
+}
+```
+
+```css
+@media (min-width: 768px) {
+  .element {
+    color: red;
+  }
+}
+```
+
+### 函数`Functions`
+
+```less
+.xkd() {
+  @w: 10px;
+  @h: 20px;
+}
+.p1 {
+  .xkd();
+  @w: 100px;
+  width: @w;
+  height: @h;
+}
+```
+
+```css
+.p1 {
+  width: 100px;
+  height: 20px;
+}
+```
+
+### 映射`Maps`
+
+相当于js中的对象属性。
+
+```less
+#colors() {
+  primary: blue;
+  secondary: green;
+}
+.button {
+  color: #colors[primary];
+  border: 1px solid #colors[secondary];
+}
+```
+
+```css
+.button {
+  color: blue;
+  border: 1px solid green;
+}
+```
+
+### 作用域`Scope`
+
+Less的作用域与CSS中的作用域类似。先在本地查找变量和混合，如果找不到，则从"父"级作用域继承。
+
+```less
+@var: red;
+#page {
+  #header {
+    color: @var; // white
+  }
+  @var: white;
+}
+```
+
+### 导入`importing`
+
+如果导入一个`.less`文件，此文件中的所有变量就可以全部使用了。如果导入的文件是`.less`扩展名，则可将扩展名省略掉：
+
+```less
+@import "library"; // library.less
+@import "type.css";
+```
+
+# 软件使用
+
+### Node
+
+**概念**
+
+- node.js是一个基于Chrome V8引擎的JavaScript运行环境：
+  - 不是库，是运行环境/JS语言解释器。底层源码是用C++开发的。
+  - Chrome V8引擎：引擎分为渲染引擎（渲染DOM）和脚本引擎(运行脚本语言)。脚本引擎最流行的是chrome中的V8引擎。
+- node.js的包管理是npm，成为世界上最大的开源代码的生态系统。
+- node.js使用了一个事件驱动、非阻塞I/O的模型，使其轻量又高效。
+  - 事件驱动：指在持续事务管理过程中，进行决策的一种策略，即跟随当前时间点上出现的事件，调动可用资源，执行相关任务，使不断出现的问题得以解决，防止事务堆积。
+  - I/O：在服务器上可理解为读写操作，非阻塞I/O(异步I/O)。nodejs是单线程语言，其在遇到I/O事件会创建一个线程去执行，然后主线程会继续往下执行。因此，触发一个I/O事件，紧接着继续执行别的动作，再触发一个I/O事件，两个动作并行执行，假如各需要1s，那么总时间是1s。
+
+**组成**
+
+- nodejs是由ECMAScript及node环境提供的一些附加API组成，包括文件、http、路径等API。
+- 全局对象global的方法可在任何地方使用，global可省略。
+  - console.log()   //在控制台输出
+  - setTimeout()   //设置超时定时器
+  - clearTimeout()   /清除超时定时器
+  - setInterval()   //设置间歇定时器
+  - clearInterval()  //清除间歇定时器
+- node应用场景：自动化构件等工具、HTTP Proxy、网站应用开发、im即时聊天(socket、io)
+
+```bash
+nvm list	#查看所有安装版本
+nvm use 12.13.1		#切换指定版本
+nvm uninstall 12.13.1	#卸载指定版本
+```
+
+### NPM
+
+**概念**
+
+- NPM是随同nodejs一起安装的包管理工具。常见使用场景：
+  - 从NPM服务器下载别人编写的第三方包到本地；
+  - 从NPM服务器下载并安装比人编写的命令行程序到本地；
+  - 将自己编写的包或命令程序上传到NPM服务器。
+- 在windows系统中，全局安装路径默认是用户node目录下的node_modules，非全局安装路径是命令运行所在路径下的node_modules下。
+
+```bash
+npm -v						#查看版本
+npm install <name> --save	#安装并写入package.json
+npm init -y					#初始化package.json文件，-y为默认生成
+npm install <name> -f		#强制安装
+npm update <name>			#更新模块
+npm uninstall <name>		#卸载模块
+```
+
+**npm install去哪获取模块？**
+
+- npm配置有仓库地址，install时都会从仓库地址中找模块。默认的仓库地址是：`https://registry.npmjs.org/`，可配置默本地默认的npm仓库下载地址：`npm config set registry http://ggjs-app-03.hnisi.com.cn:8090`
+
+**淘宝NPM镜像**
+
+1. 使用淘宝镜像：`npm install -g cnpm --registry=http://registry.npm.taobao.org`
+2. 安装模块：cnpm install [name]
+3. 创建模块：nodejs模块就是发布到npm的代码块。
+   1. 首先利用`npm init`命令创建package.json，这个过程中命令行会逐步提示你输入这个模块的信息，其中模块的名字和版本号是必填项。
+
+### Yarn
+
+**概念**
+
+- Yarm是一个由Facebook、Google、exponent和tilde构建的新的JavaScript包管理器。目标是解决npm所遇的问题：安装包不够快速和稳定；因npm允许包在安装时运行代码导致存在安全隐患。
+- Yarm不能完全替代npm。Yarm仅仅是一个能够从npm仓库获取模块的新的CLI客户端。
+- 特点：速度超快(yarm缓存每个下载过的包，再次使用无需重复下载)；安全(在执行代码前，yarm会通过算法校检每个安装包的完整性)；可靠(使用详细、简介的锁文件格式和明确的安装算法，Yarm能保证在不同系统上无差异工作)
+
+### Webpack
+
+### Babel
+
+### Mock
+
+# 面试题
+
+## CSS
+
+### 重绘和回流(重排)
+
+- 重绘和回流是什么？
+
+  ​	1.重绘：不会影响页面布局的操作，如更改颜色；
+  ​	2.回流：布局的改变导致需要重新构建，就是回流
+  ​	注意：回流必将引起重绘，重绘不一定会引起回流
+
+- 重新绘制到屏幕上的过程称为重绘。引起重排的原因有
+       1.添加或者删除可见的DOM元素，
+       2.元素位置、尺寸、内容改变，
+       3.浏览器页面初始化，
+       4.浏览器窗尺寸改变，重排一定重绘，重绘不一定重排
+
+- 减少重绘和重排的方法：
+      1.不在布局信息改变时做 DOM 查询
+      2.使用 `cssText` 或者 `className` 一次性改变属性
+      3.使用 `fragment`
+      4.对于多次重排的元素，如动画，使用绝对定位脱离文档流，让他的改变不影响到其他元素
+
+### 对语义化的理解
+
+- 根据内容的结构选择适合的标签
+- 1、样式丢失或者去掉样式后，页面仍然可以呈现出清晰的结构
+- 2、有利于SEO，让爬虫可以抓到更多的有效信息
+- 3、方便其他设备渲染页面（盲人阅读器等）
+- 4、更具有可读性，便于团队开发维护
+
+### 为什么要初始化css样式
+
+因为浏览器的兼容问题，不同浏览器对有些标签的默认值不同，如果不初始化css，会导致不同浏览器页面间的显示差异。
+
+### 移动端适配1px问题
+
+问题：移动端的1px在有些机型上看去比较粗，虽然写着1px但看上去的效果可能是2px
+
+解决方法：伪类+transform方法，原理是把原先元素的`border`去掉，然后利用`:before`或者`:after`重做`border`，并`transform`的`scale`缩小一半，原先的元素相对定位，新做的`border`绝对定位。
+
+```css
+* {
+  margin: 0;
+  padding: 0;
+}
+ul, li{
+  list-style: none;
+}
+.hairlines {
+  width: 300px;
+  margin: 100px auto;
+}
+.hairlines li{
+  position: relative;
+  border:none;
+  margin-top: 10px;
+}
+.hairlines li:after{
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background: #cccccc;
+  width: 100%;
+  height: 1px;
+  -webkit-transform: scaleY(0.5);
+  transform: scaleY(0.5);
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+}
+```
+
+### 居中为什么要使用transform(为什么不适用margin:Left/Top)
+
+transform： 属于合成属性，不会引起整个页面的回流重绘，节省性能借号，但是占用内存会大些；
+top/left：属于布局属性，会引起页面layout回流和repaint重绘。
+
+## JS/ES6
+
+### ES6的新特性
+
+const/let、模板字符串、箭头函数、函数的参数默认值、对象和数组结构、`for...of 和 for...in`
+
+### promise的使用、怎么用es5实现promise
+
+### if有作用域吗
+
+只有函数有作用域，if是没有作用域的。
+但是有一种情况会让if看上去有作用域，就是在`if{ }`语句中，使用`const、let`，他们会有块级作用域。
+
+### 原型链和作用域链的区别
+
+```
+（1）原型链
+当访问一个对象的某个属性时，会先在这个对象本身的属性上找，如果没有找到，会去这个属性的__proto__属性上找，即这个构造函数的prototype，如果还没找到，就会继续在__proto__上查找，直到最顶层，找不到即为undefined。这样一层一层往上找，彷佛是一条链子串起来，所以叫做原型链。
+
+（2）作用域链
+变量取值会到创建这个变量的函数的作用域中取值，如果找不到，就会向上级作用域去查，直到查到全局作用域，这么一个查找过程形成的链条就叫做作用域链。
+
+（3）区别
+作用域是对变量而言，原型链是对于对象的属性而言
+作用域链的顶层是window，原型链的顶层是Object
+```
+
+## Webpack
+
+### webpack里面的插件是怎么实现的
+
+### dev-server是怎么跑起来
+
+### 使用过webpack里面哪些plugin和loader
+
+### webpack整个生命周期，loader和plugin有什么区别
+
+### webpack打包的整个过程
+
+### 一般怎么组织CSS（Webpack）
+
+### 如何配置把js、css、html单独打包成一个文件
+
+### webpack和gulp的优缺点
+
+### 使用webpack构建时有无做一些自定义操作
+webpack的热更新是如何做到的？说明其原理？
+
+# Vue2.0
+
+## 	安装
+
+### VScode插件
+
+①、Bootstrap v3 Snippets、Bootstrap v4 Snippets -->boostrap框架的输入快捷键
+
+**用户代码片段**
+
+![å¨è¿éæå¥å¾çæè¿°](image/20181219094546585.png)
+
+**Chrome浏览器扩展程序**
+
+vue插件-->Vue-devtools（vue调试工具）
+
+**代码规范**
+
+缩进2空格（1 tab）
+
+**npm安装**
+
+npm install vue --save
+
+npm run server
+
+### vscode问题
+
+**选中多行代码出现多个光标问题**
+
+英文版：File --> Preformences --> Settings
+中文版：文件 --> 首选项 --> 设置
+然后输入搜索 Editor: Column Selection，取消选中
+
+## VUE的认知
+
+### 提高开发效率的发展历程
+
+- 原生JS -> Jquery之类的类库 -> 前端模板引擎 -> Angular.js / vue.js
+
+
+- 能够帮助我们减少不必要的DOM操作；提高渲染能力；双向数据绑定的概念
+
+
+### 框架和库的区别
+
+- 框架：是一套完整的解决方案，对项目的侵入性较大，项目如果需要更换框架，则需要重新架构整个项目。
+
+
+- 库（插件）：提供某一个功能，读项目的侵入性较小，如果某个库无法完成某些需求，可以很容易切换到其他库实现需求。
+
+
+### node（后端）中的 MVC 与前端中的 MVVM 之间的区别
+
+MVC是后端的分层开发概念；MVM是前端视图层的概念，主要关注于视图层分离（即MVVM把前端视图层分为Model，ViewModel，View三部分）
+
+MVVM作用：把逻辑层跟视图层区通过VM调度来分开
+
+View：（html+css）代表UI组件，负责将数据模型转化成UI展现出来
+
+VM：分割了M和每当V层想要获取后保存数据时，都要由VM做中间处理，把data中的数据(model层)通过v-model双向数据绑定把数据渲染到页面(view层)；
+
+M：指保存的是每个页面中的单独数据，js中data的数据
+
+![image-20201117235906290](image/image-20201117235906290.png)
+
+![image-20201118000348571](image/image-20201118000348571.png)
+
+![vue处理过程](image/vue%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B.png)
+
+###  Vue的生命周期
+
+1. 生命周期：从 vue 实例创建、运行到销毁期间，总是伴随各种的事件，这些事件统称为生命周期；
+
+   开始创建、初始化数据、编译模板、挂载DOM-》渲染、更新-》渲染、销毁等一系列过程
+
+2. 生命周期钩子 = 生命周期函数 = 生命周期事件
+    callHook(回调钩子)
+  
+3. 主要的生命周期函数分类：
+
+ - 创建期间的生命周期函数：
+
+   + beforeCreate：实例刚在内存中被创建出，此时还没初始化 data 和 methods 属性
+   + created：实例已经在内存中创建好、 data 和 methods 已经创建，此时还没开始编译模板（$el属性）
+   + beforeMount：此时已经完成模板的编译，但是还没挂载到页面中
+   + mounted：此时已将编译好的模板挂载到页面指定的容器中显示
+
+ - 运行期间的生命周期函数：
+
+   - beforeUpdate：状态更新前执行此函数， 此时 data 中的状态值是最新的，但是界面上显示的数据还是旧的，因为此时还没开始重新渲染DOM节点
+   - updated：实例更新完毕后调用此函数，此时 data 中的状态值 和 界面上显示的数据都已经完成更新，界面已经被重新渲染好
+
+ - 销毁期间的生命周期函数：（vue实例一般不会销毁，一般组件会销毁）
+
+   - beforeDestroy：实例销毁前调用。在这一步，实例仍然完全可用。
+   - destroyed： 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。
+
+### vue的两个核心
+
+数据驱动和组件系统
+
+### 方法和函数的区别
+
+- 方法：methods；函数：function
+
+- java中只有方法，没有函数（方法面对对象的）
+
+- 方法在类中定义的，函数是在外边定义
+
+
+## 模板语法
+
+### 插值
+
+#### 文本：
+
+数据绑定最常见的形式就是使用“Mustache”语法（双大括号）的文本插值：
+
+```html-vue
+<span>Message:{{ msg }}</span>
+```
+
+Mustache 标签将会被替代为对应数据对象上 `msg` property 的值。当绑定的数据对象上 `msg` property 发生改变，插值处的内容都会更新。
+
+通过使用` v-once `指令也能执行一次性地插值，当数据改变时，插值处的内容不会更新。但会影响到该节点上的其它数据绑定：
+
+```html-vue
+<span v-once>这个将不会改变: {{ msg }}</span>
+```
+
+#### 原始HTML `v-html`
+
+双大括号会将数据解释为普通文本，而非 HTML 代码。为了输出真正的 HTML，你需要使用 `v-html`指令
+
+```html-vue
+<p>{{ rawHtml }}</p>
+<span v-html="rawHtml"></span>
+```
+
+#### 文本形式`v-text`
+
+```html-vue
+<p v-text="message">v-text的内容，包括把标签一起输出来</p>
+```
+
+#### 不解析直接输出内容`v-pre`	
+
+（ pre 是 prevent的缩写，阻止解析）
+
+```html-vue
+<p v-pre>把{{ message }}直接输出</p>
+```
+
+####  先解析再渲染`v-cloak`
+
+v-cloak要在样式中设置属性（v-cloak在平常中不常用）
+
+在vue解析前，html中有一个属性v-cloak；
+
+解析后，html中没有一个属性v-cloak
+
+```html-css
+[v-cloak] {display:none}
+```
+
+```vue+html
+<p v-cloak>{{msg}}</p>
+<p v-text="msg"> 11 </p>
+<p v-html="msg"> 11 </p>
+```
+
+**v-cloak(斗篷)、v-text、v-html的区别**
+
+- 相同：都是等到页面解析完后，才会改变相应的数据，此三种指令都可以防止插值表达式的闪烁。
+
+- ①：v-cloak：需要设置相应的样式才能防闪烁， 而v-text和v-html默认就没有闪烁问题；
+
+- ②：在使用v-cloak的元素标签中添加其他的内容，渲染完页面后会被保留，而v-text和v-html如果在元素标签中填写其他，页面加载完成后，会被覆盖掉
+
+- ③：v-html会识别数据中的标签元素，而v-cloak和v-text则不会识别元素标签
+
+
+###  v-bind:（缩写`：`）
+
+是Vue中绑定属性的指令，绑定data中的数据，因为普通的mustache语法无法达成绑定。
+
+```vue+html
+<input type="button" value="按钮" v=bind:title="mytitle + '123'">
+<input type="button" value="按钮" :title="mytitle + '123'">
+<!-- 上面两个式子等价，在 v-bind 中，可以写合法的JS表达式  -->
+<!-- v-bind通过属性绑定为属性绑定的class类样式和style行内样式
+v-bind:style  v-bind:class
+  -->
+```
+
+#### 使用v-bind绑定class样式
+
+```html-vue
+//1、数组
+<h1 :class="['red', 'thin']">这是一个H1</h1>
+
+//2、数组中使用三元表达式
+<h1 :class="['red', 'thin', isactive?'active':'']">这是一个H1</h1>
+
+//3、数组中嵌套对象
+<h1 :class="['red', 'thin', {'active': isactive}]">这是一个H1</h1>
+
+//4、直接使用对象
+<h1 :class="{red:true, italic:true, active:true, thin:true}">这是一个H1</h1>
+```
+
+#### 使用v-bind绑定内联样式
+
+```html-vue
+//1、直接在元素上通过 :style 的形式，书写样式对象
+<h1 :style="{color: 'red', 'font-size': '40px'}">这是一个善良的H1</h1>
+
+//2、将样式对象，定义到 data 中，并直接引用到 :style 中
+<h1 :style="h1StyleObj">这是一个H1</h1>
+data: {
+        h1StyleObj: { color: 'red', 'font-size': '40px'}
+}
+
+//3、在 :style 中通过数组，引用多个 data 上的样式对象
+<h1 :style="[h1StyleObj, h1StyleObj2]">这是一个H1</h1>
+data: {
+        h1StyleObj: { color: 'red', 'font-size': '40px'},
+        h1StyleObj2: { fontStyle: 'italic' }
+}
+
+//4、调用函数的样式
+<h1 :style="getStyles()">这是一个H1</h1>
+data: {
+       finalColor: 'red', 
+       finalSize: 100
+},
+methods: {
+	getStyles(){
+		return {color: this.finalColor,fontSize: this.finalSize+'px'}
+	}
+}
+```
+
+### v-on:（缩写`@`）
+
+是Vue中绑定事件的指令，调用需在methods里设置触发事件
+
+```vue+html
+<input type="button" value="按钮" v-on:click="stop">
+<input type="button" value="按钮" @click="stop">
+```
+
+```html-vue
+//案例，点击按钮P标签的内容会变色（通过绑定class样式来改变颜色）
+//CSS样式
+.color{
+	color:lightgreen;
+}  
+
+//HTML
+<div id="app">
+<p :class="{color:color_activity}">测试按钮后颜色</p>
+<button @click="btn_click">按钮</button>
+</div>
+
+//JS
+var app = new Vue({
+	el: '#app',
+	data: {
+		color_activity : true
+	},
+    methods:{
+        btn_click(){
+            this.color_activity = !this.color_activity
+        }
+    }
+});
+```
+
+**v-on的参数传递**
+
+当v-on中不带参数时，可以省略小括号，但方法本身是需要一个参数的，此时vue会默认将浏览器生成的event事件对象作为参数传入到方法
+
+手动获取到浏览器参数的event对象：**$event**
+
+```vue
+//html
+<div id="app">
+    <!-- 事件调用方法不带参数 -->
+    <button @click="btn1">按钮1</button>
+    <button @click="btn1()">按钮2</button>
+    <br>
+    <!-- 带一个参数 -->
+    <button @click="btn2(123)">按钮3</button>
+    <button @click="btn2()">按钮4</button>
+    <button @click="btn2">按钮5</button>
+    <br>
+    <!-- 带两个参数 -->
+    <!-- 手动获取到浏览器参数的event对象：$event -->
+    <button @click="btn3(123,$event)">按钮6</button>
+    <button @click="btn3">按钮7</button>
+</div>
+<!-- 按钮1、2为空值；按钮3：123；按钮4：undefined；按钮5：event对象；按钮6、7:123，evnet对象 -->
+//JS
+const app = new Vue({ 
+	el: '#app',
+	methods: {
+		btn1(){ console.log("btn1"); },
+		btn2(event){ console.log("btn2———",event); },
+		btn3(abc,event){ console.log("btn3——",abc,"——",event); }
+	}
+});
+```
+
+### `v-on`事件修饰符
+
+-  .stop：阻止事件冒泡（不再循环触发，也不在子代触发）
+-  .prevent：阻止默认事件行为（如a标签的跳转，表单的跳转）
+-  .capture：实现捕获事件的触发机制（从最外层标签到内层标签逐层触发）
+-  .self：只当事件在该元素本身（如不是子元素）触发时触发回调
+- .once：事件只触发一次
+- .`{keyCode|keyAias} `：只当事件是从特定键触发时才触发回调
+- native：监听组件根元素的原生事件**（组件是不能点击的，必须加上`.native`，否则会认为监听的是来自Item组件自定义的事件）**
+
+
+> .stop与.once的区别：.self只会阻止自身的冒泡行为触发，并不会真正组织冒泡
+
+```html-vue
+<!-- 阻止单击事件继续传播 -->
+<a @click.stop="doThis"></a>
+
+<!-- 提交事件不再重载页面 -->
+<form @submit.prevent="onSubmit"></form>
+
+<!-- 修饰符可以串联 -->
+<a @click.stop.prevent="doThat"></a>
+
+<!-- 只有修饰符 -->
+<form @submit.prevent></form>
+
+<!-- 添加事件监听器时使用事件捕获模式 -->
+<!-- 即内部元素触发的事件先在此处理，然后才交由内部元素进行处理 -->
+<div @click.capture="doThis">...</div>
+
+<!-- 只当在 event.target 是当前元素自身时触发处理函数 -->
+<!-- 即事件不是从内部元素触发的 -->
+<div @click.self="doThat">...</div>
+
+<!-- 点击事件将只会触发一次 -->
+<a @click.once="doThis"></a>
+
+<!-- 点击事件监听键帽（点击enter键触发事件） -->
+<input type="text" @keyup.enter="keyup">
+
+//1、 给vue组件绑定事件时，必须加上native ，否则会认为监听的是来自Item组件自定义的事件
+//2、 等同在子组件中：子组件内部处理click事件然后向外发送click事件：$emit("click".fn)
+<Item @click.native = "shijian()"></Item>
+```
+
+### 数据双向绑定`v-model`
+
+- v-bind只能实现数据的单向绑定，只能从M自动绑定到V，无法实现数据双向绑定
+
+- 表单元素：`input（text、radio、address、email….）、select、checkbox、textarea`
+- `v-model` 在内部为不同的输入元素使用不同的 property 并抛出不同的事件
+   - text 和 textarea 元素使用 `value` property 和 `input` 事件；
+   - checkbox 和 radio 使用 `checked` property 和 `change` 事件；
+   - select 字段将 `value` 作为 prop 并将 `change` 作为事件。
+
+```html-vue
+<div id="app">
+	<input v-model="test">
+	<!-- <input :value="test" @input="test= $event.target.value"> --><!--语法糖，等价于v-modl='test'-->
+</div>
+<script>
+    new Vue({
+    	el: '#app',
+    	data: {
+        	test: '这是一个测试'
+        }
+    });
+</script>
+```
+
+```vue
+//select选择多个(需要按住ctrl键选择)
+//html
+<div id="app">
+	<select name="abc" v-model="fruit" multiple>
+        <option value="苹果">苹果</option>
+        <option value="香蕉">香蕉</option>
+    </select>
+    <p>{{fruit}}</p>
+</div>
+
+//vue
+const app = new Vue({ 
+    el: '#app',
+    data: {
+    	fruit: []
+    }
+});
+```
+
+```html+vue
+//HTML
+<div id="app">
+<!-- checkbox多选框 -->
+    <input type="checkbox" value="篮球" v-model="hobbies">篮球
+    <input type="checkbox" value="足球" v-model="hobbies">足球
+    <input type="checkbox" value="乒乓球" v-model="hobbies">乒乓球
+    <p>您的爱好是：{{hobbies}}</p>
+
+    <label v-for="item in originHobbies" :for="item">
+        <input type="checkbox" :value="item" :id="item" v-model="hobbies">{{item}}
+    </label>
+</div>
+
+//VUE
+const app = new Vue({ 
+    el: '#app',
+    data: {
+    	hobbies: ['篮球'],	//多选框，默认为篮球
+    	originHobbies: ['篮球','足球','乒乓球','羽毛球','台球','高尔夫球']
+    }
+});
+```
+
+**修饰符**
+
+v-model默认是在input事件中同步输入框的数据，即一旦数据发生改变对应的data中数据自动改变。
+
+- lazy修饰符：使数据失去焦点或回车才会更新
+- number修饰符：将输入的数字转换为Number 类型
+  输入框中无论输入的是字母还是数字，都会被当做字符串string 处理(数字输入框比较有用)
+- trim修饰符：自动过滤输入的首尾空格
+  如果输入内容首尾很多空格，通常我们希望将其去除(内容中间的空格无法去掉)
+
+```vue
+<input type="text" v-model.lazy="test">
+<input type="number" v-model.number="test">
+<input type="text" v-model.trim="test">
+```
+
+### 循环`v-for和key属性`
+
+迭代（数组、对象属性、数字）
+
+```hrml-vue
+//1、迭代数组
+<ul>
+<li v-for="(item,i) in list">索引：{{i}}---值：{{item.name}}{{item.age}}</li>
+</ul>
+
+//2、迭代对象中的属性 //循环遍历对象身上的属性
+<div v-for="(val,key,i) in info">{{val}}---{{key}}---{{i}}</div>
+    
+//3、迭代数字
+<p v-for="i in 10">这是第 {{i}} 个P标签</p>
+```
+
+- 当 vue用`v-for`正在更新已渲染过的元素列表时默认用**就地复用**策略。如果数据项的顺序被改变，Vue**不是移动 DOM 元素来匹配数据项的顺序**， 而是**简单复用此处每个元素**，并且确保它在特定索引下显示已被渲染过的每个元素。
+
+- 为了给 Vue 一个提示，**以便它能跟踪每个节点的身份，从而重用和重新排序现有元素**，需要为每项提供一个唯一 **key** 属性。
+
+- key的作用主要是为了高效地的更新虚拟DOM。
+
+
+### 方法
+
+- **splice()**：从数组中添加/删除u项目，然后返回被删除的项目（返回数组）
+
+```js
+arrayObject.splice(index,howmany,item1,.....,itemX);
+//index	必需。整数，规定添加/删除项目的位置，使用负数可从数组结尾处规定位置。
+//howmany	要删除的项目数量。如果设置为 0，则不会删除
+//item1, ..., itemX	可选。向数组添加的新项目。
+this.arr.splice(1);//删除第一个参数后面的所有参数
+this.arr.splice(1,3);//删除第一个参数的三个参数
+```
+
+- **push()**：添加元素到最后面	//this.array1.push('abc');
+- **pop()**：删除最前面的元素	//this.array1.pop();
+- **shift()**：删除数组第一个元素	//this.array1.shirt();
+
+- **unshift**：在数组最前面添加元素	//this.array1.unshirt('aaa','bbb','ccc');
+
+- **sort()：**排序。
+- **reverse()：**对字符串进行反转操作。
+
+- **NumberObject.toFixed(num)**：定义num位小数位数（需要是数字型）
+- **padStart(maxLength,fillString=' ')**：用于头部补全，补充字符串
+
+- **padEnd(maxLength,fillString=')**：用来尾部补全，填充字符串
+
+```js
+//超出会自动补全，差一点则截取到最大长度
+'AA'.padStart(5,'B')  //输出：BBBAA
+'AA'.padStart(5,'BC')  //输出：BCBAA
+ 
+'AA'.padEnd(5,'B') //输出：AABBB
+'AA'.padEnd(5,'BC') //输出：AABCB
+```
+
+### v-if
+
+```vue
+//当isName=true时显示
+<div v-if="isName">
+    <p v-if="score>=90">优秀</p>
+    <p v-else-if="score>=80">良好</p>
+    <p v-else-if="score>=60">及格</p>
+    <p v-else="score<60">不及格</p>
+</div>
+```
+
+**v-if 和 v-show**
+
+v-if（不存在DOM中-->有较高的切换性能消耗）和v-show（通过CSS样式隐藏-->有较高的初始渲染消耗）
+
+- 两者区别：
+
+  v-if按照条件是否渲染（v-if每次都会重新删除或创建元素）
+
+  v-show是dispkay的bloak或none（v-show每次都不会重新进行DOM的删除和创建操作，只会切换了元素的display:none;样式）
+
+- 推荐使用场景
+
+  如果涉及到频繁的切换，使用v-show
+
+  如果元素可能永远也不会被显示出来被用户看到，则推荐使用v-if
+
+### vue中的this
+
+#### this的必要性
+
+**在VM实例中，如果要访问data上的数据，或者访问methods中的方法，必须带this**
+
+#### 
+
+### 计算属性`computed`
+
+- **computed 适合多个数据变化影响一个数据（得到的是一个返回的新值）**
+
+- 计算属性是由data中的已知值，得到的一个新值。
+  这个新值只会根据已知值的变化而变化，其他不相关的数据的变化不会影响该新值。
+  计算属性不在data中，计算属性新值的相关已知值在data中。
+  别人变化影响我自己。
+- 支持缓存，只有依赖数据发生改变，才会重新进行计算
+- 不支持异步，当computed内有异步操作时无效，无法监听数据的变化
+- 若computed属性值是函数，默认会用get方法；函数的返回值就是属性的属性值；在computed中的属性都有一个get和set方法，当数据变化时，调用set方法。（计算属性一般没有set方法，只读属性）
+- `computed`计算时只执行调用一次，而methods每次运行都需要执行调用（因为`computed`拥有自己的缓存机制）
+
+```vue
+//在html里要当作属性来使用，所以调用计算属性不需要加括号
+<div id="demo">{{ fullName }}</div>
+//js
+var vm = new Vue({
+  el: '#demo',
+  data: {
+    firstName: 'Foo',
+    lastName: 'Bar',
+  },
+  computed: {
+	/* fullName:{
+      // get和set方法
+      set:function(newValue){
+        const names = newValue.split(' ');
+        this.firstName=names[0];
+        this.lastName=names[1];
+      },
+      get:function(){
+        return this.firstName+' '+this.lastName
+      }
+    } */
+    fullName() {
+      return this.firstName + ' ' + this.lastName
+    }
+  }
+})
+```
+
+### 侦听属性`watch`
+
+- **watch 适合一个数据的变动影响多个数据或者复杂的运算（当data中所监听的数据发生变动时，才会执行）**
+- **watch的作用可以监控一个值（必须存在`data`中）的变换，并调用因为变化需要执行的方法。可以通过watch动态改变关联的状态。**
+- 不支持缓存，监听的数据改变，直接会触发相应的操作；
+- watch支持异步；
+- 监听的函数接收两个参数，第一个参数是最新值；第二个参数是输入之前的值； 当一个属性发生变化时，需要执行对应的操作；一对多；
+- 监听数据必须是data中声明过或者父组件传递过来的props中的数据，当数据变化时，触发其他操作，函数有两个参数，
+  - immediate：组件加载立即触发回调函数执行，
+  - deep: 深度监听，为了发现**对象内部值**的变化，复杂类型的数据时使用，例如数组中的对象内容的改变，注意监听数组的变动不需要这么做。注意：deep无法监听到数组的变动和对象的新增，参考vue数组变异,只有以响应式的方式触发才会被监听到。
+
+```vue
+ data:{
+     a:1,
+     b:{
+         c:1
+     }
+ },
+ watch:{
+     a(val, oldVal){//普通的watch监听
+         console.log("a: "+val, oldVal);
+     },
+     b:{//深度监听，可监听到对象、数组的变化
+         handler(val, oldVal){
+             console.log("b.c: "+val.c, oldVal.c);
+         },
+         deep:true //true 深度监听
+     }
+ }
+```
+
+###  template标签
+
+- H5中的template
+  **html中的template标签中的内容在页面中不会显示**，但是在后台查看页面DOM结构存在template标签。（因为template标签设置了`display:none;`属性）
+
+- vue实例中的template属性
+  将实例中template属性值进行编译，并将编译后的dom替换掉vue实例绑定的元素，如果该vue实例绑定的元素中存在内容，这些内容会直接被覆盖。
+
+- 循环遍历
+  template的作用是占位符，可帮助我们包裹元素，但在循环的过程中，template不会被渲染到页面上。
+
+  ```vue
+  <template v-for="(item, index) in list" :key="item.id">
+  	<div>{{item.text}}--{{index}}</div>
+  	<span>{{item.text}}</span>
+  </template>
+  ```
+
+### scoped属性
+
+scoped代表作用域。
+
+在`<style scoped></stype>`中添加scope属性，该style中的css样式只会针对当前组件起效果；若不添加，其他组件中的css样式相同样式，会在该组件中其效果。
+
+## 过滤器
+
+过滤器可用两个地方：mustache插值和v-bind表达式，过滤器应添加在JS表达式的尾部，有“管道”符表示。
+
+```vue
+//过滤器中function的第一个参数data永远都是过滤器管道符前面传递来的数据
+Vue.filter('过滤器名称',function(data){return data;})
+```
+
+#### 私有过滤器
+
+```html
+<td>{{item.ctime | dataFormat('yyyy-mm-dd')}}</td>
+```
+
+```vue
+filters: { // 私有局部过滤器，只能在当前VM对象所控制的 View 区域使用
+    dataFormat(input, pattern = "") { // 在参数列表中通过 pattern="" 来指定形参默认值，防止报错
+      var dt = new Date(input);
+      // 获取年月日
+      var y = dt.getFullYear();
+      var m = (dt.getMonth() + 1).toString().padStart(2, '0');
+      var d = dt.getDate().toString().padStart(2, '0');
+      
+      // 如果 传递进来的字符串类型，转为小写之后，等于 yyyy-mm-dd，那么就返回 年-月-日
+      // 否则，就返回  年-月-日 时：分：秒
+      if (pattern.toLowerCase() === 'yyyy-mm-dd') {return `${y}-${m}-${d}`;
+      } else { // 获取时分秒
+        var hh = dt.getHours().toString().padStart(2, '0');
+        var mm = dt.getMinutes().toString().padStart(2, '0');
+        var ss = dt.getSeconds().toString().padStart(2, '0');
+        return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+      }
+    }
+  }
+
+/* 使用ES6中的字符串新方法 
+String.prototype.padStart(maxLength, fillString='')
+String.prototype.padEnd(maxLength, fillString='')
+来填充字符串； */
+```
+
+#### 全局过滤器
+
+> 注意：局部过滤器优先于全局过滤器被调用
+> 当有局部和全局两个名称相同的过滤器时，会以就近原则进行调用
+
+```vue
+// 定义一个全局过滤器
+Vue.filter('dataFormat', function (input, pattern = '') {
+  var dt = new Date(input);
+  // 获取年月日
+  var y = dt.getFullYear();
+  var m = (dt.getMonth() + 1).toString().padStart(2, '0');
+  var d = dt.getDate().toString().padStart(2, '0');
+
+  // 如果传递进来的字符串类型，转为小写之后，等于 yyyy-mm-dd，那么就返回 年-月-日;否则，就返回  年-月-日 时：分：秒
+  if (pattern.toLowerCase() === 'yyyy-mm-dd')  {return `${y}-${m}-${d}`;
+  } else { // 获取时分秒
+    var hh = dt.getHours().toString().padStart(2, '0');
+    var mm = dt.getMinutes().toString().padStart(2, '0');
+    var ss = dt.getSeconds().toString().padStart(2, '0');
+    return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+  }
+});
+```
+
+```html+vue
+<div id="app">
+    <p>{{ msg | msgFormat('疯狂','123') }}</p>
+</div>
+
+//js
+Vue.filter('msgFormat',function(msg, arg, arg2){
+	return msg.replace(/单纯/g,arg + arg2)
+
+})
+var vm = new Vue({
+	el: '#app',
+	data: {
+		msg: '曾经，我也是一个单纯的少年，单纯的我，傻傻的问谁是世界上最单纯的男人'
+	}
+})
+```
+
+## 组件
+
+#### **全局组件与局部组件**
+
+```html+vue
+<div id="app">
+	<cpn></cpn>
+</div>
+
+//全局组件
+//创建组件构造器对象
+const cpnC = Vue.extend({
+	template:`
+		<div>
+			<h2>标题</h2>
+			<p>内容</p>
+		<div>
+	`
+})
+//注册组件
+Vue.component('cpn',cpnC);	//cpn为使用时的标签名
+```
+
+```html+vue
+//局部组件(可以在创建组件中调用其他组件标签，template里的``是tab键上面那个)
+//HTML
+<div id="app">
+	<cpn></cpn>
+</div>
+
+//js
+const cpnC1 = Vue.extend({	//子组件
+	template: `
+		<div>
+			<h2>标题1</h2>
+			<p>内容1</p>
+		<div>
+	`
+})
+const cpnC2 = Vue.extend({	//父组件
+	template: `
+		<div>
+			<h2>标题2</h2>
+			<p>内容2</p>
+			<cpn1></cpn1> <!-- 调用cpnC1组件的内容 -->
+		<div>
+	`,
+	components: {	//cpnC1的调用只能在cpnC2中使用
+		cpn1: cpnC1
+	}
+})
+const VM = new Vue({
+	el: '#app',
+	components: {	//root组件
+        cpn: cpnC2
+    }
+})
+```
+
+```html+vue
+//组件注册的语法糖
+//全局组件语法糖
+Vue.component('cpn1',{
+	template: 
+		`<div>
+			<h2>标题1</h2>
+			<p>内容1</p>
+		<div>`
+})
+//局部组件语法糖
+const VM = new Vue({
+	el: '#app',
+	components: {
+        'cpn2': {
+        	template: 
+                `<div>
+                    <h2>标题2</h2>
+                    <p>内容2</p>
+                <div>`
+        }        
+    }
+})
+```
+
+**组件优化**
+
+```html+vue
+//HTML
+<div id="app">
+    <cpn></cpn>
+    <cpn1></cpn1>
+</div>
+<!-- 1.通过template标签 -->
+<template id="cpnC1">
+    <div>
+        <h2>标题1</h2>
+        <p>内容1</p>
+    <div>
+</template>
+ <!-- 2.通过script标签，但是类型必须为text/x-template -->
+<script type="text/x-template" id="myCpn">
+    <div>
+        <h2>标题1</h2>
+        <p>内容1</p>
+    <div>
+</script>
+
+//JS
+Vue.component('cpn1',{
+	template: '#cpnC1'
+})
+const VM = new Vue({
+    el: '#app',
+    components: {
+        'cpn': {
+        	template: '#myCpn'
+        }
+    }
+})
+```
+
+**组件data**
+
+组件data不能是对象的原因：vue组件中data值不能为对象，因为对象是引用类型，组件可能会被多个实例同时引用。如果data值为对象，将导致多个实例共享一个对象，其中一个组件改变data属性值，其它实例也会受到影响。
+
+data为函数的原因：data为函数，通过return 返回对象的拷贝，致使每个实例都有自己独立的对象，实例之间可以互不影响的改变data属性值。
+
+```html+vue
+//HTML
+<div id="app">
+	<cpn></cpn>
+</div>
+<template id="cpnC1">
+    <div>
+        <h2>{{title}}</h2>
+        <p>{{content}}</p>
+    <div>
+</template>
+
+//js
+Vue.component('cpn',{
+    template: '#cpnC1',
+    data(){
+        return{
+            title: '我是标题',
+            content: '我是内容'
+        }
+    }
+})
+```
+
+#### 组件name的作用
+
+```Details.vue
+<template>
+	<div>组件命名为detail,其中dom加载完毕后,在钩子函数mounted中进行数据加载</div>
+</template>
+export default {
+	name: 'Details',
+	mounted() {
+		this.getInfo();	// 请求加载数据
+	},
+	methods: {
+		getInfo() {
+			// 通过接口请求数据。。。
+		}
+	}
+}
+```
+
+- **当项目使用`keep-alive`时，可搭配组件`name`进行缓存过滤。**
+
+  - 因为使用`keep-alive`会导致我们第二次进入时页面不会重新请求，即触发`mounted`函数。
+    有两种解决方案，一是增加`activated()`函数，每次进入新页面时再获取一次数据。
+    								  二是在`keep-alive`中增加一个过滤。
+
+  - ```App.vue
+    <div>
+    	<keep-alive exclude="Details">
+    		<router-view/>
+    	</keep-alive>
+    </div>
+    ```
+
+- **DOM做递归组件时**
+
+  -  比如说detail.vue组件里有个List.vue子组件，递归迭代时需要调用自身name
+
+  - ```List.vue
+    <div>
+        <div v-for="(item,index) of list" :key="index">
+          <div>
+            <span class="item-title-icon"></span>
+            {{item.title}}
+          </div>
+          <div v-if="item.children" >
+            <detail-list :list="item.children"></detail-list>
+          </div>
+        </div>
+     </div>
+    <script>
+    export default {
+      name:'DetailList',//递归组件是指组件自身调用自身
+      props:{
+        list:Array
+      }
+    }
+    </script>
+    ```
+
+- **当你用vue-tools时**，vue-devtools调试工具里显示的组见名称是由vue中组件name决定的
+
+#### **父子组件的通信**
+
+- 父传子：`props`		通过`props`向子组件传递数据
+- 子传父：`$emit`        通过事件(`events`)向父组件发送消息
+
+**父传子**
+
+```html+vue
+<div id="app">
+    <cpn :cmovies="movies" :cmessage="message"></cpn>
+</div>
+
+<template id="cpn1">
+    <div>
+        <p>{{cmessage}}</p>
+        <ul>
+            <li v-for="item in cmovies">{{item}}</li>
+        </ul>
+    <div>
+</template>
+
+<!-- JS -->
+const cpn = {
+    template: '#cpn1',
+    props: ['cmovies','cmessage'],
+    data(){
+       return {} 
+    }
+}
+const VM = new Vue({
+    el: '#app',
+    data: {
+        message: 'hello',
+        movies: ['海王','海贼王','海绵宝宝']
+    },
+    components: {
+        cpn		//增强式写法,原式为cpn: cpn
+    }
+})
+```
+
+**props的使用**
+
+```vue
+//数组写法
+props: ['cmovies','cmessage'],	//里面的定义不支持驼峰写法
+
+//对象写法
+props: {
+	//1、类型限制
+	cmovies: Array,
+	
+	//2、提供一些默认值
+	cmessage:  {
+		type: String,	//数据类型
+		default: 'aaaaaa',	//默认值
+		required: true	//必须填写	
+	}
+}
+```
+
+**子传父-->自定义事件**
+
+```vue
+<div id="app">
+    <cpn @itemclick="cpnClick"></cpn>
+</div>
+
+<template id="cpn">
+    <div>
+        <button v-for="item in categories" @click="btnClick(item)">
+            {{ item.name }}
+        </button>
+    <div>
+</template>
+
+//VUE
+//子组件
+const cpn = {
+    template: '#cpn',
+    data(){
+        return {
+            categories: [
+                {id: 'a', name: '热门推荐'},
+                {id: 'b', name: '手机数码'},
+                {id: 'c', name: '家用电器'}
+            ]
+        } 
+    },
+    methods: {
+        btnClick(item) {
+            this.$emit('itemclick',item);    //子组件发射的事件
+        }
+    }
+}
+//父组件
+const VM = new Vue({
+    el: '#app',
+    components: { cpn },
+    methods: {
+        cpnClick(value){	//接收子组件传过来的值（item{}）
+            console.log('cpnClick' + value.name,value.id);
+        }
+    }
+})
+```
+
+#### **自定义事件`$emit与$on`**
+
+- **`$emit`**
+  - `this.$emit("自定义事件名","要传送的数据");`
+  - 触发当前实例上的事件，要传递的数据会传给监听器。
+- **`$on`**
+  - `VM.$on('事件名',callback);`	
+  - `callback`回调`$emit`要传送的数据；
+  - 监听当前实例上自定义事件
+
+```vue
+<template>
+  <div>
+    <button @click="relation">Son按钮</button>
+  </div>
+</template>
+<script>
+export default {
+  created() {
+    this.$on("relation",function(relations) {
+      console.log("子组件接收了自己发射的事件:" + relations);
+    });
+  },
+  methods: {
+    relation() {
+      console.log("子组件发射事件");
+      this.$emit("relation","son");
+    }
+  }
+}
+</script>
+```
+
+```vue
+<template>
+  <div>
+      <p>{{ relations }}</p>
+     <son @relation='father'/>
+</template>
+<script>
+import son from '@/views/home/FatherAndSonComm-Son'
+export default {
+  data() {
+    return { relations: 'father' }
+  },
+  components: { son },
+  methods: {
+    father(relation) {
+      this.relations = relation;
+      console.log("父组件接收事件:" + this.relations);
+    }
+  }
+}
+</script>
+```
+
+![image-20210719171619593](image/image-20210719171619593.png)
+
+#### **父子组件的访问方式**
+
+**父访子 `$children、$refs`、子访父` $parent、$root`**
+
+> 注意：在复用组件时需要在组件中定义属性   `ref=''`
+
+- `ref`如果绑定在组件中，那么通过`this.$refs.refname`获取到的是一个组件对象。
+  `ref`如果绑定在普通元素中，那么通过`this.$refs.refname`获取到的是一个元素对象。
+
+```html+vue
+<div id="app">
+    <cpn></cpn>
+    <cpn></cpn>
+    <cpn ref="aaa"></cpn>
+    <button @click='btnClick'>按钮</button>
+</div>
+<template id="cpn">
+    <div>我是子组件</div>
+</template>
+
+//js
+const VM = new Vue({
+    el: '#app',
+    methods: {
+        btnClick(){
+            /* console.log(this.$children);
+            for(let c of this.$children){
+                console.log(c.name);
+            } */
+            console.log(this.$refs.aaa.name);	//访问子组件
+        }
+    },
+    components: {
+        cpn: {
+            template: '#cpn',
+            data(){
+                return {
+                    name: '子组件',
+                    console.log(this.$parent,this.$root);	//访问父组件、根组件
+                }
+            }
+        }
+    }
+})
+```
+
+##### **子组件的methods中获取props中的值**
+
+```父组件.vue
+<div id="app">
+    <cpn ref="aa" :chartData='chartData'></cpn>
+</div>
+<script>
+import cpn from './子组件'
+export default {
+    data() {
+        return { chartData: [1,3,4], }
+    },
+    components: { cpn }
+}
+</script>
+```
+
+```子组件.vue
+<template>
+  
+</template>
+<script>
+export default {
+	props: ['chartData'],
+	data(){
+        return {
+        	cData: []
+        }
+    },
+    watch: {
+    	chartData: function(newVal,oldVal){
+    		this.cData = newVal;  //newVal即是chartData
+    		this.drawChart();
+    	}
+    },
+}
+</script>
+```
+
+- 在props中的值为静态值的情况下，子组件的methods中想要取到props中的值，直接使用`this.chartData`即可;
+
+- 当父组件中chartData里面的值并不是固定的，而是动态获取的，此时methods中取不到`chartData`，或取到值是默认值，此时需要通过侦听属性`watch`来处理，把props传来的值赋给data数据中`cData`存放，再通过调用data中的数据即可。
+
+- > 当父组件中多个值**同时**传来，则只需要在侦听属性`watch`中定义一个监听函数即可（在同一监听函数内，获取props传来的数据，以此来降低性能损耗）
+
+### slot组件的插槽
+
+组件的插槽目的是让我们封装的组件更具扩展性。（预留空间、抽取共性保留不同）
+
+#### 普通插槽（携带的默认值可替换）
+
+```html+vue
+<div id="app">
+    <cpn><button>按钮</button></cpn>	<!--slot的位置被一个按钮代替-->
+    <cpn></cpn>
+</div>
+<template id="cpn">
+    <div>
+        <slot></slot>	<!--插槽-->
+    	<slot><span>默认值</span></slot>	<!--  可以在slot中放默认值 -->
+    </div>
+</template>
+```
+
+#### **具名插槽**（多个插槽）
+
+```html+vue
+<div id="app">
+    <cpn>
+    	<span slot="left">我是返回</span>
+    	<span slot="right">我是菜单</span>
+    	<span slot="center">我是标题</span>
+    </cpn>
+</div>
+<template id="cpn">
+    <div>
+    	
+        <slot name="left"><button>左边</button></slot>
+        <slot name="center"><button>中间</button></slot>
+        <slot name="right"><button>右边</button></slot>
+    </div>
+</template>
+```
+
+**编译作用域**：template的作用域是组件里面的，调用组件的是实例的作用域
+
+#### **作用域插槽`slot-scope属性`**
+
+- 作用：通过获取子组件的data数据，然后在实例中输出
+- 在子组件中绑定一个`:data="Languages"`，然后在父组件中的使用`slot-scope`属性调用子组件中绑定在属性中数据（）
+
+````html+vue
+//HTML
+<div id="app">
+    <cpn></cpn>
+    <cpn>
+    	<!-- 获取子组件的的数据，存放在slot1中 -->
+        <template slot-scope="slot1">
+            <!-- <span v-for="item in slot1.data">{{ item }}</span> -->
+            <span>{{ slot.data1.join('  -  ') }}</span>
+        </template>
+    </cpn>
+    <cpn>
+        <template slot-scope="slot">
+            <span>{{ slot.data1.join('  *  ') }}</span>
+        </template>
+    </cpn>
+</div>
+<template id="cpn">
+    <div>
+    	<!-- 把language数组的数据存放在data1中 -->
+        <slot :data1="language">
+            <ul>
+                <li v-for="item in language">{{item}}</li>
+            </ul>
+        </slot>
+    </div>
+</template>
+
+//JS
+const app = new Vue({ 
+    el: '#app',
+    components: {
+        cpn: {
+            template: '#cpn',
+            data(){
+                return {
+                    language: ['JavaScript','Java','C++','c#','Go']
+                }
+            }
+        }
+    }   
+});
+````
+
+## 小案例
+
+### 动态修改`Vue`项目中的页面标题`title`
+
+- 在页面的最外层div上添加属性 v-title data-title="页面标题"，然后通过在`main.js`中获取值给`document.title`
+- 还可在页面方法中直接赋值给`document.title`（不建议，会产生多冗余代码）
+
+```main.js
+//main.js
+Vue.directive('title', {
+	inserted: function(el, binding) {
+		document.title = el.dataset.title
+	}
+})
+```
+
+```.vue
+//在页面的最外层div上添加属性 v-title data-title="页面标题"
+<template>
+	<div v-title data-title="页面标题"><p>这是页面的内容</p></div>
+</template>
+```
+
+## 模块化开发
+
+常见的模块化规范：CommonJS、AMD、CMD、ES6的Modules
+
+**ES6的模块化**
+
+```js
+/*
+使用export指令导出模块对外提供的借口，通过import命令来加载该模块
+我们引入导入导出的js文件类型必须设置为module
+导入的变量跟导出的变量名必须要一致的，不能改变
+<script src="info.js" type="module"> </script>
+*/
+
+//导入的{}中定义的变量
+import {flag, sum} from './aaa.js';
+
+//导出变量
+export function mul(num1,num2){
+    return num1*num2;
+}
+export default abc	//default只能导一个，不能多个default
+
+//导出所有接口，然后定义一个来接收
+import * as abc from './aaa.js'
+cosole.log(abc.flag);
+```
+
+### webpack
+
+webpack是一个现代的js应用的静态模块化打包工具（模块和打包）
+
+![image-20201210154729727](image/image-20201210154729727.png)
+
+安装webpack（需先安装nodejs）
+
+```js
+//main.js
+//使用commonjs模块化规范
+const {add,mul} = require('./mathUtils.js')
+
+console.log(add(20,39));
+console.log(mul(10,20));
+
+//使用ES6模块化规范
+import {name,age,height} from './info'
+console.log(name);
+console.log(age);
+console.log(height);
+
+//info.js
+export const name = 'Kobe';
+export const age = 14;
+export const height = 12.2;
+
+//mathUtils.js
+function add(num1,num2){
+    return num1 + num2
+}
+function mul(num1,num2){
+    return num1 * num2
+}
+module.exports = {
+    add,
+    mul
+}
+```
+
+```vscode-cmd
+#把main.js文件打包生成bundle.js文件
+webpack .\src\main.js .\dist\bundle.js	
+```
+
+**config.js和package.json的配置**
+
+```vscode-cmd
+#初始化定义，然后生成package.json文件
+npm init
+```
+
+```js
+//config.js配置
+const path = require('path')	//导入模块
+module.exports = {
+    entry: './src/main.js',	//入口
+    output: {	//出口
+        path: path.resolve(__dirname, 'dist'),	//resolve()对括号里面的路径进行拼接，__dirname是当前文件路径
+        filename: 'bundle.js'
+    }
+}
+```
+
+````vscode-cmd
+#vscode本地安装webpack
+npm install webpack@3.6.0 -save-dev
+````
+
+#### **loader**
+
+loadeer作用：处理CSS文件
+
+![image-20201214122355623](image/image-20201214122355623.png)
+
+```vscode-cmd
+#vscode安装loader配置（此为固定版本安装）
+npm install --save-dev css-loader@2.0.2 css
+npm install --save-dev style-loader@0.23.1 style
+npm install --save-dev less-loader@4.1.0 less@3.9.0
+npm install url-loader@1.1.2 --save-dev		#引用图片时调用
+npm install file-loader@3.0.1 --save-dev	#当图片大于所定义的大小时，需要引用
+npm install -save-dev babel-loader@7 @babel/core @babel/preset-es2015	#ES6转化为ES5
+npm install vue --save
+npm install --save-dev vue-loader@13.0. vue-template-compiler@2.5.21
+```
+
+```webpack.config.js
+//引入loader
+//css-loader只负责将CSS文件进行加载，style-loader负责将样式添加到DOM中
+//使用多个loader时，use的引用是由右向左的
+module.exports = {
+  entry: './src/main.js',
+    output: {
+       path: path.resolve(__dirname, 'dist'),
+       filename: 'bundle.js',
+       publicPath: 'dist/'     //自动在前面拼接
+   },
+  module: {
+    rules: [
+      {
+         test: /\.css$/i,
+         use: ["style-loader", "css-loader"]
+       },
+       {
+         test: /\.less$/,
+         use: [
+           {
+             loader: "style-loader",
+           },
+           {
+             loader: "css-loader",
+           },
+           {
+             loader: "less-loader",
+             options: {
+               lessOptions: {
+                 strictMath: true
+               }
+             }
+           }
+          ]
+        },
+       {
+          test: /\.(png|jpg|gif)$/i,
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                //当加载的图片小于limit时，会将图片编译成base64字符串形式
+                //当加载图片大于limit时，需要使用filte-loader模块进行加载，加载的图片会存入dist目录下
+                limit: 8192,
+                name: 'img/[name].[hash:8].[ext]'
+              }
+            }
+          ]
+        },
+        {
+          test: /\.vue$/,
+          loader:'vue-loader'
+        }
+    ],
+  },
+  resolve: {//vue环境的配置
+    alias: {//alias(别名--起别的名字)
+     'vue$': 'vue/dist/vue.esm.js'
+  }
+};
+```
+
+**图片文件处理--修改文件名称**
+
+![image-20201218001222599](image/image-20201218001222599.png)
+
+#### **Plugin插件**
+
+plugin作用：
+
+- plugin是插件，通常是对于某个现有的架构进行扩展。
+- webpack中的插件，即是对webpack现有功能扩展，如打包优化，文件压缩
+
+**loader和plugin的区别**
+
+- loader主要用于转换某些类型的模块，是转换器
+- plugin是插件，是扩展器
+
+**HtmlWebPlugin插件作用：**
+
+- 自动生成一个index.html文件（可指定模块生成）
+- 将打包的js文件，自动通过script标签插入到body中
+
+**UglifyJsPlugin插件作用：**
+
+- 丑化js代码，在打包js代码时，会把注释等删掉
+
+```vscode-cmd
+#打包html的plugin
+npm install html-webpack-plugin@3.2.0 --save-dev
+#js压缩的plugin（uglifyjs--即丑化js）
+npm install uglifyjs-webpack-plugin@1.1.1 --save -dev
+```
+
+```webpack.config.js
+const path = repuire('path')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+module.exports = {
+	plugins: [
+		new webpack.BannerPlugin('最终版权归willy所有'),
+		new HtmlWebpackPlugin({
+        	template: 'index.html'	//默认搜寻当前路径下的index.html作为模板生成文件
+      	}),
+		new UglifyJsPlugin()
+	]
+}
+```
+
+**webpack配置文件的抽离--merge插件**
+
+因为有些配置前期不需要使用到，到最后打包才用到，比如：js代码的丑化（uglifyjs插件），因此需要分离配置文件，方便维护使用
+
+```vscode-cmd
+npm install webpack-merge@4.1.5 --save-dev
+```
+
+在package.json中修改build和dev的文件
+
+```package.json
+"build": "webpack --config ./build/prod.config.js",
+"dev": "webpack-dev-server --open --config ./build/dev.config.js
+```
+
+新建build文件，把webpack.config.js文件分离成base.config.js、dev.config.js、prod.config.js
+
+通过调用base.config.js文件来运行
+
+```dev.config.js、prod.config.js
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const webpackMerge = require('webpack-merge')
+const baseConfig = require('./base.config')
+module.exports = webpackMerge(baseConfig,{
+    plugins: [
+      new UglifyJsPlugin()
+    ]
+})
+```
+
+#### **搭建本地服务器**
+
+本地服务器基于nodejs搭建，内部使用express框架，实现我们想要让浏览器刷新显示我们修改后的结果
+
+deserver属性选项
+
+- contentBase：为哪一个文件夹提供本地服务，默认为根文件夹，一般写./dist
+- port：端口号,默认8080端口
+- inline：页面实时刷新
+- historyApiFallback：在SPA页面中，依赖HTML5的history模式
+- open参数表示直接打开浏览器
+
+```vscode-cmd
+#本地服务器安装
+npm install --save-dev webpack-dev-server@2.9.1
+```
+
+```webpack.config.js
+module.exports = {
+	devServer: {
+		contentBase: './dist',
+		inline: true,
+	}
+}
+```
+
+### 可视化管理 `vue ui`
+
+在cmd中输入`vue ui`即可。
+
+## 脚手架CLI
+
+**概述**
+
+- CLI是Command-Line Interface，即命令行界面，俗称脚手架。
+- 使用vue-cli可以快速搭建vue开发环境以及对应的webpack配置。
+- Vue CLI是官方发布的vue.js项目脚手架
+- 前提是webpack和node
+
+**NPM**
+
+- NPM全程是Node Package Manager，是一个nodejs包管理和分发工具，是非官方的模块/包的标准
+
+**脚手架安装**
+
+```cmd
+npm install -g @vue/cli@3.2.1
+vue --version
+#拉取脚手架2.0版本
+npm install -g @vue/cli-init
+```
+
+### **脚手架2**
+
+![image-20201218124600637](image/image-20201218124600637.png)
+
+```vscode-cmd
+#创建脚手架项目，项目名为my-project
+vue in
+it webpack my-project
+```
+
+**解读生成的文件**：先从package.json中读文件运行的过程
+
+![image-20201218132217602](image/image-20201218132217602.png)
+
+**runtime-compiler和runtime-only的区别**
+
+vue程序运行过程如下图所示：
+
+![image-20201229000721595](image/image-20201229000721595.png)
+
+- runtime-compiler运行过程：template-->ast-->render-->virtual dom-->UI
+
+- runtime-only运行过程：render-->virtual dom-->UI，所以性能相对更高，代码量更少
+
+  注意：runtime-only中不存在template
+
+**createElement**
+
+```vue
+const cpn = {
+  template: `<div>{{message}}</div>`,
+  data() {
+    return {
+      message: '我是组件message'
+    }
+  }
+}
+new Vue({
+	el: '#app',
+	render: function(createElement){
+	//1.普通用法：createElemnt('标签',{标签的属性},['标签的内容，里面可以再次嵌套'])
+		//return createElement('h4',{class:'box'},['Hello,world~',createElement('button',['按钮'])])
+		
+	//2. 传入组件对象(不能再runtime-only中运行)
+	return createElement(cpn)
+	}
+})
+```
+
+**npm run build/dev运行过程**
+
+![image-20210105104406137](image/image-20210105104406137.png)
+
+![image-20210105104341788](image/image-20210105104341788.png)
+
+### 脚手架3
+
+```
+#创建cli3项目
+vue create cliName
+
+#打开页面的项目管理器（因为cli3的配置会隐藏起来，所以这个比较好管理配置）
+vue ui
+```
+
+**vue-cli 3 与 2版本的区别**（约定大于配置）
+
+- vue-cli 3 是基于webpack 4打造，vue-cli 2 还是 webpack 3
+- vue-cli 3 的设计原则是“0配置”，移除的配置文件根目录下的build和config等目录
+- vue-cli 3 提供了vue ui 命令，提供了可视化配置，更加人性化
+- 移除了static文件，新增public文件夹，并且index.html移动到public中
+
+![image-20210105111814071](image/image-20210105111814071.png)
+
+## 路由
+
+### **路由**
+
+- 路由是通过互联的网络把信息从源地址传输到目的地址的活动。
+- 路由器提供了两种机制：路由和转送
+  - 路由是决定数据数据包从来源到目的地的路径。
+  - 转送是输入端的数据转移到合适的输出端。
+- 路由表本质上时一个映射表，决定了数据包的指向。
+
+### **渲染**
+
+- 后端渲染：
+  - 通过转发和重定向发送数据给服务器来渲染好对应的HTML页面，返回给客户端进行展示。
+  - 每个页面由对应的URL，url会发送到服务器，服务器通过正则对该URL进行匹配，然后交给Controller进行处理，最终生成HTML或数据，返回给前端，此为I/O操作。——后端路由
+- 前端渲染：
+  - 前后端分离阶段(ajax)：后端只负责提供数据，不负责任何阶段的内容。浏览器中显示的页面的大部分内容，都是前端写的JS代码在浏览器中执行，最终渲染出来的页面。
+  - 单页面富应用SPA阶段(vue)：在前后端分离基础上加一层前端路由，也就是前端来维护一套路由规则。(一个URL对应一个页面)
+  - 前端路由整体核心：改变URL，但是页面不进行整体的刷新。
+  - 改变页面的url但页面并不刷新的方案：url的hash和HTML5的history
+
+### **hash 和 history**
+
+```浏览器控制台
+##修改页面的URL地址，且使页面不刷新
+#在浏览器控制台中修改
+location.href='ddd'	//页面会刷新且URL修改
+location.hash='aaa'	//页面不刷新但URL修改
+history.pushState({},'','bbb')		//入栈（会保留历史记录）
+history.replaceState({},'','ccc')	//替换（不保留历史记录）
+
+#back()、forward()、go()等同于浏览器界面的前进后退
+history.back()		等价于	history.go(-1)
+history.forward()	等价于	history.go(1)
+```
+
+![image-20210307162042775](image/image-20210307162042775.png)
+
+- `<router-link>`:该标签是一个`vue-router`中已经内置的组件，会被渲染成一个`<a>`标签；
+  - `<router-link to='/home' tag='button' replace active-class="class1">`
+    
+  - tag：tag可以指定`<router-link>`之后渲染成什么组件，如上会渲染成一个button按钮
+
+  - replace：replace不会留下history记录，所以指定replace时，后退键不能返回上一操作页面
+
+  - active-class：当`<router-link>`对应的路由匹配成功时，会自动给当前元素设置一个`router-link-active`的`class`，设置`active-class`可以修改默认的名称。
+    (在进行高亮显示的导航菜单或底部tabbar时会使用该类；但通常不会修改类的属性，会直接使用默认的router-link-active即可)
+
+- `<router-view>`:该便签会根据当前的路径，动态渲染出不同的组件。(显示不同组件的页面内容)
+
+- 网页的其他内容，比如顶部的标题/导航，或底部的一些版权信息会个`<router-view>`处于同一个等级。
+
+- 在路由切换时，切换的是`<router-view>`挂载的组件，其他内容不会发生改变。
+
+### **路由的默认值和修改为history模式**
+
+```index.js
+//配置路由相关信息
+import Vue from 'vue'
+import Router from 'vue-router'
+
+//导入路径
+import Home from '../components/Home'
+import About from '../components/About'
+
+//1、通过Vue.use(插件)，安装插件
+Vue.use(Router)
+
+//3.将router对象传入（导入）到VUE实例中
+export default new Router({
+  //配置路由和组件之间的应用关系
+  routes: [
+    //2、创建VueRouter对象
+    {
+      path: '',  //路由的默认值，默认显示(配置的是根路径)
+      redirect: '/home' //重定向，将根路径重定向到/home的路径下
+    },
+    {
+      path: '/home',
+      component: Home
+    },
+    {
+      path: '/about',
+      component: About
+    }
+  ],
+  mode: 'history', //把默认的hash模式改为history模式
+  linkActiveClass: 'class1'	//index.js中active-class='class1'所统一设置的属性样式
+})
+```
+
+### **通过代码修改路由**
+
+```App.vue
+<template>
+  <div id="app">
+    <router-link to="/home" tag="button" replace>首页1</router-link>
+    <router-link to="/about" tag="button" replace>关于1</router-link>
+    <button @click="homeClick">首页2</button>
+    <button @click="aboutClick">关于2</button>
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'App',
+  methods: {
+    homeClick() {
+      //通过代码的方式修改路由 vue-router
+      this.$router.push('/home');
+      //this.$router.replace('/home');
+      console.log('homeClick');
+    },
+    aboutClick() {
+      this.$router.push('/about');
+      console.log('aboutClick');
+    }
+  }
+}
+</script>
+```
+
+### 动态路由
+
+在某些情况下，希望跳转到带`url的id`路径的页面（即不确定的页面，如带商品id传入商品详情页）
+
+```compents/User.vue
+<template>
+  <div>
+    <h2>我是用户界面</h2>
+    <p>我是用户的相关信息~~~~</p>
+    <HR></HR>
+    <h2>{{ $route.params.userid }}</h2>
+    <p>{{ userId }}</p>
+  </div>
+</template>
+<script>
+export default {
+  name: "User",
+  computed: {
+    userId() {
+      //return this.$router.userid; //获取的是index.js中router对象的内容
+      return this.$route.params.userid;  //$route获取的是index.js中最活跃的路由
+    }
+  }
+}
+</script>
+```
+
+```router/index.js
+//配置路由相关信息
+import Vue from 'vue'
+import Router from 'vue-router'
+import User from '../components/User'
+Vue.use(Router)
+
+export default new Router({
+  routes: [
+    {
+      path: '/user/:userid',  //此userid时传给compents/User.vue中js请求的userid传的值
+      component: User
+    }
+  ]
+})
+```
+
+```router/App.vue
+<template>
+  <div id="app"> 
+    <router-link :to="'/user/'+userid" tag="button">用户1</router-link>
+    <!-- 通过v-bind绑定。带单引号里面的内容为真实的，其他为字符串/变量 -->
+    <router-view></router-view>
+  </div>
+</template>
+<script>
+export default {
+  name: 'App',
+  data() {
+    return {
+      userid: 'lisi'
+    }
+  }
+}
+```
+
+### 打包文件的解析（路由的懒加载）
+
+- 懒加载：用到的时候再加载。（加快页面的加载速度）
+- 路由懒加载主要作用是将路由对应的组件打包成一个个的js代码块，只有这个路由被访问到时才能加载对应的组件。
+- ` component: ()=> import('../components/Home')`
+
+```index.js
+//方式一（不推荐）：结合Vue的异步组件和webpack的代码分析
+const Home = resolve => {require.ensure(['../components/Home.vue'],() => { resolve(require('../components/Home.vue')) })};
+
+//方式二：AMD写法
+const About = resolve => require(['../components/About.vue'],resolve);
+
+//方法三（推荐）：在ES6中，优化方法一来组织vue异步组件和webpack的代码分割
+const Home = () => import('../components/Home.vue')
+
+//示例
+export default new Router({
+  routes: [
+    {
+      path: '/home',
+      component: () => import('../components/Home')
+    },
+    {
+      path: '/about',
+      component: () => import('../components/About')
+    }
+  ]
+})
+```
+
+### 嵌套路由（子路由）
+
+```index.js
+import Vue from 'vue'
+import Router from 'vue-router'
+Vue.use(Router)
+export default new Router({
+  routes: [
+    {
+      path: '/home',
+      component: ()=> import('../components/Home'),
+      children: [ //子路由能让router-view不改变其框的父内容
+        {
+          path:'',
+          redirect: 'news'  //默认设置子路由的路径
+        },
+        {
+          path: 'news',
+          component: () => import('../components/HomeNews')
+        },
+        {
+          path: 'messages',
+          component: () => import('../components/HomeMessage')
+        }
+      ]
+    }
+  ]
+})
+```
+
+```components/Home.vue
+<template>
+  <div>
+    <h2>我是首页</h2>
+    <router-link to="home/news">新闻</router-link>
+    <router-link to="/home/messages">消息</router-link>
+    <router-view></router-view>
+  </div>
+</template>
+```
+
+>**注意：以`/`开头的嵌套路径会被当做根路径，使得在使用嵌套组件时无需设置嵌套的路径**
+>**（即在使用嵌套路由时无需再前面使用`/`，否则父路径将会无效，而是作为单独的路径存在）**
+
+### 参数传递
+
+传递参数主要有两种类型：params和query
+
+- params类型：
+  - 配置路由格式：`/router/:idname`
+  - 传递的方式：`在path后面跟上对应的值`
+  - 传递后形成的路径：`/router/123   或/router/abcd等`
+- query类型：
+  - 配置路由格式：`/router`，即是普通配置
+  - 传递的方式：`对象中使用query的key作为传递方式`
+  - 传递后形成的路径：`/router?id=123 或 /router?id=abc等`
+  - url中query的位置：
+    - `URI = scheme:[//authority]path[?query][#fragment] `
+    - `authority = [userinfo@]host[:port]`
+    - ![image-20210416003100883](image/image-20210416003100883.png) 
+
+```App.vue
+<template>
+  <div id="app">
+    <router-link :to="{ path: '/profile', query:{name:'willy', age:22, heigth:188}}" tag="button" replace>档案1</router-link>
+    <router-link :to="'/user/'+userid" tag="button">用户1</router-link>
+    <!-- 通过v-bind绑定。带单引号里面的内容为真实的，其他为字符串/变量 -->
+    <hr>
+    <button @click="profileClick">档案2</button>
+    <button @click="userClick">用户2</button>
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'App',
+  data() {
+    return {
+      userid: 'lisi'
+    }
+  },
+  methods: {
+    profileClick() {
+      this.$router.push({
+        path: '/profile',
+        query: {
+          name: 'willy',
+          age: 22,
+          height: 199
+        }
+      });
+      console.log('profileClick');
+    },
+    userClick() {
+      this.$router.push('/user/' + this.userid);
+      console.log('userClick');
+    }
+  }
+}
+</script>
+```
+
+```index.js
+import Vue from 'vue'
+import Router from 'vue-router'
+Vue.use(Router)
+export default new Router({
+  routes: [
+    {
+      path: '/user/:userid',  //此userid时传给compents/User.vue中js请求的userid传的值
+      // component: User
+      component: ()=> import('../components/User')
+    },
+    {
+      path: '/profile',
+      component: () => import('../components/Profile')
+    }
+  ]
+})
+```
+
+### `$route`与`$router`区别
+
+- `$router`为`VueRouter`实例，想要导航到不同`URL`，则使用`$router.push`方法（vue原型里面定义的方法）
+- `$route`为当前`router`跳转对象，里面可以获取`name、path、query、params`等（index定义的path对象）
+
+### `keep-alive`与`vue-router`
+
+- `keep-alive`是vue内置的一个组件，可以使被包含的组件保留状态，或避免重新渲染。（渲染过程可通过`create`声明函数来验证）
+  - `kepp-alive`的`include`属性：只有匹配的组件会被缓存。
+  - `keep-alive`的`exclude`属性：任何匹配的组件都不会被缓存。
+  - （其两种属性中的值为定义组件的`name`值）
+- `router-view`也是一个组件，如果直接被包在`keep-alive`里，所有的路径匹配的视图组件都会被缓存。
+- `path`属性离开时的路径在`beforeRouteLeave()`方法中记录。
+
+```App.vue
+<template>
+  <div id="app">
+    <router-link to="/home" tag="button" replace>首页1</router-link>
+    <router-link to="/about" tag="button" replace>关于1</router-link>
+
+    <keep-alive include="Home">
+    <!-- include属性为包含其内容模块，值是组件页面中js定义的name值    exclude为匹配的组件不会被缓存 -->
+      <router-view></router-view>
+    </keep-alive>
+  </div>
+</template>
+```
+
+```index.js
+//去掉默认路径的重定向
+```
+
+```Home.vue
+<template>
+  <div>
+    <h2>我是首页</h2>
+    <p>我是首页内容</p>
+    <router-link to="/home/news">新闻</router-link>
+    <router-link to="/home/messages">消息</router-link>
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Home",
+  data() {
+    return {
+      message: '这是一个消息',
+      path: '/home/news'
+    }
+  },
+  //activated 和 deactivated这两个函数只有该组件被保持了状态使用keep-alive时，才是有效的
+  activated() {
+    this.$router.push(this.path);
+  },
+  beforeRouteLeave (to, from, next) {
+    console.log(this.$route.path);
+    this.path = this.$route.path;
+    next();
+  }
+}
+</script>
+```
+
+### 配置路径别名(文件路径引用问题)
+
+在`build/webpack.base.conf.js`中的`resolve:{alias}`中配置路径的别名，（节省了书写路径中多个`../`繁杂容易出错的操作）
+
+> src属性里面，需要在前面添加`~`符号
+
+```webpack.base.conf.js
+resolve: {
+	extensions: ['.js', '.vue', '.json'],
+	alias: {
+		'vue$': 'vue/dist/vue.esm.js',
+		'@': resolve('src'),
+		'assets': 'src/assets'
+	}
+}
+```
+
+```修改的文件
+<img src="~assets/img/index.svg">
+
+import TabBar from "@/components/tab-bar/TabBar"
+```
+
+### 导航守卫（可做权限验证）
+
+- `vue-router` 提供的导航守卫主要用来通过跳转或取消的方式守卫导航。有多种机会植入路由导航过程中：全局的, 单个路由独享的, 或者组件级的。
+
+- 导航守卫：路由跳转过程中一些钩子函数。每个过程都有一个函数，这个函数能让你操作一些其他的事情。(点击该页路由链接，页面的标题也会随之改变)。
+
+#### 全局前置守卫`router.beforeEach()`
+
+确保 next 函数在任何给定的导航守卫中都被严格调用一次。它可以出现多于一次，但是只能在所有的逻辑路径都不重叠的情况下，否则钩子永远都不会被解析或报错。
+
+```index.js
+const routes = [
+  {
+    path: '/home',
+    // component: Home
+    component: ()=> import('../components/Home'),
+    meta: {		//元数据（描述数据的数据）
+      title: '首页'
+    }
+]
+const router = new Router({
+  routes,
+  mode: 'history'
+})
+router.beforeEach((to, from, next) => {	//前置守卫gaurd
+  //从from跳转到to
+  // document.title = to.meta.title;
+  document.title = to.matched[0].meta.title //解决子路由导航问题
+  console.log(to,from)
+  next();
+})
+export default router
+```
+
+#### 全局解析守卫`router.beforeResolve()`
+
+`router.beforeEach` 类似，区别是在导航被确认之前，**同时在所有组件内守卫和异步路由组件被解析之后**，解析守卫就被调用。
+
+#### 全局后置钩子`router.afterEach()`
+
+全局后置钩子，然而和守卫不同的是，这些钩子不会接受 `next` 函数也不会改变导航本身。
+
+```index.js
+router.afterEach((to, from) => {
+  // ...
+})
+```
+
+#### 路由独享守卫
+
+```index.js
+const router = new VueRouter({
+  routes: [
+    {
+      path: '/foo',
+      component: Foo,
+      beforeEnter: (to, from, next) => {
+        // ...
+      }
+    }
+  ]
+})
+```
+
+#### 组件内的守卫
+
+```js
+const Foo = {
+  template: `...`,
+  beforeRouteEnter(to, from, next) {
+    // 在渲染该组件的对应路由被 confirm 前调用
+    // 不！能！获取组件实例 `this`
+    // 因为当守卫执行前，组件实例还没被创建
+  },
+  beforeRouteUpdate(to, from, next) {
+    // 在当前路由改变，但是该组件被复用时调用
+    // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
+    // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
+    // 可以访问组件实例 `this`
+  },
+  beforeRouteLeave(to, from, next) {
+    // 导航离开该组件的对应路由时调用
+    // 可以访问组件实例 `this`
+  }
+}
+```
+
+#### **完整的导航解析流程**
+
+1. 导航被触发。
+2. 在失活的组件里调用 `beforeRouteLeave` 守卫。
+3. 调用全局的 `beforeEach` 守卫。
+4. 在重用的组件里调用 `beforeRouteUpdate` 守卫 (2.2+)。
+5. 在路由配置里调用 `beforeEnter`。
+6. 解析异步路由组件。
+7. 在被激活的组件里调用 `beforeRouteEnter`。
+8. 调用全局的 `beforeResolve` 守卫 (2.5+)。
+9. 导航被确认。
+10. 调用全局的 `afterEach` 钩子。
+11. 触发 DOM 更新。
+12. 调用 `beforeRouteEnter` 守卫中传给 `next` 的回调函数，创建好的组件实例会作为回调函数的参数传入。
+
+## Vuex
+
+#### 理念
+
+- Vuex是一个专为Vue.js应用程序开发的状态管理模式。
+  - 采用**集中式存储管理**应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。
+  - Vuex也集成到Vue的官方调试工具`devtools extension`，提供了诸如零配置的`time-travel`调试，状态快照导入导出等高级调试功能。
+- vuex就是为了提供一个在多个组件间共享状态的插件。
+
+#### 使用`vuex`管理状态
+
+- 安装vuex：`npm install vuex --save`
+- 安装插件Vue.use(Vuex)`，在src下新建store文件夹，新建index.js
+- 一般不会直接使用`$store.state.count`获取vuex中的状态，也不是直接使用`$store.state.count++`来操作vuex中的状态。
+
+```js
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+// 1.安装插件
+Vue.use(Vuex)
+
+// 2.创建对象
+const store = new Vuex.Store({
+  state: { // 状态集合
+    count: 0 // 具体的状态数据
+  }
+})
+
+// 3.导出store对象
+export default store
+```
+
+![image-20210505164210975](image/image-20210505164210975.png)
+
+- Vue Components是vue组件
+- Mutations ：更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
+- State 是vuex中状态的集合
+- Actions与Mutations 类似，经常与后端交互，不同在于：Action 提交的是 mutation，而不是直接变更状态； 可包含任意异步操作。
+
+### State（单一状态树）
+
+Vuex 使用**单一状态树**用一个对象就包含了全部的应用层级状态（唯一数据源 `	Single Source of Truth`）。即每个应用将仅仅包含一个 store 实例。单一状态树让我们能够直接地定位任一特定的状态片段，在调试的过程中也能轻易地取得整个当前应用状态的快照。
+
+把数据所有有关的数据封装到一个对象（store实例），无论是数据的状态（state），以及对数据的操作（mutation、action）等都在store实例中，便于管理维护操作。
+
+可直接通过`this.$store.state`获取state对象。
+
+### Getters
+
+Getters类似计算属性，帮我们做一些重复的事情。
+
+```js
+const store = new Vuex.Store({
+  state: { // 状态集合
+    students: [
+      {id: 110, name: 'zzz', age: '18'},
+      {id: 111, name: 'ttt', age: '20'},
+      {id: 112, name: 'yyy', age: '22'},
+      {id: 113, name: 'zty', age: '25'}
+    ]
+  }
+})
+```
+
+获取**年龄大于20岁的学生数量**：
+
+```js
+computed: {
+    stuCount() {
+      return this.$store.state.students.filter(student => student.age > 20).length
+    }
+  }
+```
+
+如果很多组件中需要**年龄大于20岁的学生数量**，你可能会将这个计算属性复制，将filter函数写很多遍，但是如果你有**Getters**。
+
+> 在store实例中定义getters
+
+```js
+  getters: {
+    getStudentCounts: state => {
+      return state.students.filter(s => s.age > 20).length
+    }
+  }
+```
+
+> 通过属性调用getters
+
+```
+computed: {
+    stuCount() {
+      return this.$store.getters.getStudents
+    }
+  }
+```
+
+现在只需要调用getters的getStudents对象，就能获取数量。
+
+如果你想查询指定ID（传入ID）的学生信息。
+
+你也可以通过让 getter 返回一个函数，来实现给 getter 传参。在你对 store 里的数组进行查询时非常有用。
+
+### Mutation（传递参数、状态更新）
+
+- Vuex的store状态更新的唯一方式：**提交Mutation**
+
+- Mutation主要包括两个部分：
+
+  1. 字符串的**事件类型（type）**
+  2. 一个**回调函数（handler）**，这个回调函数就是我们实际进行状态更改的地方，该回调函数的**第一个参数就是state**
+
+- mutation携带的参数被称为是mutation的载荷（Payload）
+
+- Mutation的定义方式：
+
+  ```js
+  mutation: {
+      addStu (state, stu) {
+      	state.students.push(stu) // 向数组中添加指定的stu
+      	console.log(state.students.find(s => s.id === stu.id)) // 输出打印查看state中是否有新增stu
+  	}
+  }
+  ```
+
+- 通过Mutation更新
+
+  ```vue
+  <button @click="addStu()">新增一个指定的学生</button>
+  
+  //methods中的方法
+  addStu () {
+      const stu = {
+          id: 114,
+          name: 'ytz',
+          age: '35'
+      }
+      this.$store.commit('addStu', stu)
+  }
+  ```
+
+#### mutation的提交风格
+
+1. 普通提交风格
+
+   ```js
+   this.$store.commit('addStudent',stu);	//stu传过去的就是stu
+   ```
+
+2. 特殊的提交封装
+
+   ```vue/js/methods
+   addStudent () {
+   	const stu = {id:117, name:'willy', age:22};
+   	// this.$store.commit('addStudent',stu);	//stu传过去的就是count=10	
+   	this.$store.commit({
+   		type: 'addStudent',	//count传过去是一个对象payload（载荷）	{type: 'addCount',stu
+   		stu
+   	})
+   }
+   ```
+
+   ```index.js/getters
+   addCount (state, payload) { // 此时传入的就不是一个count值了，而是一个对象
+   	state.count += payload.count
+   }
+   ```
+
+
+### Vuex的响应式原理
+
+1. Vuex的store的state是响应式的，当state中的数据发生改变时，Vue组件会自动更新。
+
+2. 响应式需要遵循规则
+
+   - state的对象需要初始化
+   - 如果需要给state中的对象添加新属性的时候，使用以下方式
+     1. 使用Vue.set(obj, 'newProp', 123)
+     2. 用新对象替换就对象
+
+3. 在state中增加一个对象user
+
+   ```js
+   user: {
+       name: 'zhangsan',
+       sex: '男'
+   }
+   ```
+
+4. 在app.vue增加按钮修改信息
+
+   ```vue
+   <h3>{{ $store.state.user }}</h3>
+   <button @click="updateInfo()">修改信息</button>
+   ```
+
+5. app.vue增加按updateInfo()方法
+
+   ```js
+   updateInfo () {
+       this.$store.commit('updateInfo', 12)
+   }
+   ```
+
+6. 在mutation中添加updateInfo()
+
+   ```json
+   updateInfo (state, age) {
+       state.user.age = age
+   }
+   ```
+
+7. 点击**修改信息**按钮，发现state的值变化了，但是页面没有响应变化
+
+8. 使用`Vue.set()`方法支持响应式
+
+   ```js
+       updateInfo (state, age) {
+         // state.user.age = age
+         Vue.set(state.user, 'age', 12)
+       }
+   ```
+
+9. 再次点击**修改信息**按钮，发现变响应式了
+
+
+> **总结**
+
+1. state未初始化属性（`age`）
+
+   - 使用直接赋值的方式不能响应式
+   - 需要使用` Vue.set(state.user, 'age', 12)`
+
+2. state已经初始化了，可以使用直接赋值方式
+
+3. 关于删除属性
+
+```js
+// 该方法没有响应式，需要使用vue.delete
+// delete state.user.age
+Vue.delete(state.user, age)// 响应式删除age
+```
+
+#### mutation的类型常量
+
+一个vue文件中有关mutation的方法太多了，常常可能写错，所有可以在store文件夹下定义一个`mutation-type.js`的常量。
+
+1. 定义一个`mutation-type.js`的常量
+
+```json
+export const UPDATEINFO = 'updateInfo'
+```
+
+2. 修改`App.vue`的updateinfo方法
+
+```js
+import { UPDATEINFO } from './store/mutation-type'
+[UPDATEINFO] () {
+	this.$store.commit(UPDATEINFO, 12)
+}
+```
+
+3. 修改store的`index.js`，将mutation的方法名也改成常量使用方式
+
+```js
+import { UPDATEINFO } from './mutation-type'
+[UPDATEINFO] (state, age) {
+    Vue.set(state.user, 'age', 12)
+    // Vue.delete(state.user, age)// 响应式删除age
+}
+```
+
+这样保证了所有的方法都定义在`mutation-type.js`中，不会出问题。
+
+#### mutation同步函数
+
+- 通常Vuex要求mutation中的方法必须是同步方法。
+- 方便`devtools`工具捕捉mutation的快照（异步操作`devtools`不能很好的追踪操作什么时候完成）
+
+- 即强调，不要用Mutation中进行异步操作。
+- 使用mutation操作更新state的时候，使用异步修改数据，用actions代替。
+
+### Actions
+
+- 使用actions操作更新state时，使用异步修改数据
+
+- Action 类似于 mutation，不同在于：
+  - Action 提交的是 mutation，而不是直接变更状态。
+  - Action 可以包含任意异步操作。
+
+1. 新增一个mutation
+
+```js
+updateName (state, name) {
+	state.user.name = name
+}
+```
+
+2. 新增一个actions
+
+```js
+actions: {
+    // context：上下文
+    aUpdateInfo (context, name) {
+        setTimeout(() => {
+        context.commit(UPDATEINFO, 12)
+        }, 1000)
+    }
+}
+```
+
+3. 在`App.vue`中新增一个按钮修改user对象姓名
+
+```vue
+<h3>异步修改的信息:{{ $store.state.user }}</h3>
+<button @click="aUpdateInfo()">异步修改信息</button>
+```
+
+4. 给按钮新增方法
+
+```js
+aUpdateInfo () {
+	this.$store.dispatch('aUpdateInfo', 'lisi')
+}
+```
+
+5. 点击`异步修改信息`按钮测试
+
+在点击按钮之后，信息修改了，dev-tools也能跟踪到state的变化。通过`$store.dispacth()`方法来调用actions，发送异步请求，在actions中需要提交mutation来修改state。
+
+6. actions回调，在异步操作后，成功或者失败都应该会有回调，`$store.dispacth()`返回一个Promise对象，修改actions，返回一个Promise对象，成功调用`resolve(msg)`，将成功的`msg`传入
+
+   ```js
+   actions: {
+       // context：上下文
+       aUpdateInfo (context, name) {
+           let msg = '响应成功'
+           return new Promise((resolve, reject) => {
+               setTimeout(() => {
+                   context.commit(UPDATEINFO, 12)
+                   resolve(msg)
+               }, 1000)
+           })
+       }
+   }
+   ```
+
+   
+
+7. 修改`aUpdateInfo()`方法，获取回调参数`msg`，此时的`response`就是actions中回调的`msg`，也可以支持失败的回调，只要actions中使用了reject，在`aUpdateInfo()`方法中catch回调结果就能获取resjct对象回传结果。
+
+   ```js
+   aUpdateInfo () {
+       this.$store.dispatch('aUpdateInfo', 'lisi').then(response => {
+           console.log(response)
+       })
+   }
+   ```
+
+8. 再次点击`异步修改信息`，打印结果信息
+
+   ![image-20210506112408156](image/image-20210506112408156.png)
+
+> Actions 支持同样的载荷方式(**payload**)和对象方式进行分发
+
+```js
+// 以载荷形式分发
+store.dispatch('aUpdateInfo', {
+  name: 'lisi'
+})
+
+// 以对象形式分发
+store.dispatch({
+  type: 'aUpdateInfo',
+  name: 'lisi'
+})
+```
+
+### moudules（模块）
+
+由于使用单一状态树，应用的所有状态会集中到一个比较大的对象。当应用变得非常复杂时，store 对象就有可能变得相当臃肿。
+
+为了解决以上问题，Vuex 允许我们将 store 分割成**模块（module）**。每个模块拥有自己的 state、mutation、action、getter、甚至是嵌套子模块——从上至下进行同样方式的分割。
+
+```js
+const moduleA = {
+  state: () => ({ ... }),
+  mutations: { ... },
+  actions: { ... },
+  getters: { ... }
+}
+
+const moduleB = {
+  state: () => ({ ... }),
+  mutations: { ... },
+  actions: { ... }
+}
+
+const store = new Vuex.Store({
+  modules: {
+    a: moduleA,
+    b: moduleB
+  }
+})
+
+store.state.a // -> moduleA 的状态
+store.state.b // -> moduleB 的状
+```
+
+#### 模块的局部状态
+
+1. 模块内部的mutation 和 getter，接收的第一个参数是**模块的局部状态对象**。
+
+2. 模块内部的 action，局部状态是 `context.state` ，根节点状态则为 `context.rootState`。
+
+3. 对于模块内部的 getter，第三个参数是根节点状态。
+
+4. > 注意：只有模块才有根节点
+
+   ```js
+   const moduleA = {
+     state: () => ({
+       count: 0
+     }),
+     mutations: {
+       increment (state) {
+         // 这里的 `state` 对象是模块的局部状态
+         state.count++
+       }
+     },
+     actions: {
+       incrementIfOddOnRootSum (context) {
+         if ((context.state.count + context.rootState.count) % 2 === 1) {
+           context.commit('increment')
+         }
+       }
+     },
+     getters: {
+       doubleCount (state, getters, rootState) {
+         console.log(rootState.count) // 获取的是根状态的count
+         return state.count * 2
+       }
+     }
+   }
+   ```
+
+   > 注意actions的context
+
+   ```js
+   actions: {
+       incrementIfOddOnRootSum ({ state, commit, rootState }) {
+           if ((context.state.count + context.rootState.count) % 2 === 1) {
+               context.commit('increment')
+           }
+       }
+   }
+   ```
+
+   `{ state, commit, rootState }`对应`context`对象中的属性，使用ES6的对象解构。
+
+### 项目结构
+
+Vuex 并不限制你的代码结构。但是，它规定了一些需要遵守的规则：
+
+1. 应用层级的状态应该集中到单个 store 对象中。
+2. 提交 **mutation** 是更改状态的唯一方法，并且这个过程是同步的。
+3. 异步逻辑都应该封装到 **action** 里面。
+
+只要你遵守以上规则，如何组织代码随你便。如果你的 store 文件太大，只需将 action、mutation 和 getter 分割到单独的文件。
+
+对于大型应用，我们会希望把 Vuex 相关代码分割到模块中。
+
+```bash
+├── index.html
+├── main.js
+├── api
+│   └── ... # 抽取出API请求
+├── components
+│   ├── App.vue
+│   └── ...
+└── store
+    ├── index.js          # 我们组装模块并导出 store 的地方
+    ├── actions.js        # 根级别的 action
+    ├── mutations.js      # 根级别的 mutation
+    └── modules
+        ├── cart.js       # 购物车模块
+        └── products.js   # 产品模块
+```
+
+## axios
+
+**网络模块选择**
+
+- 传统的AJAX是基于XMLHttpRequest(XHR)：配置和调用方式很混乱，编码繁杂，一般使用JQuery-Ajax;
+- JQuery-Ajax：相对于Vue该框架过于重量。
+- vue-resource：在vue2.0后不再更新和维护，对以后的项目开发维护存在隐患。
+- axios（ajax i/o system）特点：在浏览器中发送XMLHttpRequests请求；在node.js中发送http请求；支持Promise API；拦截请求和响应；转换请求和响应数据...
+
+**jsonp**
+
+- 使用JSONP原因：解决跨域访问的问题。
+- 原理：JSONP核心在于通过`<script>`标签的src来帮助我们请求数据，将数据当做一个javascript的函数来执行，并且执行的过程中传入我们需要的json。
+- 封装JSONP的核心在于监听window上的jsonp进行回调时的名称。
+
+#### 安装/使用axios
+
+- 安装axios：`npm install axios --save`
+- 网站测试：`http://httpbin.org/`
+- 并发请求：使用`axios.all([])`，可以放入多个请求的数组，返回的结果是一个数组，使用`axios.spread`可将数组`[res1,res2]`展开为res1，res2。
+
+#### axios请求方式
+
+```js
+axios(config)
+axios.request(config)
+axios.get(url[,config])
+axios.delete(url[,config])
+axios.head(url[,config])
+axios.post(url[,data[,config]])
+axios.put(url[,data[,config]])
+axios.patch(url[,data[,config]])
+```
+
+```main.js
+import axios from 'axios'
+axios({
+  url: 'http://123.207.32.32:8000/home/data',
+  //专门针对get请求的参数拼接
+  params:{
+    type: 'pop',
+    page: 1
+  },
+  method: 'get'
+}).then(res => {
+  console.log('axios.get模拟测试：',res);
+})
+// axios.post()
+
+//进行axios的全局配置
+axios.defaults.baseURL = 'http://123.207.32.32:8000'
+axios.defaults.timeout = 1000
+
+//2、axios发送并发请求
+axios.all([axios({
+  url: '/home/multidata',
+
+}),axios({
+  url: '/home/data',
+  params:{
+    type: 'sell',
+    page: 4
+  },
+})])
+/* .then(resluts =>{
+  // console.log(resluts)
+}) */
+.then(axios.spread((res1,res2) =>{
+  console.log('axios.spread,res1：',res1);
+  console.log('axios.spread,res2：',res2);
+}))
+```
+
+#### 全局配置
+
+- 因为有些代码段都是固定的，这时我们可进行一些抽取，利用axios的全局配置
+
+**常见的配置选项：**
+
+- 请求地址：`url:'/user'`
+- 请求类型：`method:'get'`
+- 请求路径：`baseURL:'http://www.baidu.com/api'`
+- 请求前的数据处理：`transformRequest:[function(data){}]`
+- 请求后的数据处理：`transformResponse:[function(data){}]`
+- 自定义的请求头：`headers:{'x-Requested-With':'XMLHttpRequest'}`
+- URL查询对象：`params:{id:12}`
+- 查询对象序列化函数：`paramsSerializer:function(params){}`
+- request body：`data:{key:'aa'}`
+- 超时设置s：`timeout:1000`
+- 跨域是否带Token：`withCredentials:false`
+- 自定义请求处理：`adapter:function(resolve,reject,config){}`
+- 身份验证信息：`auth:{uname:'willy',pwd:'123'}`
+- 相应的数据格式json/blod/document/arraybuffer/text/stream：`responseType:'json'`
+
+#### 创建axios实例
+
+- 不要对第三方框架过于依赖，即不要在多个页面嵌套axios请求，应进行封装（否则后期维护花费成本过高）
+- 在src目录下创建`network`文件夹，存放网络请求文件，主文件为`request.js`
+
+```request.js
+import axios from 'axios'
+/* export function request(config, success, failure) {
+  //创建axios实例
+  const instancel = axios.create({
+    baseURL: 'http://123.207.32.32:8000',
+    timeout: 1000,
+  })
+
+  //发送真正的网络请求
+  instancel(config)
+    .then(res => {
+      // console.log(res);
+      success(res)
+    }).catch(err => {
+      // console.log(err);
+      failure(err)
+    })
+} */
+
+export function request(config){
+  return new Promise((resolve, reject) => {
+    const instancel = axios.create({
+      baseURL: 'http://123.207.32.32:8000',
+      timeout: 1000,
+    })
+
+    //axios的拦截器 interceptors.request
+    instancel.interceptors.request.use(data => {
+      console.log('interceptors.request的data：',data)
+
+      //拦截data中不符合的信息
+      //发送请求时，在界面上显示加载中（请求）的图标
+      //某些网络请求（如登录携带token），必须携带写特殊的信息
+
+      return data //需要使用return返回结果，否则在main.js中的请求回调会输出error信息
+    }, err => {
+      console.log('interceptors.request的err：',err)
+    })
+
+    //axios的响应拦截 interceptors.response
+    instancel.interceptors.response.use(res => {
+      console.log('interceptors.response的res：',res)
+      return res
+    }, err => {
+      console.log('interceptors.response的err：',err)
+    })
+
+    // return instancel(config)
+
+    //发送真正的网络请求
+    instancel(config)
+    .then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+//回调函数：
+/* function test(aa, bb) {
+  aa('hello');
+  bb('hi');
+}
+test(function(res) {
+  console.log(res);
+},function (err) {
+  console.log(err);
+})
+ */
+
+```
+
+```main.js
+//封装axios请求中的request模块
+import { request } from './network/request';
+/* request({
+  url: '/home/multidata'
+},res => {
+  console.log(res);
+},err => {
+  console.log(err);
+}) */
+
+request({
+  url: '/home/multidata'
+}).then(res => {
+  console.log('request请求的数据：',res)
+}).catch(err => {
+  console.log(err);
+})
+```
+
+#### axios的拦截器`interceptors`
+
+- `interceptors.use()`携带两个参数，成功与失败的参数
+- `interceptors.request`：拦截请求
+- `interceptors.response`：响应拦截
+
+## nginx
+
+## 问题
+
+#### `NavigationDuplicated: Avoided redundant navigation to current location`
+
+vue项目中，点击左侧菜单栏中的项，重复点击时会报错，解决这个问题，首先找到项目中管理路由的文件，一般是router/index.js,有的直接就是router.js。
+然后看vue-router的引入名称，
+
+```
+//情况一：
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+// 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
+//情况二：
+import Router from 'vue-router';
+Vue.use(Router);
+// 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
+const originalPush = Router.prototype.push
+ 
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+```
+
+#### 命令行报错：`Component template should contain exactly one root element. If you are using v-if on multiple elements, use v-else-if to chain them instead `
+
+- 组件模板应该包含一个根元素。如果在多个元素上使用V-IF，则使用V-ELS-IF来链接它们。
+- 即说在模版里只能有一个主div（根对象），如果有多个元素，请用一个主div包含他们。
+
+```vue
+<!-- 错误代码 -->
+<template>
+  <div><el-header><myHeader></myHeader></el-header></div>
+  <div>这里才是首页</div>
+</template>
+
+
+<!-- 修正代码 -->
+<template>
+  <div>
+    <el-header ><myHeader></myHeader></el-header>
+    <div>这里才是首页</div>
+  </div>
+</template>
+```
+
+#### 渲染错误问题：`“Error in render: "TypeError: Cannot read property '0' of undefined"”`
+
+![image-20210729212831827](image/image-20210729212831827.png)
+
+- 无法读取未定义的属性，意思是模板在渲染时，读取对象中的某个对象的属性值时，这个对象不存在，说通俗点就是**三层表达式a.b.c，在对象a中没有对象b，那么读取对象a.b.c中的值，自然会报错。如果是两层表达式a.b则不会报错，返回的是undefined。**
+- ![image-20210729220504924](image/image-20210729220504924.png)
+- 根本原因：这里的info是vuex中state管理加载的数据，异步调用显示，然后vue渲染机制中：**异步数据先显示初始数据，再显示带数据的数据**，所以上来加载Info时还是一个空对象。
+- 解决方案：在上面一个div中添加v-if判断条件，如果info.supports取不到，则不加载该div即可解决。（**注意，不能用v-show，v-show的机制是加载后，根据条件判断是否显示**）
+- ![image-20210729215904817](image/image-20210729215904817.png)
+
+## 案例
+
+### 跑马灯效果
+
+```html_vue
+//HTML
+<div id="app">
+    <p>{{info}}</p>
+	<input type="button" value="开启" v-on:click="go">
+	<input type="button" value="停止" v-on:click="stop">
+</div>
+
+//js	Vue实例
+// 创建 Vue 实例，得到 ViewModel
+var vm = new Vue({
+    el: '#app',
+    data: {
+        info: '猥琐发育，别浪~！',
+        intervalId: null
+    },
+    methods: {
+        go() {
+            // 如果当前有定时器在运行，则直接return
+            if (this.intervalId != null) {
+                return;
+            }
+            // 开始定时器
+            this.intervalId = setInterval(() => {this.info = this.info.substring(1) + this.info.substring(0, 1);}, 500);
+
+        },
+        stop() {
+            clearInterval(this.intervalId);
+        }
+    }
+});
+```
+
+### 用户登录案例
+
+（通过v-if条件渲染）
+
+```problem
+1、如果我们在输入内容的情况下，切换了类型，会发现文字依然显示之前输入的内容
+原因==>因为vue在进行DOM渲染时，出于性能考虑，会尽可能复用已经存在的元素，而不是重新创建新的元素
+解决==>如果不希望vue出现复用问题，可给对应的input添加key
+```
+
+```vue
+//html
+<div id="app">
+    <span v-if="isUser">
+        <label for="username">用户账号</label>
+        <input type="text" id="username" placeholder="用户账号" key="username">
+    </span>
+    <span v-else>
+        <label for="email">用户邮箱</label>
+        <input type="text" id="email" placeholder="用户邮箱" key="email">
+    </span>
+    <button @click="isUser = !isUser">切换类型</button>
+</div>
+
+//js
+const app = new Vue({ 
+    el: '#app',
+    data: {
+    isUser: true
+    }
+});
+```
+
+### 父子组件通信案例
+
+```html+vue
+//HTML
+<!-- 1、父子传参    2、改变data中的数据     3、下面的数字永远是上面数字的一百倍 -->
+<!-- 子组件模板 -->
+<div id="app">
+    <cpn :number1="num1" :number2="num2" @num1change='num1change' @num2change='num2change' />
+</div>
+<!-- 父组件模板 -->
+<template id="cpn">
+    <div>
+        <p>props：-->{{number1}}</p>
+        <p>data：-->{{datanumber1}}</p>
+        <input type="text" :value="datanumber1" @input="num1Input">
+        <hr>
+        <p>props:-->{{number2}}</p>
+        <p>data：-->{{datanumber2}}</p>
+        <input type="text" :value="datanumber2" @input="num2Input">
+    <div>
+</template>
+
+//JS	 
+const VM = new Vue({
+    el: '#app',
+    data: {
+        num1: 1,
+        num2: 0
+    },
+    methods: {
+        num1change(value){
+            console.log(typeof value);
+            //因为传过来的是字符串String类型，所以需要转换
+            this.num1 = parseFloat(value)
+        },
+        num2change(value){
+            this.num2 = parseFloat(value)
+        }
+    },
+    components: {
+        cpn: {
+            template: '#cpn',
+            props: {
+                number1: Number,
+                number2: Number
+            },
+            data(){
+                return {
+                    datanumber1: this.number1,
+                    datanumber2: this.number2
+                }
+            },
+            methods: {
+                num1Input(event){
+                    //1.将input中的value赋值到组件中的data中（datanumber1）
+                    this.datanumber1 = event.target.value;
+
+                    //2. 为了让父组件可以修改值，发生一个事件
+                    this.$emit('num1change',this.datanumber1)
+
+                    //3. 同时修改datanumber2的值
+                    this.datanumber2 = this.datanumber1*100;
+                    this.$emit('num2change',this.datanumber2);
+                },
+                num2Input(event){
+                    this.datanumber2 = event.target.value;
+                    this.$emit('num2change',this.datanumber2)
+                    this.datanumber1 = this.datanumber2/100;
+                    this.$emit('num1change',this.datanumber1);
+                }
+            }
+        }
+    }
+})
+```
+
+### `router_cli@2`多页面内容切换--`TabBar`
+
+#### 选项卡切换
+
+**理念**：通过`onclick`带值事件和绑定三元`class`样式来显示。
+
+```vue
+<div id="app">
+	<div>
+	<i class="icon iconfont" slot="item-icon" :class="currentIndex===0?'color':''" @click='changeColor(0)'>&#xe60b;</i>
+	<div slot="item-text">首页</div>
+	</div>
+	<div>
+	<i class="icon iconfont" slot="item-icon" :class="currentIndex===1?'color':''" @click='changeColor(1)'>&#xe7f9;</i>
+	<div slot="item-text">分类</div>
+	</div>
+	<div>
+	<i class="icon iconfont" slot="item-icon" :class="currentIndex===2?'color':''" @click='changeColor(2)'>&#xe62d;</i>
+	<div slot="item-text">购物车</div>
+	</div>
+	<div>
+	<i class="icon iconfont" slot="item-icon" :class="currentIndex===3?'color':''" @click='changeColor(3)'>&#xe617;</i>
+	<div slot="item-text">我的</div>
+	</div>
+</div>
+
+<script>
+  new Vue(){
+    data(){ return { currentIndex:0 } },
+    methods: { changeColor(index){ this.currentIndex = index } }
+  }
+</script>
+<style scoped>
+  .color{color: red;}
+</style>
+```
+
+# Echarts
+
+## 起步
+
+`Echarts`是使用`JavaScript`实现的开源可视化库，底层依赖矢量图形库`ZRender`，可高度个性化定制数据可视化图表。
+
+- title：标题
+- tooltip：提示框组件，用于配置鼠标滑过或点击图标时的显示框
+- toolbox：工具栏（内置导出图片、数据导图、动态类型转换、数据区域缩放、重置五个工具）
+- legend：通用配置（图例），用于筛选系列，需和series配合使用
+
+#### 注意
+
+- **`legend`内的`data`值与`series`内的`name`值不一致**，将会导致拿到后台传递的数据后，页面依旧不会渲染成功。
+- **不给`canvas`（即描绘数据表的div标签）设定宽高值**，将会导致数据表无法显示出来。
+- `xAxis或yAxis`里面的值与`series`中的data值（看描述什么图），将会导致数据表无法正确渲染。
+
+#### 建议：
+
+- 数据报表不能`mounted`生命周期中。
+- 图标挂载之前判断是否有数据，当数据请求回来以后再进行挂载。或者使用`$nextTick()`方法，让图表在下一个tick或者本轮tick的微任务阶段挂载。
+- 父组件要使用中间变量的方式向子组件传递所需要的数据。（即在子组件的data中定义变量，再通过watch侦听父组件传来的值，且把传来的值赋给data的变量中，调用的是data的变量）
+- 在父组件数据发生改变后子组件要做到实时更新，就需要子组件用watch来监听数据的变化，而且对象类型和数组类型的监听方式不同。
+
+## demo
+
+### 图表大小随窗口变化自适应
+
+```
+//在方法中编写	
+window.onresize = function () {
+       this.myChart.resize();
+       // .resize后加括号哦，这里还可以写其他的事件
+};
+```
+
+> 注意：必须要给容器一个高度，否则高度为0，图表不显示
+> 一般是把图表写在子组件中，然后把子组件的宽高定义为`100%`，再在父组件中通过`ref属性`绑定子组件，再调用`window.onresize`。
+
+```son.vue
+<template>
+    <div class="m-box">
+        <div>图表<div>
+                <div class="m-subject">
+                    <div class="m-echarts" ref="myCharts"></div>
+                </div>
+            </div>
+</template>
+
+<script>
+    import echarts from 'echarts'
+    export default {
+        props: { xData: Array, },
+        data() {
+            return {
+                xxData: [],
+                xxDataName: [],
+                xxDataValue: [],
+                instance: {},
+            }
+        },
+        methods: {
+            resize() {
+                this.instance.echart.resize();
+            },
+            initEcharts() {
+                this.instance.echart = echarts.init(this.$refs.myCharts);
+            },
+            setEchartsOption() {
+                this.instance.echart.setOption({
+                    legend: {
+                        data: ['DATA1']
+                    },
+                    xAxis: [{  //x轴坐标数据
+                        type: 'category',
+                        boundaryGap: false,
+                        data: this.xxDataName //['周一','周二','周三','周四','周五','周六','周日']
+                    }],
+                    yAxis: [{   //y轴坐标数据
+                        type: 'value',
+                        axisLabel: {
+                            formatter: '{value} °'
+                        }
+                    }],
+                    series: [  //驱动图表生成的数据内容数组，几条折现，数组中就会有几个对应对象，来表示对应的折线
+                        {
+                            name: "DATA1",
+                            type: "line",  //pie->饼状图  line->折线图  bar->柱状图
+                            data: this.xxDataValue,//[11, 11, 15, 13, 12, 13, 10],
+                        },
+                    ]
+                });
+            },
+        },
+        create() {
+            this.yData();
+            this.xData();
+        },
+        mounted() {
+            this.initEcharts();
+            this.setEchartsOption();
+        },
+        watch: {
+            xData: function (newVal, oldVal) {
+                this.xxData = newVal;
+                for (let i in this.xxData) {
+                    this.xxDataName.push(this.xxData[i].name);
+                    this.xxDataValue.push(parseInt(this.xxData[i].value));
+                }
+                this.setEchartsOption();
+            }
+        }
+    }
+</script>
+<style lang="less">
+    .m-box {
+        width: 100%;
+        height: 100%;
+
+        .m-subject {
+            width: 100%;
+            height: 100%;
+
+            .m-echarts {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+</style>
+```
+
+```App.vue
+<template>
+  <div id="app">
+    <div class="charts">
+      <data-table :xData="xData" class="charts" ref="dataTable"></data-table>
+    </div>
+  </div>
+</template>
+
+<script>
+  import { xData } from './components/data.js';
+  import dataTable from './components/son'
+
+  export default {
+    name: 'App',
+    data() {
+      return { xData: [], }
+    },
+    methods: {
+      getData() { this.xData = xData; },
+    },
+    components: { xData, dataTable },
+    mounted() {
+      this.getData();
+      window.onresize = () => {	//通过定义CSS样式宽高100%，和这函数来实现满屏显示图表
+        this.$refs.dataTable.resize();
+      }
+    },
+  }
+</script>
+<style lang="less">
+  html,body,#app {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .charts {
+    width: 100%;
+    height: 100%;
+  }
+</style>
+```
+
+
+
+## 图状
+
+#### 柱状图`bar`
+
+
+
+#### 折线图`line`
+
+![image-20210509234336139](image/image-20210509234336139.png)
+
+#### 散点图`scatter`
+
+- 基本的散点图
+  - x轴和y轴的数据是一个二维数组
+  - series中的type设置为scatter
+  - xAxis和yAxis中的type设置为value
+
+- 气泡图效果
+  - 散点的大小不同：`symbolSize`
+  - 散点的颜色不同：`itemStyle.color`
+  - 涟漪动画效果：`type:effectScatter,showEffectOn:'emphasis',rippleEffect:{}`
+- 散点图特点
+  - 散点图可推断出不同维度数据之间的相关性
+  - 散点图经常用在地图的标注上
+
+#### 直角坐标系
+
+- 直角坐标系图标：柱状图、折线图、散点图
+- 配置：网格`grid`、坐标轴`axis`、区域缩放`dataZoom`
+- 网格`grid`
+  - `grid`是用来控制直角坐标系的布局和大小
+  - x轴和y轴是在grid的基础上进行绘制
+  - 显示grid：`show`
+  - grid的边框：`borderWidth`、`borderColor`
+  - grid的位置和大小：`left | top | right | bottom`
+- 坐标轴`axis`
+  - 坐标轴分x轴`xAxis`和y轴`yAxis`
+  - 坐标轴类型type：
+    - value：数值轴，自动会从目标数据读取数据
+    - category：类目轴，该类型必须通过data设置类目数据
+  - 显示位置`position`：
+    - xAxis：可取值为top/bottom
+    - yAxis：可取值为left/right
+
+- 区域缩放`dataZoom`
+  - dataZoom用于区域缩放，对数据范围过滤(x、y轴都可)
+  - dataZoom是一个数组，可配置多个区域缩放器
+  - 类型type：
+    - slider:滑块过滤
+    - inside：内置过滤，依赖鼠标滚轮或者双指缩放
+  - 指明产生的作用轴：
+    - xAxisIndex：设置缩放组件控制的是哪个x轴，一般为0
+    - yAxisIndex：设置缩放组件控制的是哪个y轴，一般为0
+  - 指明初始状态的缩放情况：start、end（注意：值为百分比的值，100为所有，0为无）
+
+#### 饼图`pie`
+
+
+
+# 小程序
+
+## 起步
+
+文件路径、页面生命周期、常用组件、API使用方式
+小程序特点：简单、用完即走、低频、性能要求不高的应用
+Flex弹性盒子模型、移动分辨率和自适应单位PPX
+
+### 小程序代码构成
+
+微信小程序的页面分别由四个文件组成：
+
+- .js(脚本逻辑文件)：负责页面逻辑内容的处理，遵循js语言框架。
+
+- .json(配置文件)：用来设置页面的窗口内容，遵循`JSON`语法规范。
+- .wxss(样式文件)：兼容CSS语法规范。类似CSS源文件
+- .wxml（页面结构文件或视图文件）：用于页面可视化组件的组织和描述，语法结构类似于xml，与html格式差别较大。是编写小程序骨架的文件（类似HTML+CSS）
+
+````
+//开发目录如下：
+|—— app.js
+|—— app.json
+|—— app.wxss
+|—— pages
+|   |—— index
+|   |   |—— index.wxml
+|   |   |—— index.js
+|   |   |—— index.json
+|   |   |—— index.wxss
+|   |—— logs
+|   |   |—— logs.wxml
+|   |   |—— logs.js
+|__ utils
+
+//需要在app.json文件下配置 page与logs 路径
+{
+	"pages": ["pages/index/index", "pages/logs/logs"]
+}
+````
+
+#### .json配置
+
+##### 小程序配置app.json
+
+- 用于指定小程序由哪些页面组成，每一项都对应一个页面的路径（含文件名）信息。文件名不需要写文件后缀，框架会自动去寻找对应位置的 `.json`, `.js`, `.wxml`, `.wxss` 四个文件进行处理
+- app.json文件对微信小程序进行全局配置，决定页面文件的路径、窗口表现、设置网络超时时间、设置多tab等。
+- `pages`字段 —— 用于描述当前小程序所有页面路径，这是为了让微信客户端知道当前你的小程序页面定义在哪个目录下。
+- `window`字段 —— 定义小程序所有页面的顶部背景颜色，文字颜色定义等。
+
+##### 页面配置page.json
+
+在页面下的`.json`文件不能写搭配的路径，如上面的`"pages":["xxx"]`等；只能写配置窗口表现`window`的属性
+
+```app.json
+{
+  "window": {
+    "navigationBarBackgroundColor":"#ffffff",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText":"文与字", //设置标题字
+    "backgroundColor": "#eeeeee",
+    "backgroundTextStyle": "light"
+  }
+}
+```
+
+##### 微信索引sitemap.json
+
+- 当开发者允许微信索引时，微信会通过爬虫的形式，为小程序的页面内容建立索引。当用户的搜索词条触发该索引时，小程序的页面将可能展示在搜索结果中。 
+- 在小程序根目录下的`sitemap.json`文件来配置小程序及其页面是否允许被微信索引。
+- 注：`没有 sitemap.json` 则默认所有页面都能被索引
+  注：`{"action": "allow", "page": "\*"}` 是优先级最低的默认规则，未显式指明 "disallow" 的都默认被索引
+- 注：`sitemap` 的索引提示是默认开启的，如需要关闭 `sitemap` 的索引提示，可在小程序项目配置文件 `project.config.json` 的 `setting` 中配置字段 `checkSiteMap` 为 `false`
+  注: `sitemap` 文件内容最大为 5120 个 UTF8 字符
+
+```sitemap.json
+{
+  "rules":[{	// 所有页面都会被微信索引（默认情况）
+    "action": "allow",
+    "page": "*"
+  },{	//配置 path/to/page 页面不被索引，其余页面允许被索引
+    "action": "disallow",
+    "page": "path/to/page"
+  },{	// 包含 a 和 b 参数的 path/to/pages 页面会被微信优先索引，其他页面都会被索引
+    "action": "allow",
+    "page": "path/to/pages",
+    "params": ["a", "b"],
+    "matching": "inclusive"
+  }]
+}
+```
+
+#### .wxml 模板
+
+- 网页编程采用的是 HTML + CSS + JS 这样的组合，其中 `HTML` 是用来描述当前这个页面的结构，`CSS` 用来描述页面的样子，`JS` 通常是用来处理这个页面和用户的交互。
+- `wxml`和`html`相似，由标签、属性等构成。
+
+1、view主键：等价于HTML中的div标签
+
+2、滑动轮播图
+
+```.wxml
+//可以滑动切换内容,相对于JS，内部已经通过标签部署好切换的JS代码
+//swiper-item标签只是起到容器的作用，里面可以放不同的内容
+//vertical为滚动的方向，默认false，true为纵向滚动
+<view>
+	<swiper vertical="true">
+		<swiper-item>Content1</swiper-item>
+		<swiper-item>Content2</swiper-item>
+		<swiper-item>Content3</swiper-item>
+	</swiper>
+</view>
+```
+
+3、数据绑定
+
+通过 {{ }} 的语法把一个变量绑定到界面上，我们称为数据绑定。仅仅通过数据绑定还不够完整的描述状态和界面的关系，还需要 `if`/`else`, `for`等控制能力，在小程序里边，这些控制能力都用 `wx:` 开头的属性来表达。
+
+```wxml
+this.setData({ msg: "Hello World" })
+```
+
+#### wxss
+
+- `WXSS` 具有 `CSS` 大部分的特性；
+  新增尺寸单位，`WXSS` 在底层支持新的尺寸单位 `rpx`；
+  提供了全局的样式和局部样式；
+  `WXSS` 仅支持部分 `CSS` 选择器。
+
+1、移动设备的分辨率与rpx
+
+- 分辨率PT：逻辑分辨率，长度和视觉单位，pt大小和屏幕尺寸有关
+
+- 分辨率PX：物理分辨率，像素比，和屏幕尺寸无关
+
+- PPI（DPI）：用分辨率的平方开根号再除以屏幕英寸所得
+
+- 建议：在控制两个元素之间的距离时，用px，因为在不同设备下，rpx会转变为不同的宽度，而不是固定的宽度，可能会造成换行的情况。
+
+2、通过弹性布局使得页面具有流动性
+
+```wxss
+.container{
+	display:flex;
+	flex-dicection:colum;//设置方向为列方向
+	align-item:conter; //设置内容居中
+}
+```
+
+#### .js逻辑交互
+
+- 通过`.js`脚本文件来处理用户的操作和用户交互。如响应用户的点击、获取用户的位置等。
+
+### 渲染层与逻辑层
+
+- 小程序运行环境分为渲染层和逻辑层，其中`WXML`模板和`WXSS`样式工作在渲染层，`JS`脚本工作在逻辑层。
+- 渲染层的界面使用`WebView`进行渲染；逻辑层采用`JsCore`线程运行`JS`脚本。因小程序有多个页面，所以渲染层存在多个`WebView`线程，这两个线程的通信会经常由微信客户端做中转，逻辑层发送网络请求也经由`Native`(微信客户端)转发。
+
+![image-20210603001456032](image/image-20210603001456032.png)
+
+## 语法
+
+### 数据绑定
+
+```.wxml
+<view>
+	//6、内壳嵌套使用
+	<image src="{{img.post_img}}">
+	<button class='{{item}}' bindtap='clickme'>按钮</button>
+</view>
+
+//3、运算绑定
+<view hidden='{{type?true:false}}'>Hidden</view>
+
+//4、控制属性绑定
+<view wx:if="{{myKey}}">你的名字</view>
+
+//5、wx:for列表渲染语句
+<view wx:for="{{array}}">{{index}}:{{item.info}}</view>
+```
+
+```.js
+Page({
+  data: {
+  	//1、数据的简单绑定
+    text:'hello',
+    
+    //2、组件属性
+    checked:true,
+    item:'first',
+    
+    //4、控制属性绑定
+    myKey:false,
+    
+    //wx:for列表渲染语句
+    array:[{
+      info:"墨雪"
+    },{
+      info:"晓风残月"
+    }]
+  }
+  onLoad：function(options){
+  	var post_content1={
+  	data:"Sep 18 2016",
+  	title:"正式在下",
+  	img:{
+  		post_img:"img/12.png"
+  	}
+  	}
+  }
+  clickme:function(event){
+  	this.data.checked = !this.data.checked;
+    
+    if(this.data.checked){
+      this.data.item =  'first';
+    } else{
+      this.data.item = 'second';
+    }
+    this.setData({
+      item: this.data.item
+    })
+  } 
+})
+```
+
+```.wxss
+.first{
+  width: 250rpx;
+  height: 100rpx;
+  background-color: red;
+}
+.second{
+  width: 200rpx;
+  height: 200rpx; 
+  background-color: green;
+  border-radius: 100rpx;
+}
+```
+
+## 入门
+
+- 标签的书写严格，区分大小写
+
+- 不支持通配符选择器
+
+- ` JSON `文件中无法使用注释，样式文件多行注释才有效
+
+- 没有跨域的，服务器必须用Https
+
+- 小程序中引入less
+
+  - 安装插件`easy-less`
+
+  - 在设置里面的`easy-less`配置加入自动生成`wxss`文件配置
+
+    ```json
+    "less.compile": {
+    	"outExt":".wxss"
+    }
+    ```
+
+- 页面.js文件中 存放事件回调函数的时候，存放在data同层级下
+- 组件.js文件中存放事件回调函数的时候，必须要存放在methods中
+- iPhone的部分手机不识别webp图片格式
+
+
+
+# 记注
+
+### 互联网公司的岗位英文简写
+
+```
+RD – Research & Develop 研发工程师
+
+FE – Front End 前端工程师
+
+BE – Back End 后端工程师
+
+QA – Quality Assurance 测试工程师
+
+DBA – Database Administrator 数据库
+
+PM – Product & Marketing 产品经理
+
+TS – Technology Support 技术支持
+
+OP – Operation 运维工程师
+
+UE(UX) – User Experience 用户体验设计师
+
+UI – User Interface 用户界面设计师
+
+UER – User Experience Research 用户研究
+
+SYS – System
+
+SCM – Software Configuration Management
+
+FM – Facility Management
+```
+
+### 学习路线
+
+```
+less scss sass
+
+bootstrap
+
+react  vue angluar
+
+node
+
+小程序
+
+gti,svn项目管理
+
+snipaste
+
+打包工具webpack,glub
+
+hexo
+
+本福特定律---vba编程
+
+浏览器API
+
+```
+
+![学习路线](image/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF.jpg)
+
+### 学习框架方法
+
+```
+这个框架是什么？即简介
+这个框架内部有哪些组件？
+各个组件的功能是什么？
+这个框架的工作流程？
+这个框架的原理机制？
+这个框架的优缺点？
+```
+
+# Emmet(缩写)语法
+
+### 元素
+
+Emmet使用类似于CSS选择器的语法描述元素在生成的文档树中的位置及其属性。
+
+可以用元素名（如div或p）来生成HTML标签。Emmet没有预定义的元素名的集合，可以把任何单词当做标签来生成和使用。如：`div→<div></div>，foo→<foo></foo>`等。
+
+### 子：`>`
+
+可以使用`>`运算符指定嵌套元素在另一个元素内部：`div>ul>li`
+
+```
+<div>
+	<ul>
+		<li></li>
+	</ul>
+</div>
+```
+
+### 兄弟：`+`
+
+使用`+`运算符将相邻的其他元素处理为同级：`div+p+bq`
+
+```
+<div></div>
+<p></p>
+<blockquote></blockquote>
+```
+
+### 上升：`^`
+
+使用>运算符将会降低所有后续元素在生成树中的级别，每一级的兄弟也被解析成相同深度的元素：`div+div>p>span+em`
+
+````
+<div></div>
+<div>
+	<p><span></span><em></em></p>
+</div>
+````
+
+使用`^`运算符，能够提升元素在生成树中的一个级别，并同时影响其后的元素：`div+div>p>span+em^bq`
+
+```
+<div></div>
+<div>
+	<p><span></span><em></em></p>
+	<blockquote></blockquote>
+</div>
+```
+
+可以连续使用多个运算符，没此提高一个级别：`div+div>p>span+em^^^bq`
+
+````
+<div></div>
+<div>
+	<p><span></span><em></em></p>
+</div>
+<blockquote></blockquote>
+````
+
+### 重复：`*`
+
+使用`*`运算符可以定义一组元素：`ul>li*3`
+
+```
+<ul>
+	<li></li>
+	<li></li>
+	<li></li>
+</ul>
+```
+
+### 分组：`()`
+
+括号用于在复杂的Emmet缩写中处理一组子树：`div>(header>ul>li*2>a)+footer>p`
+
+````
+<div>
+	<header>
+		<ul>
+			<li><a href=""></a></li>
+			<li><a href=""></a></li>
+		</ul>
+	</header>
+	<footer>
+		<p></p>
+	</footer>
+</div>
+````
+
+如果想与浏览器DOM协同工作，可能想要对文档片段分组：每个分组包含一个子树，所有的后续元素都插入到与组中第一个元素相同的级别中。能够在组中嵌套组并且使用`*`运算符绑定它们：`(div>dl>(dt+dd)*3)+footer+p`
+
+````
+<div>
+	<dl>
+		<dt></dt>
+		<dd></dd>
+		<dt></dt>
+		<dd></dd>
+		<dt></dt>
+		<dd></dd>
+	</dl>
+</div>
+<footer></footer>
+<p></p>
+````
+
+使用分组，可以使用单个缩写逐个写出整页的标签，但不推荐此做法。
+
+### 属性运算符
+
+属性运算符用于编辑所生成的元素的属性，在HTML和XML中可以快速地生成元素添加class属性。
+
+#### ID和class
+
+在CSS中，可以使用elem#id和elem.class注解来达到元素指定id或class属性的目的。在Emmet中，可以使用几乎相同的语法来指定的元素添加这些属性：`div#header+div.page+div#footer.class1.class2.class3`
+
+```
+<div id="header"></div>
+<div class="page"></div>
+<div id="footer" class="class1 class2 class3"></div>
+```
+
+#### 自定义属性
+
+可以使用`[attr]`注解来为元素添加自定义属性：`td[title="hello world!" colspan=3]`
+
+```
+<td title="hello world!" colspan="3"></td>
+```
+
+- 能够在方括号中放置多个属性，
+- 可以不为属性指定值：`td[colspan title]`，
+- 属性可以用单引号或双引号为定界符。
+- 如果属性不包含空格，不需要用定界符括住它：`td[title=hello colspan=3]`是正确的。
+
+### 编号：`$`
+
+使用*运算符可以重复生成元素，如果带`$`就可为它们编号。把`$`放在元素那个、属性名或属性值中，将为每个元素生成正确的编号：
+
+```
+ul>li.item$*5
+生成结果：
+<ul>
+	<li class="item1"></li>
+	<li class="item2"></li>
+	<li class="item3"></li>
+</ul>
+```
+
+使用多`$`可以填充前导的零：
+
+```
+ul>li.item$$$*3
+生成结果：
+<ul>
+	<li class="item001"></li>
+	<li class="item002"></li>
+	<li class="item003"></li>
+</ul>
+```
+
+#### 改变编号的基数和方向：`@`
+
+使用`@`，可以改变数字的走向（升序或降序）和基数（例如起始值）。
+
+##### 在`$`后添加`@-`来改变数字的走向：
+
+```
+ul>li.item$@-*3
+生成结果：
+<ul>
+	<li class="item3"></li>
+	<li class="item2"></li>
+	<li class="item1"></li>
+</ul>
+```
+
+##### 在`$`后添加`@N`改变编号的基数：
+
+```
+ul>li.item$@7*5
+生成结果：
+<ul>
+	<li class="item7"></li>
+	<li class="item8"></li>
+	<li class="item9"></li>
+</ul>
+```
+
+##### 同时改变编号的基数和方向：
+
+```
+ul>li.item$@-3*5
+生成结果：
+<ul>
+	<li class="item7"></li>
+	<li class="item6"></li>
+	<li class="item5"></li>
+	<li class="item4"></li>
+	<li class="item3"></li>
+</ul>
+```
+
+### 文本：`{}`
+
+可以用花括号向元素中添加文本：`a{Click me}`
+
+````
+<a href="">Click me</a>
+````
+
+注意：这个`{text}`是被当成独立元素解析的（类似于div，p），但是当期跟在其他元素后面则有所不同。例如，`a{click}`和`a>{click}`产生相同的输出，但是`a{click}+b{here}`和`a>{click}+b{here}`的输出是不同的：
+
+````
+<!-- a{click}和a>{click} -->
+<a href="">click</a>
+
+<!-- a{click}+b{here} -->
+<a href="">click</a><b>here</b>
+
+<!-- a>{click}+b{here} -->
+<a href="">click<b>here</b></a>
+
+<!-- p>{Click }+a{here}+{ to continue}  -->
+<p>
+	Click 
+	<a href="">here</a>
+	 to continue
+</p>
+````
+
+因为用`>`运算符明确地将`Click here to continue`下移一级别，放在`<p>`元素内，但对于a元素的内容就不需要了，因为`<a>`仅有here这一部分内容，它不改变父元素的上下文。
+
+### 缩写格式的注意事项
+
+当熟悉了Emmet的缩写语法后，可能会想要使用一些格式来生成更可读的缩写。例如，在元素和运算符之间使用空格间隔：~~(header > ul.nav > li*5) + footer~~。
+
+但是这种写法写法是错误的，因为**空格是Emmet停止缩写解析的标识符**。
+
+# PHP
+
+### 让文字不乱码
+
+```php
+header("Content-Type:text/html;charset=utf-8");
+```
+
+### 把图片路径存入数据库，前台显示图片
+
+```php
+echo "<img src='".$row['url']."' />";
+```
+
+# lesso
+
+- 就算页面窗口很小，内容也不允许重叠，每个内容之间的距离是固定的。
+- `display:flex;`：把盒子平均分配，占满整个盒子，可定义排列方向。
+- `flex:1;overflow:hidden;`把盒子子div定义样式，所定义该样式的盒子会平均分配
+
