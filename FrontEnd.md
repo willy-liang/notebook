@@ -6403,6 +6403,18 @@ resolve: {
 import TabBar from "@/components/tab-bar/TabBar"
 ```
 
+### 账号登录缓存
+
+- 通过`cookie`在客户端记录状态
+- 通过`session`在服务端记录状态
+- 通过`token`方式维持状态
+  - `token`只在打开浏览器时存在，所以存放在`sessionStorage`中
+  - `window.sessionStorage.setItem("token", res.data.token);`
+  - 清除``token`：`window.sessionStorage.clear();`
+- 
+
+![image-20210731230204839](image/image-20210731230204839.png)
+
 ### 导航守卫（可做权限验证）
 
 - `vue-router` 提供的导航守卫主要用来通过跳转或取消的方式守卫导航。有多种机会植入路由导航过程中：全局的, 单个路由独享的, 或者组件级的。
@@ -6428,10 +6440,16 @@ const router = new Router({
   mode: 'history'
 })
 router.beforeEach((to, from, next) => {	//前置守卫gaurd
-  //从from跳转到to
   // document.title = to.meta.title;
   document.title = to.matched[0].meta.title //解决子路由导航问题
-  console.log(to,from)
+  // to 将要访问的路径
+  // from 代表从哪个路径跳转而来
+  // next 是一个函数，表示放行
+  //     next()  放行    next('/login')  强制跳转
+  if (to.path === '/login') return next()
+  // 获取token
+  const tokenStr = window.sessionStorage.getItem('token')
+  if (!tokenStr) return next('/login')
   next();
 })
 export default router
@@ -7936,8 +7954,122 @@ Page({
     ```
 
 - 页面.js文件中 存放事件回调函数的时候，存放在data同层级下
+
 - 组件.js文件中存放事件回调函数的时候，必须要存放在methods中
+
 - iPhone的部分手机不识别webp图片格式
+
+### 小程序架构->`MVVM`模式
+
+- 架构分为视图层(`wxml、wxss`)，逻辑层(`js`)，组件，API四部分。视图层负责页面结构，样式和数据展示。逻辑层负责业务逻辑，调用API等。
+
+  视图层和逻辑层类似`vue的MVVM`模式，逻辑层只需对数据对象更新，就可改变视图层的数据显示，类似vue。组件是视图层封装好的基础组件，如按钮，输入框等。API提供了访问手机设备，网络，服务器，微信平台接口等能力。
+
+### 事件
+
+- 冒泡事件：子向父元素传递事件
+- 三个阶段：捕获->处理->冒泡
+- 事件委托：防止重复定义事件
+- `bind`绑定冒泡事件，`catch`绑定非冒泡事件
+
+### tabBar配置（底部导航栏）
+
+- 底部的导航栏可以放2~5个导航链接，定义这个需要在全局`app.json`文件中配置`tabBar`字段。
+
+  - `position`->top顶部显示，但是看不到图标，默认是底部显示
+
+  - `color`未选中时的颜色
+
+  - `selectedColor`选中时的颜色
+
+  - `backgroundColor`背景颜色
+
+  - `borderStyle`边框颜色，仅支持black/white。默认为black,选填
+
+  - >list数组里至少有两个对象；颜色仅支持十六进制的输入
+
+```app.json
+{
+	"tabBar": {
+		"color": "#ddd",
+		"selectedColor": "#3cc51f",
+		"backgroundColor": "#fff",
+		"borderStyle": "black",	
+		"list":[{	// iconPath图标是非必填，只是tab栏会变矮，selectedIconPath也非必填
+                "pagePath":"pages/index/index",
+                "iconPath":"image/icon_API.png",
+                "selectedIconPath":"image/icon_API_HL.png",
+                "text":"index"
+            },{
+                "pagePath":"pages/detail/detail",
+                "iconPath":"image/icon_component.png",
+                "selectedIconPath":"image/icon_component_HL.png",
+                "text":"detail"
+            }]
+	}
+}
+```
+
+![image-20210728105609750](image/image-20210728105609750.png)
+
+### 图片大小
+
+- **`高度 = 750rpx * 图片高度/图片宽度;`**
+
+```wxss
+// 如轮播图图片 750rpx默认高度，图片宽520px,高280px
+swiper {
+	width: 100%;
+	height: calc(750rpx * 280px / 520px);
+}
+image { width: 100%; }
+```
+
+##### 图片高度自适应
+
+小程序图片高度自适应：给image标签定义属性`mode="widthFix"`
+
+```wxml
+<image src="{{item.cover}}" mode="widthFix" />
+```
+
+### 单选框`radio`
+
+- > 需要与父元素`radio-group`一起使用
+
+- 绑定事件`bindchange="函数"`
+
+```
+<radio-group bindchange="handleChange">
+    <radio value="male" color="red" checked="{{true}}">男</radio>
+    <radio value="female" color="red">女</radio>    
+</radio-group>
+<view>选中的是{{gender}}</view>
+```
+
+```js
+Page({
+  data: {
+    gender:""
+  },
+  handleChange(e){
+    let gender = e.detail.value;
+    this.setData({ gender })
+  }
+})
+```
+
+### `view`标签
+
+- `view`标签相当于`html的div`，默认为块级元素。
+
+### `window`窗口
+
+在`app.json`文件
+
+
+
+# 桌面应用——electron开发
 
 
 

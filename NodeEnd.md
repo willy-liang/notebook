@@ -56,6 +56,8 @@ pwd				#查看所在的路径
 dir				#查看目录下的文件
 cat filename	#查看文件内容
 cp 被复制文件 拷贝到所在路径	#复制文件
+
+clear		#清屏
 ```
 
 # Git
@@ -529,6 +531,8 @@ git config --global alias.unstage 'reset HEAD'
 - 使用SourceTree可以以图形界面操作Git，省去了敲命令的过程，对于常用的提交、分支、推送等操作来说非常方便。
 - SourceTree使用Git命令执行操作，出错时，仍然需要阅读Git命令返回的错误信息。
 
+# 配置
+
 ## 安装nodejs
 
 ```cmd
@@ -571,11 +575,7 @@ vue --version
 npm install @vue/cli -g
 ```
 
-# node.js
-
-## 配置与概论
-
-### Node
+## Node
 
 **概念**
 
@@ -604,7 +604,7 @@ nvm use 12.13.1		#切换指定版本
 nvm uninstall 12.13.1	#卸载指定版本
 ```
 
-### NPM
+## NPM
 
 **概念**
 
@@ -627,7 +627,7 @@ npm uninstall <name>		#卸载模块
 
 - npm配置有仓库地址，install时都会从仓库地址中找模块。默认的仓库地址是：`https://registry.npmjs.org/`，可配置默本地默认的npm仓库下载地址：`npm config set registry http://ggjs-app-03.hnisi.com.cn:8090`
 
-### 国内加速访问GitHub
+## 国内加速访问GitHub
 
 **Windows：**
 
@@ -689,7 +689,7 @@ npm uninstall <name>		#卸载模块
 3. 创建模块：nodejs模块就是发布到npm的代码块。
    1. 首先利用`npm init`命令创建package.json，这个过程中命令行会逐步提示你输入这个模块的信息，其中模块的名字和版本号是必填项。
 
-### Yarn
+## Yarn
 
 **概念**
 
@@ -697,7 +697,7 @@ npm uninstall <name>		#卸载模块
 - Yarm不能完全替代npm。Yarm仅仅是一个能够从npm仓库获取模块的新的CLI客户端。
 - 特点：速度超快(yarm缓存每个下载过的包，再次使用无需重复下载)；安全(在执行代码前，yarm会通过算法校检每个安装包的完整性)；可靠(使用详细、简介的锁文件格式和明确的安装算法，Yarm能保证在不同系统上无差异工作)
 
-### NVM
+## NVM
 
 ```
 在开发的工程中，我们可能需要经常切换node版本来应对不同的开发环境，所以需要经常使用不同版本的node
@@ -735,4 +735,8 @@ nvm use 10.16.2
 先要安装node@8.16.0，nvm install 8.16.0，
 然后，nvm use 8.16.0
 ```
+
+# node
+
+
 
