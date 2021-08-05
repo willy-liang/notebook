@@ -3228,7 +3228,82 @@ for (let y of x.entries()) {
 
 ### symbol
 
-- Symbol是一种基本数据类型。Symbol()函数会返回symbol类型的值。
+- **symbol** 是一种基本数据类型。`Symbol()`函数会返回**symbol**类型的值，该类型具有静态属性和静态方法。它的静态属性会暴露几个内建的成员对象；它的静态方法会暴露全局的symbol注册，且类似于内建对象类，但作为构造函数来说它并不完整，因为它不支持语法："`new Symbol()`"。
+
+- 每个从`Symbol()`返回的symbol值都是唯一的。一个symbol值能作为对象属性的标识符；这是该数据类型仅有的目的。
+
+- > Symbol不能与其他类型的值进行运算；
+  > Symbol可以转换为字符串和布尔值，但不能转为数字。
+
+```js
+let s1 = Symbol('foo');
+let s2 = Symbol('foo');
+console.log(s1 == s2); // false
+console.log(s1.toString() == s2.toString());  // true
+```
+
+**实例：消除魔术字符串**
+
+魔术字符串是指在代码中多次出现，与代码形成强耦合的某一字符串或数值，不利于将来的修改和维护。
+消除魔术字符串 常用的是方法是把他**设置为一个变量**。
+
+```js
+const evening= Symbol('星期一');	// 给常用的字符串 定义为变量
+function getEating(today,option){
+    let food = "tomato";
+    switch(today){
+        case evening:
+           food = option;
+           break;
+    }
+    return food;
+}   
+console.log(getEating(evening,"noodles"));
+```
+
+####  `Symbol.for, Symbol.keyFor()` 重新使用同一个Symbol值
+
+- `**Symbol.for(key)**` 方法会根据给定的键 `key`，来从运行时的 symbol 注册表中找到对应的 symbol，如果找到,则返回它；否则，新建一个与该键关联的 symbol，并放入全局 symbol 注册表中。
+
+- `Symbol.keyFor`方法返回一个已登记的 Symbol 类型值的`key`。
+
+- > 注意：为了防范冲突，最好给要放入 symbol 注册表中的 symbol 带上键前缀。
+  > for与keyfor的区别：前者会被登记在全局环境中供搜索，后者不会。
+
+```js
+let a = Symbol.for("foo"); // 创建一个 symbol 并放入 symbol 注册表中，键为 "foo"
+let b = Symbol.for("foo"); // 从 symbol 注册表中读取键为"foo"的 symbol
+console.log(a == b);	// true
+Symbol.for("mdn.foo");	// 给加入键前缀 mdn.
+
+Symbol.keyFor(s1) // "foo"
+Symbol.keyFor(s2) // undefined
+```
+
+ **实例：模块的 Singleton 模式**
+
+Singleton模块指的是调用一个类，任何时候返回的都是同一个实例。
+
+```a.js
+// a.js
+const NAME_KEY = Symbol.for('name');	// 如果键名使用Symbol方法生成，那么外部将无法引用这个值，导致也就无法改写name的值。
+function A() {
+    this.name = "willy";
+}
+if(!global[NAME_KEY]) {
+    global[NAME_KEY] = new A();
+}
+module.exports = global[NAME_KEY];
+```
+
+```b.js
+// b.js
+global[Symbol.for('name')] = { name: 'xili' };	// 调用时，更改a.js里面定义的name属性
+const a = require('./a.js');
+console.log(a)	// { name: 'xili' }
+```
+
+
 
 ### 高阶函数
 
@@ -8901,7 +8976,107 @@ display: -webkit-box;overflow: hidden;-webkit-box-orient: vertical;-webkit-line-
 
 # node.js
 
+## 初识
+
 - nodejs是一种javascript的运行环境，能够使得javascript脱离浏览器运行。
+- node 的加载机制：node 会把整个待加载的 js 文件放入一个包装 load 中执行。在执行整个 load() 函数前，Node准备了 module 变量。
+- `exports`与`module.exports`变量实际是同一个变量，并且初始化为空对象`{}`。
+  - `module.exports.foo = function () { return 'foo'; };`
+  - `exports.foo = function () { return 'foo'; };`
+- 不限node版本的情况下，如果不声明严格模式`'use strict';`，往往es6语法不支持启动。
+
+ **`global`全局对象**
+
+## `fs`文件操作
+
+### 读文件
+
+标准读取文件，是采取异步的方式读取的。
+同步读取的函数和异步函数相比，函数需要加`Sync`后缀，并且不接收回调函数，函数直接返回结果。
+并且如果同步读取文件发生错误，需要用`try...catch`捕获错误。
+
+```js
+'use strict';
+var fs = require('fs');
+// 异步(标准)读取文件
+fs.readFile('test.txt', 'utf-8', function (err, data) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log(data);
+    }
+});
+
+// 同步读取文件
+try {
+    var data = fs.readFileSync('test.txt', 'utf-8');
+    console.log(data);
+} catch (err) {
+    console.log(err)
+}
+```
+
+### 写文件
+
+将数据写入文件是通过`fs.writeFile()`函数实现；同步写文件则是`writeFileSync()`函数。
+`writeFile()`的参数依次为文件名、数据和回调函数。如果传入的数据是String，默认按UTF-8编码写入文本文件，如果传入的参数是`Buffer`，则写入的是二进制文件。回调函数由于只关心成功与否，因此只需要一个`err`参数。
+
+```js
+'use strict';
+let fs = require('fs');
+let data = 'Hello, Node.js';
+fs.writeFile('test.txt', data, function (err) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log('ok.');
+    }
+});
+fs.writeFileSync('test.txt', data);
+```
+
+#### `stat`文件信息
+
+`fs.stat()`可以获取文件大小，创建时间等信息，它返回一个`Stat`对象，能告诉我们文件或目录的详细信息。
+
+- 是否是文件`isFile()`，是否是目录`isDirectory()`，文件大小`size`
+- 创建时间`birthtime`，修改时间`mtime`
+
+```js
+'use strict';
+
+var fs = require('fs');
+
+fs.stat('test.txt', function (err, stat) {
+    if (err) {
+        console.log(err);
+    } else {
+        // 是否是文件:
+        console.log('isFile: ' + stat.isFile());
+        // 是否是目录:
+        console.log('isDirectory: ' + stat.isDirectory());
+        if (stat.isFile()) {
+            // 文件大小:
+            console.log('size: ' + stat.size);
+            // 创建时间, Date对象:
+            console.log('birth time: ' + stat.birthtime);
+            // 修改时间, Date对象:
+            console.log('modified time: ' + stat.mtime);
+        }
+    }
+});
+```
+
+### 同步与异步的取舍
+
+- 由于Node环境执行的JavaScript代码是服务器端代码，所以绝大部分需要在服务器运行期反复执行业务逻辑的代码**必须使用异步代码**，否则，同步代码在执行时期，服务器将停止响应，因为**JavaScript只有一个执行线程**。
+- **服务器启动时**如果需要读取配置文件，或者结束时需要写入到状态文件时，可以使用同步代码，因为这些代码只在启动和结束时执行一次，不影响服务器正常运行时的异步执行。
+
+## `stream`
+
+`stream`是Node.js提供的又一个仅在服务区端可用的模块，目的是支持“流”这种数据结构。
+
+
 
 
 
