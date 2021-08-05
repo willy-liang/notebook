@@ -39,6 +39,31 @@
 - `503 Service Unavailable` 服务器端暂时无法处理请求（可能是过载或维护）。
 - `504 Gateway Time-out` 网关超时，未及时获取请求。
 
+### 连接服务器超时
+
+```
+服务器连接超时就是在程序默认的等待时间内没有得到服务器的响应。
+
+网络连接超时可能的原因有：
+1、网络断开，不过经常显示无法连接。
+
+2、网络阻塞，导致你不能在程序默认等待时间内得到回复数据包。
+
+3、网络不稳定，网络无法完整传送服务器信息。
+
+4、系统问题，系统资源过低，无法为程序提供足够的资源处理服务器信息。
+
+5、设备不稳定，如网线松动、接口没插好等等。
+
+6、网络注册时系统繁忙，无法回应。
+
+7、网速过慢，如使用BT多线程下载，在线收看视频等大量占用带宽的软件，若使用共享带宽还要防范他人恶意占用带宽。
+
+8、计算机感染了恶意软件，计算机病毒，计算机木马等。
+```
+
+
+
 ## webSocket
 
 - `WebSocket`是`HTML5`提供在单个`TCP`上连接进行 **全双工通讯**的协议
@@ -183,6 +208,34 @@ Socket.close() // 关闭连接
 如果想改变盒子计算方式，让其总大小为盒子内容大小，则需定义 box-sizing:border-box;
 
 **计算盒子宽度：calc()函数**
+
+### `input`
+
+#### 清除输入框历史记录
+
+- ：`autocomplete='off'`禁用自动完成功能，清除input框输入存留历史值，防止下拉历史值显示。`<input type="text" autocomplete="off"/>`
+
+#### 使input文本框不可编辑的3种方法
+
+1. disabled 属性规定应该禁用 input 元素，被禁用的 input 元素，不可编辑，不可复制，不可选择，不能接收焦点,后台也不会接收到传值。设置后文字的颜色会变成灰色。disabled 属性无法与 `<input type="hidden"> `一起使用。
+
+   ```vue
+   <input type="text" disabled="disabled" />
+   ```
+
+2. readonly 属性规定输入字段为只读可复制，但是，用户可以使用Tab键切换到该字段，可选择,可以接收焦点，还可以选中或拷贝其文本。后台会接收到传值. readonly 属性可以防止用户对值进行修改。
+
+   readonly 属性可与 `<input type="text"> `或` <input type="password">` 配合使用。
+
+   ```vue
+   <input type="text" readonly="readonly">
+   ```
+
+3. readonly unselectable="on" 该属性跟disable类似，input 元素，不可编辑，不可复制，不可选择，不能接收焦点，设置后文字的颜色也会变成灰色，但是后台可以接收到传值。
+
+   ```vue
+   <input type="text"  readonly  unselectable="on" >
+   ```
 
 ### 弹性模型 `display：flex`
 
@@ -618,9 +671,7 @@ vertical-align: baseline(默认值)       top(顶部对齐)      middle(中部�
 3. 最后使用定位
 4. 元素模式转换必须使用display
 
-###  CSS元素的可见性
-
-即：如何把元素隐藏起来
+###  CSS元素的可见性(把元素隐藏起来)
 
 ```css
 overflow:hidden;	//将溢出的部分隐藏
@@ -744,15 +795,13 @@ boder-box这个属性可以避免很多兼容性的问题，就是那种一个�
 
 ​    二、将 box-sizing 设置为 border-box ，然后给元素添加border宽度
 
-### a标签内容超出问题
-
-**1、内容超出换行**
+### a标签内容超出换行
 
 在html的a标签中，当内容过多的时候 ，如果是英文不会造成换行，如果希望内容换行，在a标签的样式中加入`word-wrap:break-word;`
 
 如果是中文会造成换行，如果不希望内容换行，在a标签的样式中加入`white-space:nowrap;`
 
-**2、a标签超出以后显示省略点**
+### a标签内容超出以后显示省略点
 
 ```css
 display:block;
@@ -812,18 +861,18 @@ textarea{ font-size:13px; resize:none;}
 - 作用：可以定义页面编码语言、搜索引擎优化、自动刷新并指向新的页面、控制页面缓冲、响应式视窗等
 
 
-	属性					值					描述
-	charset( H5 New)	character_set		定义文档的字符编码。
-	content				text				定义与 http-equiv 或 name 属性相关的元信息。
-	http-equiv			content-type		属性关联到 HTTP 头部。
-						default-style		
-						refresh	把 content
-	name				application-name	把content 属性关联到一个名称。		
-						author
-						description
-						generator
-						keywords	
-	scheme(H5 删除)		format/URI			HTML5不支持。 定义用于翻译 content 属性值的格式。
+	属性								值									描述
+	charset( H5 New)	character_set				定义文档的字符编码。
+	content						text								定义与 http-equiv 或 name 属性相关的元信息。
+	http-equiv				content-type				属性关联到 HTTP 头部。
+										default-style		
+										refresh	把 content
+	name							application-name		把content 属性关联到一个名称。		
+										author
+										description
+										generator
+										keywords	
+	scheme(H5 删除)		format/URI					HTML5不支持。 定义用于翻译 content 属性值的格式。
 	整体来看，HTML5之前，meta标签只有两个主要属性，分别是 name 属性和 http-equiv 属性。 HTML5新添加"charset".
 
 #### name
@@ -1623,15 +1672,16 @@ sum(1,2,3,4,5,6,7,8,9,0);
 
 ### JSON
 
-a、JSON指的是JavaScript对象表示法（javascript object notation）
+- JSON指的是JavaScript对象表示法（javascript object notation）
 
-b、JSON是轻量级的文本数据交互格式，并不是编程语言
+- JSON是轻量级的文本数据交互格式，并不是编程语言
 
-c、JSON独立于语言存在
+- JSON独立于语言存在
 
-d、JSON具有自我描述性，更容易理解
+- JSON具有自我描述性，更容易理解
 
-e、JSON可以将JavaScript对象中表示的一组数据转换为字符串，然后就可以在函数之间轻松地传递这个字符串，或者在异步应用程序中将字符串从Web客户机传递给服务器端程序。
+- JSON可以将JavaScript对象中表示的一组数据转换为字符串，然后就可以在函数之间轻松地传递这个字符串，或者在异步应用程序中将字符串从Web客户机传递给服务器端程序。
+
 
 **对象结构和数组结构**
 
@@ -1666,10 +1716,41 @@ var json = JSON.stringify({a: 'Hello', b: 'World'});
 //结果是 '{"a": "Hello", "b": "World"}'
 ```
 
-## **对象**
+## 对象
+
+### 对象操作
 
 - 对象由属性(事物的特征，常用名词)和方法（事务的行为，常用动作，通常是继承的属性）组成。
+
 - 创建对象三种方式：对象直接法、关键字 new 和 Object.create() 函数来创建对象。
+
+- 删除对象中的某个属性
+
+  - 方法1：`delete obj.name;`，但它的工作比其“替代”设置慢100倍`object[key] = undefined`
+
+    > 删除`delete`是删除对象的属性没有任何剩菜剩下的唯一真正的方法。
+
+  - 方法2：`obj.name=undfined;`但其属性还在，只是内容为空
+
+  ```js
+  let obj = {
+    name: "willy",
+    age: "age",
+  }
+  obj.name = undefined;
+  console.log(obj); // { name: undefined, age: 'age' }
+  delete obj.age;
+  console.log(obj)  // { name: undefined }
+  ```
+
+- 在数组中使用`delete`，null会在数组中留下空缺，而且长度不变。
+
+  ```js
+  let array = [1,2,3];
+  delete array[2];
+  ```
+
+  
 
 ### this
 
@@ -1728,41 +1809,21 @@ Math.max()	//最大值	Math.min()	//最小值
 - Array.prototype不是指单个数组，而是指Array()对象本身。
 - prototype是一个全局对象构造函数，可用于所有JavaScript对象。
 
-#### JS遍历数组方法：
+#### 字符串与数组转换
 
---> map()、forEach和filter
-
-#### `map()`遍历数组
-
-- map() 方法返回一个新数组，数组中的元素为原始数组元素调用函数处理后的值。
-- map() 方法按照原始数组元素顺序依次处理元素。
-- **注意：** map() 不会对空数组进行检测，不会改变原始数组。
+- `split()`方法是将一个字符串按照某一分隔符进行拆分为数组，而`join()`则正好相反。
+  `join()`方法用于把数组中的所有元素放入一个字符串，元素是通过指定的分隔符进行分隔的。
+- 使用``concat`函数,在字符串后面追加一个或多个字符
 
 ```js
-// 1、获取超链接
-var link = document.getElmentById("link");
-var flag = 1; //flag=1，此时显示a.png；flag=2，显示b.png
-// 2、给超链接注册点击事件
-link.onclick = function(){
-    //3、(local var)img:HTMLElement
-    var img = document.getElementById('img');
-    if(flag === 1){
-        flag = 2;
-        img.src = 'img/b.png';
-    } else {
-       flag = 1;
-       img.src = 'img/a.png'; 
-    }
-}
+let arr = [1,2,3];	
+let res = arr.join(",");	// 1,2,3
+
+let str = "13"
+let strAdd = srt.concat("-123","-456");
 ```
 
-#### `new Array().fill()`创建数组并赋值
 
-```js
-// 默认 为undefined
-let b = new Array(8).fill()
-let a = new Array(8).fill(0)	// [0, 0, 0, 0, 0, 0, 0, 0]
-```
 
 ## 内置对象
 
@@ -1915,105 +1976,6 @@ oEvent.cancelBubble = true; //取消事件冒泡（否则点击按钮后，会�
 4、return false;
 阻止浏览器默认事件à在函数结尾处 return false;
 这个方法比较暴力，他会同事阻止事件冒泡也会阻止默认事件；写上此代码，连接不会被打开，事件也不会传递到上一层的父元素；可以理解为return false就等于同时调用了event.stopPropagation()和event.preventDefault()
-
-# JQ
-
-## 理念
-
-### load 和 ready 谁先执行？
-
-```js
-window.onload = function(){}
-$(document).ready(fcuntion(){})
-```
-
-**DOM文档加载步骤：**
-
-1. 解析 HTML 结构
-2. 加载外部脚本和样式表文件
-3. 解析并执行脚本代码
-4. 构造 HTML DOM 模型（ready 方法执行）
-5. 加载图片、视频等外部文件
-6. 页面加载完毕（load 方法执行）
-
-注意：onload 只执行一次，若有多次，则最后一次覆盖前面的
-
-​			ready 可以执行多次，不会覆盖
-
-## 选择器
-
-### 基本选择器
-
-```js
-$("#div1")		//按id属性选择元素
-$(".class1") 	//按class属性选择元素
-$("div")		//按元素名称选择元素
-$("*")			//选择所有元素
-$("#div2,span")	//并列选择元素
-```
-
-### 层次选择器
-
-```js
-$("body div") //选择body所有的div后代元素
-$("body>div") //选择body所有的直接div后代元素
-$("#div1+div") //选择id值为div1的元素的后面相邻的兄弟元素
-$("#div1~div") //选择id值为div1的元素的后面所有的兄弟元素
-```
-
-### 基本过滤选择器
-
-```js
-$("div:first")	//选择第一个div元素
-$("div:last")	//选择最后一个div元素
-$("div:eq(4)")	//选择第五个div元素
-$("div:gt(5)") 	//选择所有索引值大于5的div元素
-$("div:lt(5)") 	//选择所有索引值小于5的div元素
-$("div:even")	//选择所有索引值为偶数的div元素
-$("div:odd")	//选择所有索引值为奇数的div元素
-$("div:not(.class1)") //选择不包含class属性值为class1的所有div元素
-$(":header")	//选择所有的标题元素
-$(":focus")		//选择成为焦点的元素
-$(":animated")	//选择所有动画元素
-```
-
-### 内容过滤选择器
-
-```js
-$("div:contains(class为class1)") //改变所有包含文本"class为class1"的div元素
-$("div:has('.subClass1')") //改变所有包含class值为subClass1子元素的div元素
-$("div:empty")//改变所有不包含子元素的div元素
-$("div:parent")//改变所有包含子元素的div元素
-```
-
-### 属性过滤选择器
-
-```js
-$("div[title]") //改变所有有title属性的div元素
-$("div[title=title1]") //改变所有有title属性为title1的div元素
-$("div[title!=title1]") //改变所有有title属性不为title1的div元素
-$("div[title^=ti]") //改变所有有title属性值以ti开头的div元素
-$("div[title$=1]") //改变所有有title属性以1结尾的div元素
-$("div[title*=Pre]") //改变所有有title属性值包含Pre的div元素
-$("div[id],[title]") //改变包含属性为id和属性为title的div元素
-//注意："[],[]"是并集，"[][]"是交集（两个条件间隔一个空格）
-```
-
-### 可见过滤选择器
-
-```js
-$("div:visible") //改变所有可见的的div元素
-$("div:hidden").show(3000);//显示所有不可见的的div元素背景色
-```
-
-### 子元素过滤选择器
-
-```js
-$("div.class1 :nth-child(2)") ;//选择所有class属性值为class1的div元素的第二个子元素
-$("div.class1 :first-child") //改变所有class属性值为class1的div元素的第1个子元素
-$("div.class1 :last-child") //改变所有class属性值为class1的div元素的最后1个子元素
-$("div.class1 :only-child") //改变所有class属性值为class1的div元素的唯一一个子元素
-```
 
 # ES6
 
@@ -2177,21 +2139,25 @@ let arr1 = new Array[11, 22, 33];
 console.log(arr1.sum());	//66
 ```
 
+### `Array、Object`的扩展方法
 
-### ES5中新增的方法
+#### 迭代遍历方法：
 
-#### 迭代遍历方法：`forEach()、map()、some()、every()`
+- 迭代遍历方法有：`forEach()、map()、some()、every()、filter()`
+
+  - > `filter()`和`map()`返回的是一个数组。
 
 - **`forEach()、map()`方法->迭代数组**：**对数组的每个元素执行一次提供的函数**
 
   - `array.forEach(function(currentValue数组当项的内容, index索引, arr数组本身))`
-  - `map()`会分配内存空间存储新数组并返回新的数组；`forEach()`允许callback更改原始数组的元素，不会返回数据。
+  - `map()`会**分配内存空间存储新数组并返回**；
+  - `forEach()`允许callback更改原始数组的元素，不会返回数据。
 
 - **`filter()`方法->创建数组：主要用于筛选数组**
 
   - `array.filter(function(currentValue, index, arr))`
 
-  - `filter()`方法创建一个新的数组，新数组中的元素时通过检查指定符合条件的所有元素。
+  - `filter()`方法**创建一个新的数组**，新数组中的元素时通过检查指定符合条件的所有元素。
 
   - > 注意：它会直接返回一个新数组
 
@@ -2225,11 +2191,50 @@ let flag = arr2.some(function(value){
 console.log(flag);
 ```
 
-#### `trim()`两侧去空格
+#### `forEach()`遍历数组
+
+- `array.forEach((currentVal, index, arr) => {  })`
+- 第一参数为遍历的数据，第二参数为遍历数据的序号(可不写)，第三参数为当前遍历的数组(可不写)
 
 ```js
-let str = '  an dy   ';
-console.log(str.trim());	//an dy
+let guo = ['西瓜','芒果','橘子','葡萄'];
+guo.forEach((x,index)=>{
+    console.log(x+'很好吃'+'他的序号是'+index);
+})
+```
+
+#### `map()`遍历数组
+
+- map() 方法按照原始数组元素顺序依次处理元素；返回一个新数组，数组中的元素为原始数组元素调用函数处理后的值。
+- `array.map((currentValue,index,arr) => { 语句;有return返回 })`
+- **注意：** map() 是原数组的映射；所以不会对空数组进行检测，不会改变原始数组。
+
+```js
+let num = [1, 2, 3];
+let newNum = num.map((ele, index) => {
+  return ele + 3
+})
+console.log(newNum);  // 4,5,6
+```
+
+#### `filter()`遍历数组
+
+- `filter()`方法的return值只返回`true、false`；如果返回`true`，则保留这个数据；如果返回`false`则删除这个数据。
+
+```js
+let guo = [4, 8, 15, 98, 68, 73, 64, 16];
+let newmap = guo.filter(x => {
+    return x >= 60;
+})
+console.log(newmap) // [ 98, 68, 73, 64 ]
+```
+
+####  `new Array().fill()`创建数组并赋值
+
+```js
+// 默认 为undefined
+let b = new Array(8).fill()
+let a = new Array(8).fill(0)	// [0, 0, 0, 0, 0, 0, 0, 0]
 ```
 
 #### `Object.defineProperty()`
@@ -2258,7 +2263,9 @@ console.log(str.trim());	//an dy
   console.log(obj)
   ```
 
-### 函数的定义、调用与`this`的指向
+### this
+
+#### 函数的定义、调用与`this`的指向
 
 - 所有函数都是Function构造函数的实例对象。
 
@@ -2303,9 +2310,9 @@ setTimeout(function(){
 }())
 ```
 
-### 改变函数内部`this`指向
+#### 改变函数内部`this`指向
 
-#### 借用构造函数继承父类型属性、方法-->`call()` 
+##### 借用构造函数继承父类型属性、方法-->`call()`
 
 - ES6之前并没有`extends`继承，我们可以通过构造函数+原型对象模拟实现继承，被称为组合继承。
 
@@ -2344,7 +2351,7 @@ setTimeout(function(){
 
 - ES6后通过`extends、super()`来实现继承。
 
-#### 改变函数内部的`this`指向
+##### 改变函数内部的`this`指向
 
 - `call() `可调用函数，改变函数的this指向，
 
@@ -2476,28 +2483,6 @@ setTimeout(function(){
 fna(1,2); */
 ```
 
-### 高阶函数
-
-- 高阶函数是对其他函数进行操作的函数，它接受函数作为参数或将函数作为返回值输出。
-- 函数也是一种数据类型，可作为参数传递给另一个参数使用。如：回调函数。
-
-```html/JS
-<div style="width: 200px;height: 200px;position: absolute;background-color: pink;"></div>
-
-<script src="../lib/jquery-3.2.1.js"></script>
-<script>
-function fn(a, b, callback) {
-    console.log(a + b);
-    callback && callback();
-}
-fn(1, 2, function() {
-    console.log("我是最后调用的");
-});
-$("div").animate({left: 500}, function(){
-    $("div").css("background","purple");
-})
-```
-
 ### 预解释
 
 1. 解释变量和函数（函数解释时只把他当成字符串来解释，调用时才开始翻译）
@@ -2597,6 +2582,19 @@ console.log(b); //2
 
 - >闭包灵活，但不好用，无奈之下才使用
 
+```js
+function fn() {
+    let num = 10;
+    function fun() {
+        console.log(num);
+    }
+    fun();
+}
+let f = fn();
+f();   //延伸变量作用范围，当f()执行完，才会销毁num变量
+//等价： let f = function fun() { console.log(num); }
+```
+
 ```html
 <h1>经典案例：点击li，显示对应的li</h1>
 <ul>
@@ -2625,23 +2623,9 @@ console.log(b); //2
         })(i);
     }
 </script>
-<script>
-    function fn() {
-        let num = 10;
-        function fun(){
-            console.log(num);
-        }
-        fun();
-    }
-    let f = fn();
-    f();   //延伸变量作用范围，当f()执行完，才会销毁num变量
-    //等价： let f = function fun() { console.log(num); }
-</script>
 ```
 
-### 递归
-
-#### **递归遍历多层`json`数据**
+### 递归遍历多层`json`数据
 
 ```js
 let data = [{
@@ -2683,7 +2667,7 @@ getID(data, 11);
 getID(data, 112);
 ```
 
-#### 深拷贝与浅拷贝
+### 深拷贝与浅拷贝
 
 - 深拷贝和浅拷贝是只针对`Object`和`Array`这样的引用数据类型的。
 
@@ -2816,7 +2800,7 @@ let obj2 = _.cloneDeep(obj1);
 console.log(obj1.b.f === obj2.b.f);
 ```
 
-### let`、`var`、`const
+### `let`、`var`、`const`
 
 - 尽量少写`var`，写变量时用`let`，写常量时用`const`
 - const：
@@ -2903,6 +2887,14 @@ const obj = {
 }
 ```
 
+#### 值互换
+
+```js
+var x = 1;
+var y = 2;
+[x,y] = [y,x];
+```
+
 #### 解构赋值
 
 - 数组解构允许我们按照一一对应的关系从数组中提取值，然后将值赋值给变量。
@@ -2916,9 +2908,11 @@ let person = {name: 'willy', age: 20};
 let {name: myName, age: myAge} = person;    //赋别名
 ```
 
-#### 剩余参数
+#### 剩余(`rest`)参数
 
 剩余参数语法允许将一个不定数量的参数表示为一个数组。
+
+> 注意：剩余参数之后不能再有其他参数（即只能是最后一个参数），否则会报错。
 
 ```js
 const sum = (...args) => {
@@ -2939,7 +2933,7 @@ sum(20, 19);
 
 - 用 arguments 对象判断传递给函数的参数个数，即可模拟函数重载
 
-- > 箭头函数无法调用arguments
+- > 注意：箭头函数无法调用arguments
 
 ```js
 function doAdd() {
@@ -2956,7 +2950,7 @@ doAdd(40, 20);	//输出 "60"
 #### 剩余参数和 `arguments`对象的区别
 
 - 剩余参数只包含那些没有对应形参的实参，而 arguments 对象包含了传给函数的所有实参。
-- `arguments`对象不是一个真正的数组，而剩余参数是真正的` Array`实例，也就是说你能够在它上面直接使用所有的数组方法，比如 `sort，map，forEach或pop`。
+- `arguments`对象不是一个真正的数组，而剩余参数是真正的` Array`实例，也就是说你能够在它上面直接使用所有的数组方法，比如 `sort、map、forEach或pop`。
 - `arguments`对象还有一些附加的属性 （如callee属性：返回当前函数的引用(匿名函数可以使用该属性实现递归调用)）。
 
 #### 剩余参数与结构配合
@@ -2970,32 +2964,36 @@ console.log(s2);  //[ 'b', 'c' ]
 #### 扩展运算符
 
 - 用于取出参数对象中的所有可遍历属性，拷贝到当前对象之中
+- 应用
+  1. 复制数组 `const a2 = [...a1];`
+  2. 合并数组 `[...arr1, ...arr2, ...arr3]`
+  3. 与解构赋值结合`const [first, ...rest] = [1, 2, 3, 4, 5]; //...rest:2,3,4,5`
 
 ```js
-//合并、复制数组
-let ary1 = [1, 2, 3];
-let ary2 = [4, 5, 6];
+//1. 合并、复制数组
+let ary1 = [1, 2, 3],ary2 = [4, 5, 6];
 let ary3 = [...ary1, ...ary2];	//等价于 let ary3 = ary1.push(...ary2);
 let ary4 = [...ary1];
 console.log(ary3, ary4);
 
-//遍历、拷贝数组
+//2. 遍历、拷贝数组
 let bar = { a: 1, b: 2 };
 let baz = { ...bar }; // 等价于 az = Object.assign({}, bar);
 
 //将数组转换为参数数列
-function add(x, y){
+function Add(x, y){
     return x + y;
 }
 const numbers = [4, 38];
-add(...numbers) // 42
+let add = Add(...numbers)
+console.log(add) // 42
 
 //将伪数组(字符串)转为真正的数组
 let a = 'hello';
 console.log(a, '=>', ...a);
 ```
 
->**如果将扩展运算符用于数组赋值，只能放在参数的最后一位，否则会报错**
+>**注意：如果将扩展运算符用于数组赋值，只能放在参数的最后一位，否则会报错**
 
 #### Array的扩展方法
 
@@ -3040,11 +3038,33 @@ console.log(index,result)  // 1 true
 
 #### String的扩展方法
 
-##### 模板字符串
+- 查找字符串
+  - `starsWith()`：表示参数字符串是否在原字符串的头部，返回布尔值
+  - `endsWith()`：表示参数字符串是否在原字符串的尾部，返回布尔值
+  - `includes()`：返回布尔值，表示是否找到了参数字符串。
 
-- `starsWith()`：表示参数字符串是否在原字符串的头部，返回布尔值
-- `endsWith()`：表示参数字符串是否在原字符串的尾部，返回布尔值
-- `repeat()`：表示将原字符串重复n次，返回一个新的字符串
+- 处理字符串
+
+  - `repeat(n)`：表示将原字符串重复n次，返回一个新的字符串
+  - `raw()`：返回一个斜杠都被转义（即斜杠前面再加一个斜杠）的字符串，往往用于模板字符串的处理方法。
+  - 字符串补全长度：`String.padStart(n, str)`用于头部补全；`String.padEnd(n, str)`用于尾部补全（第一个参数是字符串补全生效的最大长度，第二个参数是用来补全的字符串）。
+
+- 检索字符串
+
+  - `indexOf()`：返回某个指定的字符串值在字符串中首次出现的位置。如果要检索的字符串值没有出现，则该方法返回 -1。
+  - `search() `：用于检索字符串中指定的子字符串，或检索与正则表达式相匹配的子字符串。如果没有找到任何匹配的子串，则返回 -1。
+  - `match() `：可在字符串内检索指定的值，或找到一个或多个正则表达式的匹配。
+  - `matchAll()`：返回一个正则表达式在当前字符串的所有匹配
+
+- 消除字符串空格
+
+  - `trim()`：两侧去空格;`let str = '  an dy   ';console.log(str.trim());	//an dy`
+
+  - `trimStart()`消除字符串头部的空格;`trimEnd()`消除尾部的空格（注意：返回的都是新字符串，不会修改原始字符串）。
+
+    >除了空格键，这三个方法对字符串头部（或尾部）的 tab 键、换行符等不可见的空白符号也有效。
+
+### 模板字符串
 
 ```js
 //模板字符串解析变量
@@ -3064,29 +3084,149 @@ let strCpoy = str.repeat(1);	//重复一次
 console.log(start, end, strCpoy);    //true true
 ```
 
+### 数据结构
+
 #### Set数据结构
 
 - `Set数据结构`类似于数组，但是成员值都是唯一、不重复。（可用于**搜索关键词、数组去重**）
 - `Set`本身是构造函数，用来生成`Set`数据结构，`Set`函数可以接受一个数组作为参数，用来初始化。
 - 实例方法
-  - `add(value)`
-  - `delete(value)`
-  - `has(value)`：返回布尔值，表示该值是否为Set的成员
-  - `clear()`：清除所有成员，没有返回值
+  - `add(value)`：增加数据
+  - `delete(value)`：删除指定数据
+  - `has(value)`：返回布尔值，判断Set数据是否有该值
+  - `clear()`：清除所有数据，并且没有返回值
 - 遍历Set：
 
 ```js
 //const s = new Set();
 const s1 = new Set([1, 2, 3, 4, 2, 1]);	//数组为1,2,3,4
-const set = new Set(["a","b","a","b"]);	//{ 'a', 'b' }
+const set = new Set(["a", "b", "a", "b"]);	//{ 'a', 'b' }
 const arr = [...set];	//把set结构转换为数组结构 [ 'a', 'b' ]
-console.log(set,arr);	//{ 'a', 'b' } [ 'a', 'b' ]
+console.log(set, arr);	//{ 'a', 'b' } [ 'a', 'b' ]
 
 //遍历set数据结构
 set.forEach(value => { console.log(value) })	//a b
+
+//遍历器
+//遍历器只能用for of来遍历
+//.keys()指的是返回键名的遍历器
+for (let s of arr.keys()) {
+    console.log(s); // 0 1
+}
+//.values()指的是返回键值的遍历器
+for (let x of arr.values()) {
+    console.log(x); // a b
+}
+//.entries()指的是返回键值对的遍历器
+for (let y of arr.entries()) {
+    console.log(y); // [ 0, 'a' ] [ 1, 'b' ]
+}
 ```
 
-### 箭头函数
+#### `map`数据结构
+
+- `Map`数据结构是为了**解决对象无法使用非字符串作为键**而提出的数据结构。
+
+- `Map`本质上是一个二维数组，其中数组元素是只包含两个元素(键值对)的数组。
+
+  - 设置键值对
+
+    - 设置键值对方法`set(key, value);`
+    - 获得值的方法`get(key);`
+
+  - 删除键值对
+
+    - 删除键值对方法`delete(key);`
+    - 清空所有数据则用`clear();`
+
+  - 构造Map
+
+    - 构造Map实例`new Map(iterable);`参数是`iterable`对象。由于`entries()`方法产生的形式与Map本身一样，所以可以用Map实例当参数传入；
+
+      ```js
+      let m = new Map();
+      let m2 = new Map(m.entires());	// 等价 let m3 = new Map(m);
+      ```
+
+```js
+var m = new Map();
+var x = { id: 1 }, y = { id: 2 };
+m.set(x, 'foo');
+m.set(y, 'bar');
+var marr = [...m];
+var marr2 = [...m.entries()]; // 效果跟上面的一样；
+console.log(marr); // [[{id: 1}, 'foo'], [{id: 2}, 'bar']]; 二维数组；
+console.log(marr2[0][1]); // 'foo';
+
+let x = new Map([
+    ['acc', 'abcd'],
+    [123, { x: '手机', y: '电脑' }],
+    [2 > 3, '不正确']
+]);
+//可以直接使用数组的foreach遍历
+x.forEach((x) => {
+    console.log(x)
+})
+console.log(x)
+//遍历器
+//遍历器只能用for of来遍历
+//.keys()指的是返回键名的遍历器
+for (let s of x.keys()) {
+    console.log(s);
+}
+//.values()指的是返回键值的遍历器
+for (let a of x.values()) {
+    console.log(a);
+}
+//.entries()指的是返回键值对的遍历器
+for (let y of x.entries()) {
+    console.log(y);
+}
+```
+
+#### `WeakMap()`数据结构
+
+- `WeakMap`是为了**解决频繁变动对象垃圾回收（GC）**而引入的Map弱引用数据结构。
+
+- 频繁变动的对象免得手动删除引用，而让GC自动回收。
+
+- `WeakMap`的键只能是对象，且对象没有被其他对象引用，只有`WeakMap`可以引用到，则会被垃圾回收机制释放内存，相应的`WeakMap`这一键值对会被删除。（这一特点很适合DOM对象，给DOM对象关联一些信息存储在`WeakMap`中，DOM对象一旦被删除，则其内存会被回收，weakmap的这一键值对会消失）
+
+- 即把键重定义为`null`，会清除之前键的引用，可以释放该出的内存；
+  把值定义为`null`，只是清除值的引用，而键还在，所以不会被垃圾回收。
+
+  ```js
+  var m = new WeakMap();
+  var x = { id: 1 }, y = { id: 2 }, z = { id: 3 }, w = { id: 4 };
+  m.set(x, y);
+  m.set(z, w);
+  x = null; // {id: 1}不再由变量x引用，只有m才能引用，此时，{id: 1}会被垃圾回收，这一键值对会被删除；
+  w = null; // 尽管值{id: 4}也不再由w引用，但m对值的引用是强引用，所以{id: 4}不会被回收；
+  ```
+
+### 高阶函数
+
+- 高阶函数是对其他函数进行操作的函数，它接受函数作为参数或将函数作为返回值输出。
+- 函数也是一种数据类型，可作为参数传递给另一个参数使用。如：回调函数。
+
+```html/JS
+<div style="width: 200px;height: 200px;position: absolute;background-color: pink;"></div>
+
+<script src="../lib/jquery-3.2.1.js"></script>
+<script>
+function fn(a, b, callback) {
+    console.log(a + b);
+    callback && callback();
+}
+fn(1, 2, function() {
+    console.log("我是最后调用的");
+});
+$("div").animate({left: 500}, function(){
+    $("div").css("background","purple");
+})
+```
+
+#### 箭头函数
 
 - 箭头函数表达式的语法比函数表达式更简洁，**并且没有自己的this**，arguments，super或new.target。箭头函数表达式更适用于那些本来需要匿名函数的地方，并且它不能用作构造函数。
 
@@ -3151,7 +3291,85 @@ const obj = {
 obj.a();
 ```
 
-###正则表达式
+#### `generator`生成器
+
+- generator 生成器是ES6引入的新数据类型，是 generator 看着像函数，但**可返回多次**。
+- generator 与一般函数的区别
+  - 一般函数在执行过程中，如果没有遇到`return `语句(函数末尾如果没有`return`，就是银行的`return undefined;`)，控制权无法返回被调用的代码。
+  - generator与函数不同的是，generator由`function*`定义，并且除了`return`语句，还可用`yield`返回多次。
+- 调用 generator 对象由两个方法：
+  - 一是不断地调用generator对象的`next()`方法。
+    `next()`方法会执行generator的代码，然后每次遇到`yiedld x;`就返回一个对象`{value:x, done:true/false}`，然后“暂停”。返回的`value`就是`yield`的返回值，`done`表示这个generator是否已经执行结束；如果`done`为`true`，则`value`就是`return`的返回值。
+  - 二是用`for...of`循环迭代 generator 对象；这种方式不需要我们判断`done`。
+- generator应用场景
+  1. 每次返回一个值：在同一场合下，函数只能返回一次，所以必须返回一个`Array`；但是换成generator，就**可以一次返回一个数，不断返回多次**。
+  2. 用一个对象来保存状态：因为generator可以在执行过程中多次返回，所以它就像一个可记住执行状态的函数。
+  3. 可把ajax的异步回调变成同步式ajax，相对传统的 then式，优化了回调地狱。
+
+```js
+function fib(max) {
+    let
+        t,
+        a = 0,
+        b = 1,
+        arr = [0, 1];
+    while (arr.length < max) {
+        [a, b] = [b, a + b];
+        arr.push(b);
+    }
+    return arr;
+}
+console.log(fib(5));    // [ 0, 1, 1, 2, 3 ]
+
+function* fibGenerator(max) {
+    let
+        t,
+        a = 0,
+        b = 1,
+        n = 0;
+    while (n < max) {
+        yield a;
+        [a, b] = [b, a + b];
+        n++;
+    }
+    return;
+}
+// next()方法循环迭代generator
+let f = fibGenerator(5);
+let f1 = f.next();
+let f2 = f.next();
+let f3 = f.next();
+let f4 = f.next();
+let f5 = f.next();
+let f6 = f.next();
+let f0 = [f1, f2, f3, f4, f5, f6];
+console.log(f0);
+
+// for...of 循环迭代generator
+let ff = fibGenerator(5);
+for(let x of ff) {
+    console.log(x);
+}
+
+// 用generator 生成同步式ajax，相对传统的 then，优化了回调地狱
+try {
+    r1 = yield ajax('http://url-1', data1);
+    r2 = yield ajax('http://url-2', data2);
+    r3 = yield ajax('http://url-3', data3);
+    success(r3);
+}
+catch (err) {
+    handle(err);
+}
+```
+
+
+
+#### `Iterator`迭代器
+
+
+
+### 正则表达式
 
 - 正则表达式通常被用来检索、替换符合某个模式（规则）的文本，还常用于过滤页面内容中的一些敏感词（替换），或从字符串中获取特定部分（提取）等。
 
@@ -3303,6 +3521,136 @@ Promise.all([
     console.log(results);
 })
 ````
+
+### `async、await`异步函数（阻塞）
+
+- `async`用于申明一个`function`是异步的，而`await`用于等待一个异步方法执行完成（`await`只出现在`async`函数中）
+
+- async 函数返回的是一个 Promise 对象。async 函数（包含函数语句、函数表达式、Lambda表达式）会返回一个 Promise 对象，如果在函数中 return 一个直接量，async 会把这个直接量通过 Promise.resolve() 封装成 Promise 对象。
+
+  ```js
+  async function Async() {
+      return "hello,async"
+}
+  const result = Async();
+  console.log(result)
+  ```
+  
+  - 在没有`await`配合下，`async`返回`promise`回对象，所以可以配合`then`处理
+  
+  ```js
+  async function Async() {
+      return "hello,async"
+  }
+  Async().then(result => {
+      console.log(result);	// hello,async
+  })
+  ```
+  
+  - 返回的同样结果，所以和promise对象中then用法一样的效果。结合Promise 的特点——无等待，所以在没有 await 的情况下执行 async 函数，它会立即执行，返回一个 Promise 对象，并且，绝不会阻塞后面的语句。这和普通返回 Promise 对象的函数并无二致。
+  
+- `await`是个运算符，用于组成表达式，await 表达式的运算结果取决于它等的东西。如果它等到的是一个 Promise 对象，等 Promise 对象 resolve，然后得到 resolve 的值，作为 await 表达式的运算结果。sync 函数调用不会造成阻塞，它内部所有的阻塞都被封装在一个 Promise 对象中异步执行。
+
+- 
+
+# JQ
+
+## 理念
+
+### load 和 ready 谁先执行？
+
+```js
+window.onload = function(){}
+$(document).ready(fcuntion(){})
+```
+
+**DOM文档加载步骤：**
+
+1. 解析 HTML 结构
+2. 加载外部脚本和样式表文件
+3. 解析并执行脚本代码
+4. 构造 HTML DOM 模型（ready 方法执行）
+5. 加载图片、视频等外部文件
+6. 页面加载完毕（load 方法执行）
+
+注意：onload 只执行一次，若有多次，则最后一次覆盖前面的
+
+​			ready 可以执行多次，不会覆盖
+
+## 选择器
+
+### 基本选择器
+
+```js
+$("#div1")		//按id属性选择元素
+$(".class1") 	//按class属性选择元素
+$("div")		//按元素名称选择元素
+$("*")			//选择所有元素
+$("#div2,span")	//并列选择元素
+```
+
+### 层次选择器
+
+```js
+$("body div") //选择body所有的div后代元素
+$("body>div") //选择body所有的直接div后代元素
+$("#div1+div") //选择id值为div1的元素的后面相邻的兄弟元素
+$("#div1~div") //选择id值为div1的元素的后面所有的兄弟元素
+```
+
+### 基本过滤选择器
+
+```js
+$("div:first")	//选择第一个div元素
+$("div:last")	//选择最后一个div元素
+$("div:eq(4)")	//选择第五个div元素
+$("div:gt(5)") 	//选择所有索引值大于5的div元素
+$("div:lt(5)") 	//选择所有索引值小于5的div元素
+$("div:even")	//选择所有索引值为偶数的div元素
+$("div:odd")	//选择所有索引值为奇数的div元素
+$("div:not(.class1)") //选择不包含class属性值为class1的所有div元素
+$(":header")	//选择所有的标题元素
+$(":focus")		//选择成为焦点的元素
+$(":animated")	//选择所有动画元素
+```
+
+### 内容过滤选择器
+
+```js
+$("div:contains(class为class1)") //改变所有包含文本"class为class1"的div元素
+$("div:has('.subClass1')") //改变所有包含class值为subClass1子元素的div元素
+$("div:empty")//改变所有不包含子元素的div元素
+$("div:parent")//改变所有包含子元素的div元素
+```
+
+### 属性过滤选择器
+
+```js
+$("div[title]") //改变所有有title属性的div元素
+$("div[title=title1]") //改变所有有title属性为title1的div元素
+$("div[title!=title1]") //改变所有有title属性不为title1的div元素
+$("div[title^=ti]") //改变所有有title属性值以ti开头的div元素
+$("div[title$=1]") //改变所有有title属性以1结尾的div元素
+$("div[title*=Pre]") //改变所有有title属性值包含Pre的div元素
+$("div[id],[title]") //改变包含属性为id和属性为title的div元素
+//注意："[],[]"是并集，"[][]"是交集（两个条件间隔一个空格）
+```
+
+### 可见过滤选择器
+
+```js
+$("div:visible") //改变所有可见的的div元素
+$("div:hidden").show(3000);//显示所有不可见的的div元素背景色
+```
+
+### 子元素过滤选择器
+
+```js
+$("div.class1 :nth-child(2)") ;//选择所有class属性值为class1的div元素的第二个子元素
+$("div.class1 :first-child") //改变所有class属性值为class1的div元素的第1个子元素
+$("div.class1 :last-child") //改变所有class属性值为class1的div元素的最后1个子元素
+$("div.class1 :only-child") //改变所有class属性值为class1的div元素的唯一一个子元素
+```
 
 # TypeScript
 
@@ -4090,7 +4438,49 @@ Less的作用域与CSS中的作用域类似。先在本地查找变量和混合�
 
 # 软件使用
 
-### Node
+## 安装nodejs
+
+```cmd
+#下载cnpm	(i是英文install的缩写，-g代表全局安装，-D代表本地安装。全局安装意味着安装后在任何文件夹下都能使用，而本地安装则把东西安装到指定的文件夹，当然使用也只能在这个文件夹下使用)
+npm i cnpm -g	
+
+#全局安装webpack（指定版本3.6.0，因为vue cli2依赖该版本）
+npm install webpack@3.6.0 -g
+
+#安装nrm（nrm有我们常用的镜像地址）
+npm i nrm
+#查看镜像地址
+nrm ls
+```
+
+**npm安装报错**
+
+```cmd
+#去掉npm代理（权限问题记得加sudo）
+npm config rm proxy
+npm config rm https-proxy
+#修改npm的资源镜像链接:
+npm config set registry http://registry.npm.taobao.org
+#查看是否修改成功
+npm config get registry
+```
+
+```vscode-cmd
+#在vscode中本地安装webpack
+npm install webpack@3.6.0 -save-dev
+
+#把main.js文件打包生成bundle.js文件
+webpack .\src\main.js .\dist\bundle.js	
+```
+
+**脚手架`CLI`安装**
+
+```cmd
+vue --version
+npm install @vue/cli -g
+```
+
+## Node
 
 **概念**
 
@@ -4149,7 +4539,41 @@ npm uninstall <name>		#卸载模块
 3. 创建模块：nodejs模块就是发布到npm的代码块。
    1. 首先利用`npm init`命令创建package.json，这个过程中命令行会逐步提示你输入这个模块的信息，其中模块的名字和版本号是必填项。
 
-### Yarn
+## 国内镜像（国内加速访问GitHub）
+
+**Windows：**
+
+```hosts文件
+ //Hosts文件位于C:\Windows\System32\drivers\etc
+//1、将下面的信息添加到Hosts文件中，保存
+140.82.114.3		github.com
+199.232.69.194	github.global.ssl.fastly.net
+151.101.192.133 raw.githubusercontent.com
+```
+
+```cmd命令
+//2、更新DNS缓存
+ipconfig /flushdns
+```
+
+**Linux：**
+
+```命令行
+//1、编辑Hosts文件
+vi /etc/hosts
+```
+
+```vi文本
+ //2、按i进入编辑模式，插入如下文本
+ 140.82.114.3		github.com
+199.232.69.194	github.global.ssl.fastly.net
+151.101.192.133 raw.githubusercontent.com
+
+//3、按Esc键退出编辑模式，输入:wq!保存退出。
+//4、重启机器或者重启服务使Hosts生效
+```
+
+## Yarn
 
 **概念**
 
@@ -4157,11 +4581,50 @@ npm uninstall <name>		#卸载模块
 - Yarm不能完全替代npm。Yarm仅仅是一个能够从npm仓库获取模块的新的CLI客户端。
 - 特点：速度超快(yarm缓存每个下载过的包，再次使用无需重复下载)；安全(在执行代码前，yarm会通过算法校检每个安装包的完整性)；可靠(使用详细、简介的锁文件格式和明确的安装算法，Yarm能保证在不同系统上无差异工作)
 
-### Webpack
+## NVM
 
-### Babel
+```
+在开发的工程中，我们可能需要经常切换node版本来应对不同的开发环境，所以需要经常使用不同版本的node
 
-### Mock
+一、安装npm插件n ,通过n模块来管理node版本
+1、全局安装n模块
+npm instlal -g n
+2、安装当前稳定版本
+n stable或者sudo n stable
+3、安装最新版本的
+n latest或者sudo n latest
+4、安装指定版本的node
+n v8.16.0
+5、卸载指定的node版本
+n rm v8.16.0
+
+二、使用nvm管理node版本
+1、安装nvm
+brew install nvm
+2、使用nvm安装node版本
+安装最新版本
+nvm isntall node
+安装指定版本
+nvm install 8.16.0
+3、查看所有版本
+nvm ls
+4、切换node版本
+使用最新版本
+nvm use node
+使用指定版本
+nvm use 10.16.2
+
+通常我会使用第二种方式
+例如：我在一个项目中使用的是node@6.13.2,新项目使用的是node@8.16.0,
+先要安装node@8.16.0，nvm install 8.16.0，
+然后，nvm use 8.16.0
+```
+
+## Webpack
+
+## Babel
+
+## Mock
 
 # 面试题
 
@@ -4297,6 +4760,16 @@ webpack的热更新是如何做到的？说明其原理？
 ### VScode插件
 
 ①、Bootstrap v3 Snippets、Bootstrap v4 Snippets -->boostrap框架的输入快捷键
+
+#### 快捷生成`console.log()`
+
+- 输入log,按tab键自动生成console.log()代码,并且光标在()内部,再次按tab键光标自动跳转到下一行
+- 选择文件->首选项->用户片段,在用户片段输入框中输入javascript并选择
+- 可以看到有一段被注释的代码,我们将代码解除注释
+  prefix:代码快捷键入口,这里设置log,当我输入log后就会进入到这里的设置,配合tab健就可以生成console.log
+  body表示代码的主体,需要设置的代码放在这里
+  $1表示生成代码后光标首次所在位置
+  $2写在这个位置,表示在生成console.log()后,代码后面会空出一行,并且表再次按tab键时,光标会转到$2的位置
 
 **用户代码片段**
 
@@ -4753,10 +5226,22 @@ v-model默认是在input事件中同步输入框的数据，即一旦数据发�
 ```
 
 - 当 vue用`v-for`正在更新已渲染过的元素列表时默认用**就地复用**策略。如果数据项的顺序被改变，Vue**不是移动 DOM 元素来匹配数据项的顺序**， 而是**简单复用此处每个元素**，并且确保它在特定索引下显示已被渲染过的每个元素。
-
 - 为了给 Vue 一个提示，**以便它能跟踪每个节点的身份，从而重用和重新排序现有元素**，需要为每项提供一个唯一 **key** 属性。
-
 - key的作用主要是为了高效地的更新虚拟DOM。
+
+### vue循环赋值
+
+```js
+this.purdetailData.itemList.forEach((i) => {
+    if(i.IIType == "尺寸类") {
+        this.dataResource = Object.assign({}, i.detailList);	//浅拷贝
+        this.dataResource = [...i.detailList];	// 三点运算符，算是深拷贝
+    }
+})
+let newArr =  this.purdetailData.itemList.filter((item)=>{	// 过滤
+    return item.IIType == "尺寸类"
+})
+```
 
 
 ### 方法
@@ -5571,7 +6056,7 @@ const app = new Vue({
 });
 ````
 
-## 小案例
+## 响应式原理
 
 ### 动态修改`Vue`项目中的页面标题`title`
 
@@ -5593,6 +6078,119 @@ Vue.directive('title', {
 	<div v-title data-title="页面标题"><p>这是页面的内容</p></div>
 </template>
 ```
+
+### vue中响应式值变化处理`this.$set()`
+
+#### 对于对象
+
+- 对于已经创建的实例，Vue 不允许动态添加根级别的响应式 property。
+
+- 但可使用`this.$set(object, propertyName, value)`、`Vue.set(object, propertyName, value)`方法向嵌套对象添加响应式proterty。
+
+- 当为已有对象赋值多个新的property，如使用 `Object.assign()` 或 `_.extend()`。但是，这样添加到对象上的新 property 不会触发更新。在这种情况下，应该用原对象与要混合进去的对象的 property 一起创建一个新的对象。
+
+  ```vue
+  // 代替 `Object.assign(this.someObject, { a: 1, b: 2 })`
+  this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 })
+  ```
+
+#### 对于数组
+
+- Vue 不能检测以下数组的变动：
+  1. 当你利用索引直接设置一个数组项时，例如：`vm.items[indexOfItem] = newValue`
+  2. 当你修改数组的长度时，例如：`vm.items.length = newLength`
+- `vm.$set(arrayName, indexOfItem, newValue)`
+
+```vue
+const vm = new Vue({
+  data: {
+    items: ['a', 'b', 'c']
+  }
+})
+vm.items[1] = 'x' // 不是响应性的
+vm.items.length = 2 // 不是响应性的
+```
+
+```vue
+Vue.set(vm.items, indexOfItem, newValue)	// Vue.set
+vm.items.splice(indexOfItem, 1, newValue)	// Array.prototype.splice
+
+vm.items.splice(newLength)	//修改数组长度
+vm.$set(vm.items, indexOfItem, newValue)
+```
+
+#### 对于 数组中嵌套对象
+
+- `this.$set( 数组名, 索引, { 该列数组中对象的属性名 : 该属性赋予的值，可以是方法或者是函数 })`
+
+```vue
+data(){
+	return {
+		filldata: [
+			{inputValue: "", result: "2", //0/1/2},
+			{inputValue: "", result: "2", //0/1/2},
+			{inputValue: "", result: "2", //0/1/2},
+		]
+	}
+},
+methods: {
+	updateData(i) {
+		this.$set(
+          this.fillData,
+          index,
+          { result:this.fillData[index].inputValue, result: "1" }
+        )
+		this.$set( this.fillData, index, { result: "1" })
+	}
+	
+}
+```
+
+### 重置vue的data中的数据
+
+- **方法1**：`Object.assign()`合并成一个新的对象再赋值		
+
+  -  Object.assign() 方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象
+  -  例：`this.seller=Object.assign({},this.seller,new.data)`
+     将`new.data`和`this.seller`都复制到空对象中，在赋值给`this.seller`
+
+- **方法2**：使用`this.$set()`,vue中是推荐使用此方法的，会强制视图重新渲染
+
+  -  例：vue文件中data有个值option，修改option值，并让页面视图更新
+
+    ```vue
+    data() { 
+    	return { 
+    		option: {},
+    	} 
+    },
+    methods: {
+    	btn() {
+    		let moke = { a: 1 };
+    		this.$set(this, "option", moke);
+    	}
+    }
+    ```
+
+- **方法3**：push等一系列自带的添加方法，也会触发视图的更新
+
+- **方法4**： v-if也会触发视图更新
+
+- **方法5：**this.$nextTick() 
+
+- 方法6：对象层次过深，没有办法时，可以试试重新获取数据，前提是清空数据，再异步获取数据
+
+  ```vue
+  this.data = [];
+  setTimeout(() => {
+  	this.onLoad();
+  }, 0);
+  ```
+
+
+### `this.$nextTick()`异步更新队列
+
+
 
 ## 模块化开发
 
@@ -7695,11 +8293,37 @@ window.onresize = function () {
 
 # 小程序
 
-## 起步
+## 描述
 
 文件路径、页面生命周期、常用组件、API使用方式
 小程序特点：简单、用完即走、低频、性能要求不高的应用
 Flex弹性盒子模型、移动分辨率和自适应单位PPX
+
+- 标签的书写严格，区分大小写
+
+- 不支持通配符选择器
+
+- ` JSON `文件中无法使用注释，样式文件多行注释才有效
+
+- 没有跨域的，服务器必须用Https
+
+- 小程序中引入less
+
+  - 安装插件`easy-less`
+
+  - 在设置里面的`easy-less`配置加入自动生成`wxss`文件配置
+
+    ```json
+    "less.compile": {
+    	"outExt":".wxss"
+    }
+    ```
+
+- 页面.js文件中 存放事件回调函数的时候，存放在data同层级下
+
+- 组件.js文件中存放事件回调函数的时候，必须要存放在methods中
+
+- iPhone的部分手机不识别webp图片格式
 
 ### 小程序代码构成
 
@@ -7769,13 +8393,16 @@ Flex弹性盒子模型、移动分辨率和自适应单位PPX
 
 ```sitemap.json
 {
-  "rules":[{	// 所有页面都会被微信索引（默认情况）
+  "rules":[{	
+  	// 所有页面都会被微信索引（默认情况）
     "action": "allow",
     "page": "*"
-  },{	//配置 path/to/page 页面不被索引，其余页面允许被索引
+  },{	
+  	//配置 path/to/page 页面不被索引，其余页面允许被索引
     "action": "disallow",
     "page": "path/to/page"
-  },{	// 包含 a 和 b 参数的 path/to/pages 页面会被微信优先索引，其他页面都会被索引
+  },{	
+  	// 包含 a 和 b 参数的 path/to/pages 页面会被微信优先索引，其他页面都会被索引
     "action": "allow",
     "page": "path/to/pages",
     "params": ["a", "b"],
@@ -7814,7 +8441,7 @@ Flex弹性盒子模型、移动分辨率和自适应单位PPX
 this.setData({ msg: "Hello World" })
 ```
 
-#### wxss
+#### wxss 样式
 
 - `WXSS` 具有 `CSS` 大部分的特性；
   新增尺寸单位，`WXSS` 在底层支持新的尺寸单位 `rpx`；
@@ -7852,125 +8479,80 @@ this.setData({ msg: "Hello World" })
 
 ![image-20210603001456032](image/image-20210603001456032.png)
 
-## 语法
-
-### 数据绑定
-
-```.wxml
-<view>
-	//6、内壳嵌套使用
-	<image src="{{img.post_img}}">
-	<button class='{{item}}' bindtap='clickme'>按钮</button>
-</view>
-
-//3、运算绑定
-<view hidden='{{type?true:false}}'>Hidden</view>
-
-//4、控制属性绑定
-<view wx:if="{{myKey}}">你的名字</view>
-
-//5、wx:for列表渲染语句
-<view wx:for="{{array}}">{{index}}:{{item.info}}</view>
-```
-
-```.js
-Page({
-  data: {
-  	//1、数据的简单绑定
-    text:'hello',
-    
-    //2、组件属性
-    checked:true,
-    item:'first',
-    
-    //4、控制属性绑定
-    myKey:false,
-    
-    //wx:for列表渲染语句
-    array:[{
-      info:"墨雪"
-    },{
-      info:"晓风残月"
-    }]
-  }
-  onLoad：function(options){
-  	var post_content1={
-  	data:"Sep 18 2016",
-  	title:"正式在下",
-  	img:{
-  		post_img:"img/12.png"
-  	}
-  	}
-  }
-  clickme:function(event){
-  	this.data.checked = !this.data.checked;
-    
-    if(this.data.checked){
-      this.data.item =  'first';
-    } else{
-      this.data.item = 'second';
-    }
-    this.setData({
-      item: this.data.item
-    })
-  } 
-})
-```
-
-```.wxss
-.first{
-  width: 250rpx;
-  height: 100rpx;
-  background-color: red;
-}
-.second{
-  width: 200rpx;
-  height: 200rpx; 
-  background-color: green;
-  border-radius: 100rpx;
-}
-```
-
-## 入门
-
-- 标签的书写严格，区分大小写
-
-- 不支持通配符选择器
-
-- ` JSON `文件中无法使用注释，样式文件多行注释才有效
-
-- 没有跨域的，服务器必须用Https
-
-- 小程序中引入less
-
-  - 安装插件`easy-less`
-
-  - 在设置里面的`easy-less`配置加入自动生成`wxss`文件配置
-
-    ```json
-    "less.compile": {
-    	"outExt":".wxss"
-    }
-    ```
-
-- 页面.js文件中 存放事件回调函数的时候，存放在data同层级下
-
-- 组件.js文件中存放事件回调函数的时候，必须要存放在methods中
-
-- iPhone的部分手机不识别webp图片格式
-
 ### 小程序架构->`MVVM`模式
 
 - 架构分为视图层(`wxml、wxss`)，逻辑层(`js`)，组件，API四部分。视图层负责页面结构，样式和数据展示。逻辑层负责业务逻辑，调用API等。
+- 视图层和逻辑层类似`vue的MVVM`模式，逻辑层只需对数据对象更新，就可改变视图层的数据显示，类似vue。组件是视图层封装好的基础组件，如按钮，输入框等。API提供了访问手机设备，网络，服务器，微信平台接口等能力。
 
-  视图层和逻辑层类似`vue的MVVM`模式，逻辑层只需对数据对象更新，就可改变视图层的数据显示，类似vue。组件是视图层封装好的基础组件，如按钮，输入框等。API提供了访问手机设备，网络，服务器，微信平台接口等能力。
+## 标签
 
-### 事件
+### 单选框`radio`
 
-- 冒泡事件：子向父元素传递事件
-- 三个阶段：捕获->处理->冒泡
-- 事件委托：防止重复定义事件
-- `bind`绑定冒泡事件，`catch`绑定非冒泡事件
+- > 需要与父元素`radio-group`一起使用
+
+- 绑定事件`bindchange="函数"`
+
+```
+<radio-group bindchange="handleChange">
+    <radio value="male" color="red" checked="{{true}}">男</radio>
+    <radio value="female" color="red">女</radio>    
+</radio-group>
+<view>选中的是{{gender}}</view>
+```
+
+```js
+Page({
+  data: {
+    gender:""
+  },
+  handleChange(e){
+    let gender = e.detail.value;
+    this.setData({ gender })
+  }
+})
+```
+
+### `icon`标签
+
+- type属性，样式
+  - success勾选
+- size属性，图标大小
+- color属性，图标颜色
+
+### `view`标签
+
+- `view`标签相当于`html的div`，默认为块级元素。
+
+### text标签
+
+- text 相当于span，默认行内元素，html中怎么打怎么显示	
+- 只能嵌套text
+- selectable属性，长按文字可以复制，只有这个标签有这个功能
+- decode属性，可以对空格，大于号进行编码
+
+### block标签
+
+一个占位符标签，当页面渲染的时候会自动去掉该标签和属性，效果依然显示
+
+### image标签
+
+- 默认大小为宽320px，高240px
+
+- 小程序的图片支持懒加载`mode="lazy-load"`(图片出现在视口上下三屏高度之内时，自动加载图片)
+
+## swiper标签（轮播图）
+
+- 轮播图外层容器swiper
+
+- 每一个轮播项swiper-item
+
+- 默认宽度100%，高度150px（swiper的宽度=100%或者100vw或者750rpx）
+
+- `swiper的高度 = calc(原图的高度 * swiper的宽度 / 原图的宽度)`
+
+
+
+## 组件
 
 ### tabBar配置（底部导航栏）
 
@@ -8012,20 +8594,196 @@ Page({
 
 ![image-20210728105609750](image/image-20210728105609750.png)
 
+### navigator导航栏组件
+
+- url可加绝对路径，也可加相对路径，/根目录，./当前目录，小程序跳转最多只有5级
+
+  ```html
+  url="/pages/demo01/demo01"
+  url="../detail/detail?={{item.id}}" //点击跳转不同页面
+  ```
+
+- 块级元素，导航栏对navigatior导航栏进行渲染
+
+- target跳到当前的小程序还是跳到其他的小程序
+
+- open-type属性
+
+  - navigate默认属性，保留了当前页面，不能跳到taber页面
+  - redirect没返回跳转功能，关闭当前页面，也不能跳转到taber页面
+  - switchTab跳转到taber页面，关闭其他所有页面，底部的taber可轮流切换
+  - reLaunch随便跳
+  - navigateBack跳转过去，可在跳回来
+  - exit退出其他小程序
+
+### 父子组件通信
+
+- 父组件
+
+  ```wxml
+  <Tabs aaa="a123a"></Tabs>
+  ```
+
+- 子组件 `tabs.js` 
+
+  ```index.js
+  properties: {
+    aaa:{
+    	type:String,
+    	value:""
+    }
+  }
+  ```
+
+  ```wxml
+  <view>{{ aaa }}<view>
+  ```
+
+
+
+## 动态
+
+### 冒泡事件
+
+- 冒泡事件：子向父元素传递事件
+- 三个阶段：捕获->处理->冒泡
+- 事件委托：防止重复定义事件
+- `bind`绑定冒泡事件，`catch`绑定非冒泡事件
+
+### 数据绑定
+
+```.wxml
+<view>
+	//6、内壳嵌套使用
+	<image src="{{img.post_img}}">
+	<button class='{{item}}' bindtap='clickme'>按钮</button>
+</view>
+
+//3、运算绑定
+<view hidden='{{type?true:false}}'>Hidden</view>
+
+//4、控制属性绑定
+<view wx:if="{{myKey}}">你的名字</view>
+
+//5、wx:for列表渲染语句
+<view wx:for="{{array}}">{{index}}:{{item.info}}</view>
+```
+
+```.js
+Page({  data: {  	//1、数据的简单绑定    text:'hello',        //2、组件属性    checked:true,    item:'first',        //4、控制属性绑定    myKey:false,        //wx:for列表渲染语句    array:[{      info:"墨雪"    },{      info:"晓风残月"    }]  }  onLoad：function(options){  	var post_content1={  	data:"Sep 18 2016",  	title:"正式在下",  	img:{  		post_img:"img/12.png"  	}  	}  }  clickme:function(event){  	this.data.checked = !this.data.checked;        if(this.data.checked){      this.data.item =  'first';    } else{      this.data.item = 'second';    }    this.setData({      item: this.data.item    })  } })
+```
+
+```.wxss
+.first{  width: 250rpx;  height: 100rpx;  background-color: red;}.second{  width: 200rpx;  height: 200rpx;   background-color: green;  border-radius: 100rpx;}
+```
+
+### 自定义下拉刷新
+
+- 在`·`app.json`和`xx.json`中的`window`里配置,
+
+  ```wxml
+  {	"window": {		"enablePullDownRefresh": true,	}}
+  ```
+
+- 在下拉触发的`onPullDownRefresh`函数里清除`loadin`状态
+  （如果不清除loadin状态，下拉后，动态图片一直在loadin状态，即二次刷新不出来）
+
+  ```index.js
+  onPullDownRefresh: function() {	wx.stopPullDownRefresh();},
+  ```
+
+### `input`事件绑定
+
+- input事件的双向绑定，`bindinput="函数"`,函数与data同级
+  - 获取事件源对象`e.detail.value`
+  - 把输入框的值赋值给data中，用`this.setData({})`，不能直接`this.data.name=e.detail.value`或``this.name=e.detail.value`
+
+- button点击事件，``bindtap=“函数”``
+  - 无法在小程序中直接传参的
+  - 通过自定义属性的方式传递参数``data-operation=“{{1}}”``
+  - 事件源（函数）中获取自定义属性`consolo.log(e)`
+  - `const operation=e.currentTarget.dataset.operation`
+  - 获取值用`this.data`，设置值用`this.setData({})`
+
+```html
+<input type="text" bindinput="handle"/><button bindtap="handletap" data-operation="{{1}}">+</button><button bindtap="handletap" data-operation="{{-1}}">-</button>
+```
+
+```javascript
+Page({  data: {    num:0  },  handle(e){    this.setData({      num:e.detail.value    })  },  handletap(e){    const operation = e.currentTarget.dataset.operation;    this.setData({      num:this.data.num + operation    })  }})
+```
+
+
+
+## 属性
+
+### 条件渲染`wx:if、wx:elif、wx:else`
+
+- 在组件上使用`wx:if={{ 表达式的真假性 }}`来判断是否需要渲染该代码块
+
+  ```
+  <view wx:if="{{ length >5 }}"> 1 </view><view wx:elif="{{ length >2 }}"> 2 </view><view wx:else="{{ length }}"> 3 </view>
+  ```
+
+### `wx:if`与`hidden`属性的区别
+
+- `wx-if=“{{对象.key}}”`条件渲染
+
+  - 初始渲染开销小，用于非频繁切换
+  - 当条件为false时，直接把标签从页面结构移除掉；
+
+- hidden属性直接加入`hidden=“{{true}}”`就隐藏组件
+
+  - 初始渲染开销大，用于用户频繁切换
+
+  - 通过添加样式的方式来切换显示
+
+  - >相当于添加了个样式`display:none;`，不要和display标签一起使用
+
+- wx:if懒渲染，hidden渲染
+
+### 列表渲染`wx:for`
+
+- 在组件上使用`wx:for="数组名"`控制属性绑定一个数组，即可使用数组中各项数据重复渲染该组件。
+  - 默认数组当前项的下标变量名默认为`index`，当前项的变量名默认为`item`
+  - `wx:for-item`可指定数组当前元素的变量名；
+  - `wx:for-index`可以指定数组当前下标的变量名；
+
+```wxml
+<view wx:for="{{ arr }}" wx:for-item="itemName" wx:for-index="idx">	{{ idx }}：{{ itemName.message }}</view>
+```
+
+```index.js
+Page({	data: {		arr: [			{ message: 'foo', },			{ message: 'bar', },		]	}})
+```
+
+### overflow属性
+
+overflow：auto;手指滚动
+
+### box-sizing属性
+
+- box-sizing: border-box;屏幕自适应尺寸，就不会再考虑边框和内边距会改变整体所占宽度
+
+- 原：width=content
+
+- `width=content+padding+border`，``height=content+padding+border`
+
+- 采用的是**flex布局**的方式，为了自适应，宽度**width**采用的是**百分比%**的形式，**border，padding，margin**采用的是**px尺寸**，所有外层的盒子运用了**box-sizing:border-box;**属性来改变盒子的结构，从而实现需求。
+
+
+
+## 样式
+
 ### 图片大小
 
 - **`高度 = 750rpx * 图片高度/图片宽度;`**
 
 ```wxss
-// 如轮播图图片 750rpx默认高度，图片宽520px,高280px
-swiper {
-	width: 100%;
-	height: calc(750rpx * 280px / 520px);
-}
-image { width: 100%; }
+// 如轮播图图片 750rpx默认高度，图片宽520px,高280pxswiper {	width: 100%;	height: calc(750rpx * 280px / 520px);}image { width: 100%; }
 ```
 
-##### 图片高度自适应
+##### **图片高度自适应**
 
 小程序图片高度自适应：给image标签定义属性`mode="widthFix"`
 
@@ -8033,45 +8791,579 @@ image { width: 100%; }
 <image src="{{item.cover}}" mode="widthFix" />
 ```
 
-### 单选框`radio`
+### `tap-highlight-color`点击高亮透明
 
-- > 需要与父元素`radio-group`一起使用
+- `tap-highlight-color：transparent；`
 
-- 绑定事件`bindchange="函数"`
+- 点击内容的时候是高亮的改为透明的；
 
-```
-<radio-group bindchange="handleChange">
-    <radio value="male" color="red" checked="{{true}}">男</radio>
-    <radio value="female" color="red">女</radio>    
-</radio-group>
-<view>选中的是{{gender}}</view>
-```
+  这个属性只用于iOS (iPhone、iPad)。当点击链接或通过Javascript定义的可点击元素时，就会出现一个半透明的灰色背景。要重设这个表现，可设置``-webkit-tap-highlight-color`为任何颜色。
 
-```js
-Page({
-  data: {
-    gender:""
-  },
-  handleChange(e){
-    let gender = e.detail.value;
-    this.setData({ gender })
-  }
-})
+### 文本行数
+
+```wxss
+display: -webkit-box;overflow: hidden;-webkit-box-orient: vertical;-webkit-line-clamp: 2;	//white-space: normal;word-wrap: break-word;text-overflow: ellipsis;
 ```
 
-### `view`标签
+- `-webkit-line-clamp` 是一个 不规范的属性（unsupported WebKit property），它没有出现在 CSS 规范草案中。为了实现该效果，它需要组合其他外来的WebKit属性。常见结合属性：
+  - `display: -webkit-box;` 必须结合的属性 ，将对象作为弹性伸缩盒子模型显示 。
+  - `-webkit-box-orient` 必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式 。
+  - `text-overflow`：可以用来多行文本的情况下，用省略号“...”隐藏超出范围的文本 。
 
-- `view`标签相当于`html的div`，默认为块级元素。
 
-### `window`窗口
 
-在`app.json`文件
+### 尺寸单位`rpx`
+
+- 自适应屏幕大小，小程序的屏幕默认为`750rpx`
+- `1px=2rpx`
+- `calc（750rpx * 100 / 375）`，750和rpx之间不能有空格
+
+```
+1. 小程序中，不需要主动引入样式文件2. 需要把页面中某些元素的单位 由 px 改为 rpx	(1) 设计稿750px		750px = 750rpx		1px = 1rpx	(2) 把屏幕宽 改为 375px		375px = 750rpx		2rpx = 1px3. 存在设计稿 宽 414 或 未知 page	(1) 设计稿 page 存在一个元素宽度100px，去实现不同宽度的页面适配		page px = 750rpx		1 px = 750rpx / page		100px = 750rpx *100 / page
+```
 
 
 
 # 桌面应用——electron开发
 
 
+
+
+
+# 窗口命令行
+
+## Mac命令
+
+### windows命令下载文件
+
+- 在打开的poershell窗口中，依次输入如下命令：
+  `$client = new-object System.Net.WebClient` （回车）
+- `$client.DownloadFile('网络文件链接地址','保存到本地后的路径+文件名')` （回车）
+
+```cmd
+start powershell
+$client = new-object System.Net.WebClient 
+$client.DownloadFile('http://test.com/xxx.html','D:\index.html')
+```
+
+## Linux
+
+### **下载文件**
+
+```
+//wget -c http下载，不需要翻墙
+wget -c http://test.com/zip/test.zip
+
+//让档案自动存储到指令的目录下，需要-P参数
+wget -P 目录 网址
+```
+
+### 移动命令mv
+
+- mv(选项)(参数)  剪切，或在同目录下移动重命名
+- 如果目标文件是文件夹，则源文件直接移动到该文件夹内，名字还是源文件的名字。
+- .如果目标文件是文件，则源文件移动的同时也会更改名字
+- 如果源文件为多个，则目标必须是目录，并且统一移动到目录下
+
+```
+#-b：当目标文件存在时，先进行备份在覆盖
+mv -b a/aa b/		#ls b -->aa aa~ bb
+
+#-f：当目标文件存在时，强制覆盖
+mv -f a/aa b/	#ls b -->aa bb
+
+-i：默认选项，当目标文件存在时，提示是否覆盖
+-t：先指定目标，在制定源
+-v：显示过程
+```
+
+### 删除文件
+
+```
+rm -f filename
+```
+
+### 集
+
+```
+pwd				#查看所在的路径
+dir				#查看目录下的文件
+cat filename	#查看文件内容
+cp 被复制文件 拷贝到所在路径	#复制文件
+
+clear		#清屏
+```
+
+# Git
+
+- **工作区：**就是你在电脑里能看到的目录。
+- **暂存区：**英文叫 stage 或 index。一般存放在 **.git** 目录下的 index 文件（.git/index）中，所以我们把暂存区有时也叫作索引（index）。
+- **版本库：**工作区有一个隐藏目录 **.git**，这个不算工作区，而是 Git 的版本库。
+
+![image-20210401230906328](image/image-20210401230906328.png)
+
+### 安装git
+
+```
+yum install git -y	#安装git
+```
+
+### 配置邮箱、用户名
+
+配置的用户名和邮箱，邮箱不一定是真实的，但格式必须正确
+
+```
+git config --global user.name willysliang	#设置用户名
+git config --global user.email willysliang@126.com	#设置用户邮箱
+git config user.name	#查看用户名
+git config user.email	#查看邮箱
+git show 	#显示所有信息
+
+git config --global color.ui ture	#适当的地显示颜色
+```
+
+### 创建仓库
+
+```
+mkdir demo	#创建仓库
+git init	#进行初始化，需要在版本库目录中
+touch file	#创建文件
+```
+
+### 文件添加到暂存区
+
+```
+git add ./abc.md	#将abc.md文件存放到暂存区
+git add ./			#添加当前目录下的所有文件到暂存区
+```
+
+### 暂存区文件存放到仓库
+
+```
+git commit -m "上传说明描述内容"	#把代码放到仓库
+git commit -a -m “massage”		#-a参数可将所有已跟踪文件中的执行修改或删除操作的文件都提交到本地仓库，即使它们没有经过git add添加到暂存区（一般不使用）
+```
+
+### 查看状态
+
+```
+git status	#仓库内文件的状态变化信息
+git status --short	#或git status -s对status简洁输出
+```
+
+### 查看提交记录
+
+```
+git log				#查看所有提交记录
+git log --oneline	#简写说明，简洁版的日志
+```
+
+### 版本回退/还原
+
+- `HEAD`指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令`git reset --hard commit_id`。
+- 穿梭前，用`git log`可以查看提交历史，以便确定要回退到哪个版本。
+- 要重返未来，用`git reflog`查看命令历史，以便确定要回到未来的哪个版本。
+
+```
+git reset --hard Head~0		#获取最近的版本并覆盖，0为最新的一个
+git reset --hard HEAD^		#回退上个版本
+$ git reset --hard HEAD^^	#回退到上上个版本
+git reset --hard 版本号	#回退到指定版本（版本号可不写全）
+
+git reflog					#查看隐藏的版本号(即在版本回退前存在，回退后不存在的版本)
+```
+
+### 撤销修改
+
+- 命令`git checkout -- readme.txt`即是把`readme.txt`文件在工作区的修改全部撤销.
+
+- `git checkout -- file`    命令中没有`--`，就变成了“切换到另一个分支”的命令.
+
+- 场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令`git checkout -- file`。
+
+  场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令`git reset HEAD <file>`，就回到了场景1，第二步按场景1操作。
+
+  场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交,参考版本回退，不过前提是没有推送到远程库。
+
+- > 注意：个人发现checkout需要你本来就已经存在文件于版本库中，否则，会显示找不到该文件
+
+```
+git reset HEAD readme.txt
+git checkout -- readme.txt
+```
+
+### 删除仓库文件
+
+- 从文件夹中删除：`git rm test.txt` 
+- 从版本库中删除：`git commit -m 'remove test.txt'`
+
+### 提交代码到GitHub
+
+- 将房间master分支里的代码上传到Github仓库中`git push 服务器地址 master`
+- 从Github仓库里的master分支拿到本地`git pull 服务器地址 master`
+
+> 注意：本地要初始化一个克隆仓库，此方法为合并数据
+
+- 把所有的内容拿到本地`git clone 服务器地址`
+
+> **注意：**此方法会覆盖本地的内容数据
+
+#### 将本地代码提交远程仓库时新建一个分支
+
+```
+2.设置本地文件夹为一个Git仓库
+git init
+
+3.建立远程连接
+git remote add origin +远程仓库地址
+
+4.可能还需要下面这一步
+git pull --rebase origin master
+
+5.创建本地新分支
+git branch branch_name
+
+查看分支
+git branch -a
+
+6.切换到本地新分支
+git checkout branch_name
+
+7.此时修改了本地代码
+
+8.提交本地代码至暂缓区、历史提交区
+
+git add .
+git commit -m "new branch first commit"
+
+9.提交到远程新分支
+ git push origin branch_name
+
+去Gitlab查看，已经创建了一个新的分支并且代码正确提交。
+```
+
+### ssh
+
+- 生成公钥和私钥`ssh-keygen -t rsa -C "willysliang@163.com" -f "github_id_rsa"` -->在用户主目录的`.ssh`目录里有`id_rsa`和`id_rsa.pub`两个文件，这两个是SSH Key的秘钥对，`id_rsa`是私钥，`id_rsa.pub`是公钥
+
+- GitHub设置公钥，打开“Account settings”，“SSH Keys”页面：然后，点“Add SSH Key”，填上任意Title，在Key文本框里粘贴`id_rsa.pub`文件的内容.
+
+  ```
+  #绑定好github上的ssh后，关联本地仓库（origin为远程库名，且关联必须放公钥到github账号列表上，否则推送不了数据）
+  git remote add origin git@github.com:willy-liang/willy.git
+  
+  #把本地库的内容推送到github上
+  git push -u origin master
+  或 git push ssh地址 master
+  ```
+
+### 删除远程库绑定(GitHub库)
+
+- 查看远程库信息：`git remote -v`
+
+- 删除远程库origin：`git remote rm origin`
+
+- 关联远程库：`git remote add origin git@server-name:path/repo-name.git`
+
+- 第一次(只有第一次才用加`-u`)推送marster分支所有内容：`git push -u origin master`
+
+  - > 加上了-u，git会把当前分支与远程分支进行关联(此方法只在当前目录下有效)
+
+- > 下载到本地用`git pull`；上传到GitHub用`git push`
+
+### 删除远程库文件
+
+```
+#1、先把github上的文件拉下来
+git pull origin master
+
+#2、删除磁盘上的文件
+git rm -r --cached test.md
+
+#3、重新提交
+git commit -m "删除了test.md文件"
+
+#4、更新远程github仓库
+git push -u origin master
+```
+
+### 克隆GitHub项目到本地
+
+- `git clone git@github.com:willy-liang/test1.git`
+- git支持多种协议，包括https（速度慢、每次推送必须输入口令），但ssh协议速度最快。
+- 在自己的账号下clone仓库才能有权限推送修改；别人的仓库会因无权限而没法修改。
+
+### 分支管理
+
+- 主分支master：要执行的代码。
+- 子分支：还未写完的代码存放的分支。
+- `HEAD`严格来说不是指向提交，而是指向`master`，`master`才是指向提交的，所以，`HEAD`指向的就是当前分支。
+
+```
+git branch dev		#创建dev分支
+git branch			#查看分支
+git checkout dev	#切换dev分支
+git checkout -b dev	#创建并切换到dev分支
+git checkout -u dev	#切换分支并进入子分支
+git merge dev		#在主分支合并分支，把当前分支与指定的分支进行合并
+git branch -d dev	#删除dev分支
+```
+
+**switch：创建与合并分支**（最新提供的命令）
+
+- 创建并切换到新`dev`分支：`git switch -c dev`
+- 直接切换到已有的`master`分支：`git switch master`
+
+#### 合并分支概念
+
+- `git merge`命令用于合并指定分支到当前分支。
+
+- 每次提交，Git都把它们串成一条时间线，这条时间线就是一个分支。截止到目前，只有一条时间线，在Git里，这个分支叫主分支，即`master`分支。随着不断提交，`master`的线也会越来越长。
+  当我们创建新的分支（如dev），Git新建了一个指针叫`dev`，指向`master`相同的提交，再把`HEAD`指向`dev`，就表示当前在`dev`分支上。
+
+  Git创建分支，除了增加一个`dev`指针，改改`HEAD`的指向，工作区的文件都没有任何改变。
+  当完成在`dev`上的工作后，就可以吧`dev`合并到`master`上，就是直接把`master`指向`dev`的当前提交，就完成合并了。
+  合并完分支后，甚至可以删除`dev`分支。删除`dev`分支就是把`dev`指针给删掉，删掉后，就剩下一条`master`分支。·
+
+### 解决合并分支内容的冲突
+
+- 在多个分支中修改同一个文件，合并可能会产生冲突（Git用`<<<<<<<`，`=======`，`>>>>>>>`标记出不同分支的内容）
+- 冲突解决办法：合并分支后，手动修改冲突文件的内容。
+- 查看分支的合并情况：`git log --graph --pretty=oneline --abbrev-commit`
+- 用`git log --graph`命令可以看到分支合并图
+
+### 分支管理策略
+
+通常合并分支时，如果可能，Git会用`Fast forward`模式，但这种模式下，删除分支后，会丢掉分支信息。
+
+如果要强制禁用`Fast forward`模式，Git就会在merge时生成一个新的commit，这样，从分支历史上就可以看出分支信息。
+
+```
+#--no-ff参数，表示禁用Fast forward
+git merge --no-ff -m "merge with no-ff" dev
+
+#查看分支历史
+git log --graph --pretty=oneline --abbrev-commit
+```
+
+### Bug分支
+
+- `git stash`：把当前工作现场"储藏"，等以后恢复现场后继续工作。
+- `git stash list`：查看储藏的`stash`。
+- `git stash apply`：恢复`stash`的内容
+- 恢复`stash`后，`stash`内容并不删除，所以需要删除
+  - `git stash drop`：删除`stash`内容
+  - ``git stash pop`：恢复的同时把`stash`内容也删了
+- `git stash apply stash@{0}`：恢复指定的stash（有多次stash时使用）
+- `git cherry-pick 4c80e2 `：复制一个特定的提交到当前分支（`3c80e2`为其他分支的提交号）
+
+### Feature分支
+
+- 添加一个新功能时，你肯定不希望因为一些实验性质的代码，把主分支搞乱了，所以，每添加一个新功能，最好新建一个feature分支，在上面开发，完成后，合并，最后，删除该feature分支。
+- 由于feature分支上存在有未提交的操作，而git为了防止修改丢失，所以不允许删除，但是这个分支没有用了,所以需要强制删除。
+- 强制删除代码：`git branch -D feature`。
+
+### 多人协作
+
+```
+- git remote			#查看远程库的信息
+- git remote -v			#显示更详细的信息
+- git push origin master	#推送marster分支到远程库
+- git checkout -b branch-name origin/branch-name	#建立本地分支和远程分支的关联
+```
+
+- `master`分支是主分支，因此要时刻与远程同步；
+- `dev`分支是开发分支，团队所有成员都需要在上面工作，所以也需要与远程同步；
+- bug分支只用于在本地修复bug，就没必要推到远程了，除非老板要看看你每周到底修复了几个bug；
+- feature分支是否推到远程，取决于你是否和你的小伙伴合作在上面开发。
+
+> 注意：在本地提交之前，先 pull 再 push，不然会有冲突
+
+### 	Rebase
+
+`git rebase`操作的特点：把分叉的提交历史"整理"成一条直线，看上去更直观。缺点是本地的分叉提交已经被修改过了。
+
+- rebase操作可以把本地未push的分叉提交历史整理成直线；
+- rebase的目的是使得我们在查看历史提交的变化时更容易，因为分叉的提交需要三方对比。
+
+### 标签管理
+
+- 打标签目的是记录该版本的发布。
+- 打标签：`git tag -a 0.1.3 -m “Release version 0.1.3`
+- 推送一个本地标签：`git push origin <tagname>`
+- 推送全部未推送过的本地标签：`git push origin --tags`
+- 删除一个本地标签：`git tag -d <tagname>`
+- 删除一个远程标签：`git push origin :refs/tags/<tagname>`
+
+```
+#当次提交的标签
+git add .
+git commit -m “fixed some bugs”
+git tag -a 0.1.3 -m “version 0.1.3″		#a指定标签名，m说明文字
+
+#可查看历史提交的commit id
+git log --pretty=oneline --abbrev-commit
+
+#新建一个标签（默认为HEAD，也可指定一个commit id）
+git tag v0.9 f52c633
+
+#分享提交标签到远程服务器上
+git push origin master
+git push origin --tags
+git push origin v0.9
+
+#切换到已有Tag
+git tag --list  // 查看已有tag列表
+git show v0.9	//查看说明文件:git show tagname
+git checkout [tag/branch/commit]  //切换到指定tag/branch/commit都是此命令
+
+#删除本地标签
+git tag -d 0.1.3
+
+#删除远端服务器的标签（需先从本地删除才能远程删除）
+git push origin :refs/tags/0.1.3
+```
+
+### 同机关联gitee与github（并行）
+
+**1、创建ssh key**
+
+```
+# 进入用户目录下的 .ssh 文件夹下，路径会因你使用的操作系统不同而略有差异
+cd ~/.ssh
+
+# 生成 key
+ssh-keygen -t rsa -C "willysliang@126.com" -f "gitee_id_rsa"
+ssh-keygen -t rsa -C "willysliang@126.com" -f "github_id_rsa"
+
+# 最终生成四个key文件
+在用户主目录的.ssh目录里有id_rsa和id_rsa.pub两个文件，这两个是SSH Key的秘钥对，id_rsa是私钥，id_rsa.pub是公钥
+```
+
+**2、创建配置文件**（在.ssh文件夹中创建config文件）
+
+```
+# gitee
+Host gitee.com
+HostName gitee.com
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/gitee_id_rsa
+
+# github
+Host github.com
+HostName github.com
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/github_id_rsa
+```
+
+**3、绑定ssh**
+
+```
+#绑定好github上的ssh后，关联本地仓库（origin为远程库名，且关联必须放公钥到github账号列表上，否则推送不了数据）
+git remote add origin git@github.com:willy-liang/willy.git
+git remote add gitee git@gitee.com:liangwilly/willy.git
+git remote -v	#查看远程信息表
+git remote -rm gitee	#删除远程库
+
+#把本地库的内容推送到github与gitee上
+git push origin master
+git push gitee master
+```
+
+### error:链接Gitee的push/pull出现错误
+
+当尝试强制上传覆盖远程文件：`git push -f  gitee master`就成功了 。
+
+### 忽略特殊文件
+
+**在Git工作区的根目录下创建一个特殊的`.gitignore`文件**，然后把要忽略的文件名填进去，Git就会自动忽略这些文件。
+
+忽略文件的原则是：
+
+1. 忽略操作系统自动生成的文件，比如缩略图等；
+2. 忽略编译生成的中间文件、可执行文件等，也就是如果一个文件是通过另一个文件自动生成的，那自动生成的文件就没必要放进版本库，比如Java编译产生的`.class`文件；
+3. 忽略你自己的带有敏感信息的配置文件，比如存放口令的配置文件。
+
+````
+# Windows:Windows会自动在有图片的目录下生成隐藏的缩略图文件，如果有自定义目录，目录下就会有Desktop.ini文件，因此你需要忽略Windows自动生成的垃圾文件：
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Python，忽略Python编译产生的.pyc、.pyo、dist等文件或目录
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+dist
+build
+
+# My configurations:自定义
+db.ini
+deploy_key_rsa
+
+# 排除所有.开头的隐藏文件:
+.*
+# 排除所有.class文件:
+*.class
+
+# 不排除.gitignore和App.class:
+!.gitignore
+!App.class
+````
+
+- 当被`.gitignore`忽略,强制添加到Git：`git add -f App.class`
+- `.gitignore`规则写错检查：`git check-ignore -v App.class`
+
+### 配置别名
+
+- `--global`参数是全局参数，也就是这些命令在这台电脑的所有Git仓库下都有用,
+- `git config --global alias.别名 原名`
+- 让其显示最后一次提交信息：`git last`
+
+```
+git config --global alias.st status		#git status-->git st
+git config --global alias.co checkout
+git config --global alias.ci commit
+git config --global alias.br branch
+
+##撤销修改：git unstage test.py-->gitreset HEAD test.py
+git config --global alias.unstage 'reset HEAD'
+
+#lg配置别名 git lg
+ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+```
+
+**配置文件**
+
+- 配置Git的时候，加上`--global`是针对当前用户起作用的，如果不加，那只针对当前的仓库起作用。
+- 每个仓库的Git配置文件都放在`.git/config`文件中。
+- 别名就在`.git/config`文件中的`[alias]`后面，要删除别名，直接把对应的行删掉即可。
+
+### 搭建Git服务器
+
+- 搭建Git服务器需要准备一台运行Linux的机器，还需要有`sudo`权限的用户账号。
+
+1. 安装git：`sudo apt-get install git`
+2. 创建一个git用户，用来运行git服务：`sudo adduser git`
+3. 创建证书登录：收集所有需要登录的用户的公钥，就是他们自己的id_rsa.pub文件，把所有公钥导入到/home/git/.ssh/authorized_keys文件里，一行一个。
+4. 初始化Git仓库：
+   1. 先选定一个目录作为Git仓库，假定是`/srv/sample.git`，在`/srv`目录下输入命令：`sudo git init --bare sample.git`
+   2. Git就会创建一个裸仓库，裸仓库没有工作区，因为服务器上的Git仓库纯粹是为了共享，所以不让用户直接登录到服务器上去改工作区，并且服务器上的Git仓库通常都以`.git`结尾。然后，把owner改为`git`：`sudo chown -R git:git sample.git`
+5. 禁用shell登录：
+   1. 出于安全考虑，第二步创建的git用户不允许登录shell，这可以通过编辑`/etc/passwd`文件完成。找到类似下面的一行：`git:x:1001:1001:,,,:/home/git:/bin/bash`
+   2. 改为：`git:x:1001:1001:,,,:/home/git:/usr/bin/git-shell`
+   3. 这样，`git`用户可以正常通过ssh使用git，但无法登录shell，因为我们为`git`用户指定的`git-shell`每次一登录就自动退出。
+6. 克隆远程仓库：`git clone git@server:/srv/sample.git`
+7. 管理公钥：把每个人的公钥收集起来放到服务器的`/home/git/.ssh/authorized_keys`文件里。或用[Gitosis](https://github.com/res0nat0r/gitosis)来管理公钥
+8. 管理权限：会在版本控制系统里设置一套完善的权限控制，每个人是否有读写权限会精确到每个分支甚至每个目录下。因为Git是为Linux源代码托管而开发的，所以Git也继承了开源社区的精神，不支持权限控制。不过，因为Git支持钩子（hook），所以，可以在服务器端编写一系列脚本来控制提交等操作，达到权限控制的目的。[Gitolite](https://github.com/sitaramc/gitolite)就是这个工具。
+
+### 使用SourceTree
+
+- 官网：[https://www.sourcetreeapp.com](https://www.sourcetreeapp.com/)
+- Git有很多图形界面工具，这里我们推荐[SourceTree](https://www.sourcetreeapp.com/)，它是由[Atlassian](https://www.atlassian.com/)开发的免费Git图形界面工具，可以操作任何Git库。
+- 使用SourceTree可以以图形界面操作Git，省去了敲命令的过程，对于常用的提交、分支、推送等操作来说非常方便。
+- SourceTree使用Git命令执行操作，出错时，仍然需要阅读Git命令返回的错误信息。
 
 # 记注
 
@@ -8401,10 +9693,4 @@ header("Content-Type:text/html;charset=utf-8");
 ```php
 echo "<img src='".$row['url']."' />";
 ```
-
-# lesso
-
-- 就算页面窗口很小，内容也不允许重叠，每个内容之间的距离是固定的。
-- `display:flex;`：把盒子平均分配，占满整个盒子，可定义排列方向。
-- `flex:1;overflow:hidden;`把盒子子div定义样式，所定义该样式的盒子会平均分配
 

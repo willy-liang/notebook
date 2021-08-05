@@ -1501,3 +1501,4 @@ public class DemoGame {
 
 ## `RESTful API`接口风格
 
+## Lambda 表达式
