@@ -2139,7 +2139,7 @@ let arr1 = new Array[11, 22, 33];
 console.log(arr1.sum());	//66
 ```
 
-### `Array、Object`的扩展方法
+### `Array`的扩展方法
 
 #### 迭代遍历方法：
 
@@ -2229,6 +2229,12 @@ let newmap = guo.filter(x => {
 console.log(newmap) // [ 98, 68, 73, 64 ]
 ```
 
+`entries(), keys(), values()`遍历数组
+
+- `keys()`是对键名的遍历；
+- `values()`是对键值的遍历；
+- `entries()`是对键值对的遍历。
+
 ####  `new Array().fill()`创建数组并赋值
 
 ```js
@@ -2237,31 +2243,47 @@ let b = new Array(8).fill()
 let a = new Array(8).fill(0)	// [0, 0, 0, 0, 0, 0, 0, 0]
 ```
 
-#### `Object.defineProperty()`
+#### `copyWith()`拷贝数组元素到指定位置
+
+- `array.copyWith(复制到的位置下标, 开始复制的下标, 结束复制的下标)`
+
+- > 使用这个方法，会修改当前的数组
+
+```js
+let arr = [0,1,2,3,4,5,6,7,8,9];
+arr.copyWithin(0,3,10);
+console.log(arr)    // [ 3, 4, 5, 6, 7, 8, 9, 7, 8, 9 ]
+```
+
+### `Object`的扩展方法
+
+#### `defineProperty()`新增或修改原有属性
 
 - `Object.defineProperty()`定义对象中新属性或修改原有的属性。
-
 - `Object.defineProperty(obj目标对象, prop需定义或修改的属性名字, descriptor目标属性所拥有的特性)`
-
 - ![image-20210425193715820](image/image-20210425193715820.png)
 
-- ```js
-  let obj = {
-      id: 1,
-      name: 'mi',
-      price: 22
-  };
-  Object.defineProperty(obj, 'num', {
-      value: 1000,
-      configurable: true
-  });
-  Object.defineProperty(obj,'price',{
-      value: 222
-  })
-  delete obj.id;
-  console.log(Object.keys(obj));
-  console.log(obj)
-  ```
+```js
+let obj = {
+    id: 1,
+    name: 'mi',
+    price: 22
+};
+Object.defineProperty(obj, 'num', {
+    value: 1000,
+    configurable: true
+});
+Object.defineProperty(obj,'price',{
+    value: 222
+})
+delete obj.id;
+console.log(Object.keys(obj));
+console.log(obj)
+```
+
+#### 对象的拓展运算符 （...）
+
+对象的扩展运算符（`...`）用于取出参数对象的所有可遍历属性，拷贝到当前对象之中。
 
 ### this
 
@@ -2961,7 +2983,7 @@ let [s1, ...s2] = arr1;
 console.log(s2);  //[ 'b', 'c' ]
 ```
 
-#### 扩展运算符
+#### 扩展运算符`...`
 
 - 用于取出参数对象中的所有可遍历属性，拷贝到当前对象之中
 - 应用
@@ -3204,6 +3226,10 @@ for (let y of x.entries()) {
   w = null; // 尽管值{id: 4}也不再由w引用，但m对值的引用是强引用，所以{id: 4}不会被回收；
   ```
 
+### symbol
+
+- Symbol是一种基本数据类型。Symbol()函数会返回symbol类型的值。
+
 ### 高阶函数
 
 - 高阶函数是对其他函数进行操作的函数，它接受函数作为参数或将函数作为返回值输出。
@@ -3297,10 +3323,11 @@ obj.a();
 - generator 与一般函数的区别
   - 一般函数在执行过程中，如果没有遇到`return `语句(函数末尾如果没有`return`，就是银行的`return undefined;`)，控制权无法返回被调用的代码。
   - generator与函数不同的是，generator由`function*`定义，并且除了`return`语句，还可用`yield`返回多次。
+- `yield*`表达式用于委托给另一个generator或可迭代对象。其表达式本身的值是当迭代器关闭时返回值(即done为true时)。
 - 调用 generator 对象由两个方法：
   - 一是不断地调用generator对象的`next()`方法。
     `next()`方法会执行generator的代码，然后每次遇到`yiedld x;`就返回一个对象`{value:x, done:true/false}`，然后“暂停”。返回的`value`就是`yield`的返回值，`done`表示这个generator是否已经执行结束；如果`done`为`true`，则`value`就是`return`的返回值。
-  - 二是用`for...of`循环迭代 generator 对象；这种方式不需要我们判断`done`。
+  - 二是用`for...of`循环迭代 generator 对象；这种方式不需要我们判断`done`，提供了一种控制流管理的方法。
 - generator应用场景
   1. 每次返回一个值：在同一场合下，函数只能返回一次，所以必须返回一个`Array`；但是换成generator，就**可以一次返回一个数，不断返回多次**。
   2. 用一个对象来保存状态：因为generator可以在执行过程中多次返回，所以它就像一个可记住执行状态的函数。
@@ -3351,8 +3378,18 @@ for(let x of ff) {
     console.log(x);
 }
 
+// while 循环迭代generator
+let fff = fibGenerator(5);
+res = fff.next();
+while(!res.done) {
+    let result = res.value;
+    console.log("result",result);
+    res = fff.next();
+}
+
+
 // 用generator 生成同步式ajax，相对传统的 then，优化了回调地狱
-try {
+/* try {
     r1 = yield ajax('http://url-1', data1);
     r2 = yield ajax('http://url-2', data2);
     r3 = yield ajax('http://url-3', data3);
@@ -3360,12 +3397,50 @@ try {
 }
 catch (err) {
     handle(err);
-}
+} */
 ```
 
-
-
 #### `Iterator`迭代器
+
+- `String、Array、TypeArray、Map、Set`都是内置可迭代对象，因为它们原型对象都拥有`Symbol.iterator`方法。
+- 用于可迭代对象的语法：`for..of`循环、展开语法(三点)、`yield*(生成器的yield多次返回值)`和解构对象。
+
+```js
+/* Array */
+let arr = ['a', 'b', 'c'];
+let arr1 = arr[Symbol.iterator]();
+console.log(arr1.next().value, arr1.next().value, arr1.next().value, arr1.next().value);
+
+/* Map数据机构 */
+const map = new Map();
+map.set('a', 'willy');
+map.set('c', 'cilly');
+
+
+// 通过 for...of 循环迭代
+const iterator1 = map[Symbol.iterator]();
+for (let item of iterator1) {
+    console.log("for..of循环迭代：" + item);
+}
+
+// 通过展开语法 三点运算符 来迭代
+const iterator2 = map[Symbol.iterator]();
+console.log(...iterator2);
+
+// 通过生成器 yield* 多次返回来迭代
+const iterator3 = map[Symbol.iterator]();
+function* gen() {
+    yield* iterator3;
+}
+console.log(gen().next(), gen().next(), gen().next());
+
+/* 控制台输出
+a b c undefined
+for..of循环迭代：a,willy
+for..of循环迭代：c,cilly
+[ 'a', 'willy' ] [ 'c', 'cilly' ]
+{ value: [ 'a', 'willy' ], done: false } { value: [ 'c', 'cilly' ], done: false } { value: undefined, done: true } */
+```
 
 
 
@@ -8821,6 +8896,12 @@ display: -webkit-box;overflow: hidden;-webkit-box-orient: vertical;-webkit-line-
 ```
 1. 小程序中，不需要主动引入样式文件2. 需要把页面中某些元素的单位 由 px 改为 rpx	(1) 设计稿750px		750px = 750rpx		1px = 1rpx	(2) 把屏幕宽 改为 375px		375px = 750rpx		2rpx = 1px3. 存在设计稿 宽 414 或 未知 page	(1) 设计稿 page 存在一个元素宽度100px，去实现不同宽度的页面适配		page px = 750rpx		1 px = 750rpx / page		100px = 750rpx *100 / page
 ```
+
+
+
+# node.js
+
+- nodejs是一种javascript的运行环境，能够使得javascript脱离浏览器运行。
 
 
 
