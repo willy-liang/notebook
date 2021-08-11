@@ -422,6 +422,10 @@ Filter : .8s ; //代表过渡时间为0.8s
 - !important > 内联样式 > id > class > 标签 > 通配符 > 继承 > 默认
 - 内联样式'1000'；ID选择器'100'；类、伪类和属性选择器'10'；标签选择器和伪元素选择器'1'；通用选择器(*)、子选择器(>)、相邻同胞选择器(+)权值为0；且在同权重下，前面的会被后面的样式覆盖。
 
+### 图片模糊处理
+
+`filter:blur(2px);`：bulr里面的数字越高就越模糊
+
 ### **图片背景background**
 
 ```css
@@ -833,6 +837,40 @@ background-position: left 10px top 15px;
 2. 滑动门导航使用背景图片制作
 3. 内容只能定义高度，不能定义宽度（为了随内容增多也不会溢出）
 
+### css样式优惠券
+
+```css
+// 横线
+.grad1 {
+    width: 250px;
+    height: 100px;
+    background: radial-gradient(circle at right top, transparent 10px,  #28A4F2 0) top left / 60px 51% no-repeat,
+      radial-gradient(circle at right bottom, transparent 10px,  #28A4F2 0) bottom left /60px 51% no-repeat,
+      radial-gradient(circle at left top, transparent 10px, #eeeeee 0) top right /190px 51% no-repeat,
+      radial-gradient(circle at left bottom, transparent 10px, #eeeeee 0) bottom right /190px 51% no-repeat;
+    filter: drop-shadow(3px 3px 3px rgba(0,0,0,.3));
+}
+```
+
+```css
+//竖向
+.grad2 {	
+    width: 100px;
+    height: 120px;
+	background:
+                    radial-gradient(circle at left bottom, transparent 10px, #28A4F2 0) top left /60px 30px no-repeat,
+                    radial-gradient(circle at right bottom, transparent 10px, #28A4F2 0) top right /60px 30px no-repeat,
+                    radial-gradient(circle at left top, transparent 10px, #EFEFF4 0) bottom left /60px 90px no-repeat,
+                    radial-gradient(circle at right top, transparent 10px, #EFEFF4 0) bottom right /60px 90px no-repeat;
+   filter: drop-shadow(3rpx 3rpx 3rpx rgba(0,0,0,.3));
+}
+
+```
+
+![image-20210811173917357](image/image-20210811173917357.png)
+
+
+
 ## 问题
 
 ### **图片自动为父元素大小**
@@ -1098,12 +1136,12 @@ content的参数值有all,none,index,noindex,follow,nofollow，默认值是all�
 <meta http-equiv="content-Type" content="text/html;charset=utf-8"/>
 	
 其他参数值：
-	GB2312			简体中文
-	BIG5			繁体中文
+	GB2312				简体中文
+	BIG5					繁体中文
 	iso-2022-jp		日文
-	ks_c_5601		韩文
+	ks_c_5601			韩文
 	ISO-8859-1		英文
-	UTF-8			世界通用的语言编码；
+	UTF-8					世界通用的语言编码；
 在HTML5中，我们一般都是：<meta charset="utf-8"/>
 ```
 
@@ -1143,9 +1181,11 @@ maximum-scale [数值] 允许缩放的最大比例
 2.format-detection（忽略电话号码和邮箱）
 
 ```
-语法：<meta name="format-detection" content="telephone=no">//忽略页面中的数字识别为电话号码
+语法：
+<meta name="format-detection" content="telephone=no">//忽略页面中的数字识别为电话号码
 <meta name="format-detection" content="email=no"/>//忽略页面中的邮箱格式识别为邮箱
-也可以写成：<meta name="format-detection" content="telphone=no, email=no"/>  
+也可以写成：
+<meta name="format-detection" content="telphone=no, email=no"/>  
 ```
 
 3、浏览器内核控制：国内浏览器很多都是双内核（webkit和Trident），webkit内核高速浏览，IE内核兼容网页和旧版网站。而添加meta标签的网站可以控制浏览器选择何种内核渲染。（仅限360浏览器）
@@ -1159,10 +1199,10 @@ maximum-scale [数值] 允许缩放的最大比例
 
 ```
 各渲染内核的技术细节
-内核			   Webkit	  IE兼容	  IE标准
-内核版本		  Chrome45   IE6/7	  IE9/IE10/IE11(取决于用户的IE)
-HTML5支持		    YES	       NO	    YES
-ActiveX控件支持	   NO		 YES	   YES
+内核			   			Webkit	  	IE兼容	  IE标准
+内核版本		  		Chrome45   	IE6/7	  	IE9/IE10/IE11(取决于用户的IE)
+HTML5支持		    	YES	       	NO	    	YES
+ActiveX控件支持	   NO		 			YES	   		YES
 ```
 
 4、WebApp全屏模式
@@ -6442,9 +6482,24 @@ var vm = new Vue({
 
 ### scoped属性
 
-scoped代表作用域。
+- scoped代表作用域。
 
-在`<style scoped></stype>`中添加scope属性，该style中的css样式只会针对当前组件起效果；若不添加，其他组件中的css样式相同样式，会在该组件中其效果。
+- 在`<style scoped></stype>`中添加scope属性，该style中的css样式只会针对当前组件起效果；若不添加，其他组件中的css样式相同样式，会在该组件中其效果。
+
+#### 深度修改样式`/deep/`或`>>>`
+
+- 使用scoped后，父组件的样式将不会渗透到子组件中；但一个子组件的根节点会同时受其父组件scoped CSS和子组件的scoped CSS的影响。
+- 如果希望scoped样式中的一个选择器能够作用得更深（如影响子组件），可以使用`>>>`操作符。
+- 如Sass之类的预处理无法正确解析`>>>`，这种情况下可以使用`/deep/`或`:v-deeep`操作符取而代之（两者都是`>>>`的别名）
+
+```css
+<style scoped>
+.a >>> .b { /* css样式 */ }
+</style>
+
+//会编译成如下:
+.a[data-v-f3f3eg9] .b { /* css样式 */ }
+```
 
 ## 过滤器
 
@@ -9824,10 +9879,30 @@ Page({
 ### image标签
 
 - 默认大小为宽320px，高240px
-
 - 小程序的图片支持懒加载`mode="lazy-load"`(图片出现在视口上下三屏高度之内时，自动加载图片)
 
-## swiper标签（轮播图）
+#### 图片显示大小
+
+- **`高度 = 750rpx * 图片高度/图片宽度;`**
+
+```wxss
+// 如轮播图图片 750rpx默认高度，图片宽520px,高280px
+swiper {	
+	width: 100%;	
+	height: calc(750rpx * 280px / 520px);
+}
+image { width: 100%; }
+```
+
+#### **图片高度自适应**
+
+小程序图片高度自适应：给image标签定义属性`mode="widthFix"`
+
+```wxml
+<image src="{{item.cover}}" mode="widthFix" />
+```
+
+### swiper标签（轮播图）
 
 - 轮播图外层容器swiper
 
@@ -9836,6 +9911,27 @@ Page({
 - 默认宽度100%，高度150px（swiper的宽度=100%或者100vw或者750rpx）
 
 - `swiper的高度 = calc(原图的高度 * swiper的宽度 / 原图的宽度)`
+
+#### 轮播图滚动时圆角变直角
+
+- 原因：轮播切换时子元素溢出。
+- 解决方案：设置父级元素的样式，自己元素溢出的话隐藏
+
+```wxss
+swiper {
+  width: 80%;
+  height: cal(750rpx * 720px / 1280px);
+  border-radius:20rpx;
+  overflow:hidden; 
+  swiper-item {
+    border-radius: 5%;
+    image {
+      width: 100%;
+      border-radius: 5%;
+    }
+  }
+}
+```
 
 
 
@@ -9896,9 +9992,9 @@ Page({
 
 - open-type属性
 
-  - navigate默认属性，保留了当前页面，不能跳到taber页面
+  - navigate默认属性，保留了当前页面，不能跳到tabar页面
   - redirect没返回跳转功能，关闭当前页面，也不能跳转到taber页面
-  - switchTab跳转到taber页面，关闭其他所有页面，底部的taber可轮流切换
+  - switchTab跳转到tabar页面，关闭其他所有页面，底部的tabar可轮流切换
   - reLaunch随便跳
   - navigateBack跳转过去，可在跳回来
   - exit退出其他小程序
@@ -9956,14 +10052,6 @@ Page({
 <view wx:for="{{array}}">{{index}}:{{item.info}}</view>
 ```
 
-```.js
-Page({  data: {  	//1、数据的简单绑定    text:'hello',        //2、组件属性    checked:true,    item:'first',        //4、控制属性绑定    myKey:false,        //wx:for列表渲染语句    array:[{      info:"墨雪"    },{      info:"晓风残月"    }]  }  onLoad：function(options){  	var post_content1={  	data:"Sep 18 2016",  	title:"正式在下",  	img:{  		post_img:"img/12.png"  	}  	}  }  clickme:function(event){  	this.data.checked = !this.data.checked;        if(this.data.checked){      this.data.item =  'first';    } else{      this.data.item = 'second';    }    this.setData({      item: this.data.item    })  } })
-```
-
-```.wxss
-.first{  width: 250rpx;  height: 100rpx;  background-color: red;}.second{  width: 200rpx;  height: 200rpx;   background-color: green;  border-radius: 100rpx;}
-```
-
 ### 自定义下拉刷新
 
 - 在`·`app.json`和`xx.json`中的`window`里配置,
@@ -9993,12 +10081,39 @@ Page({  data: {  	//1、数据的简单绑定    text:'hello',        //2、组�
   - 获取值用`this.data`，设置值用`this.setData({})`
 
 ```html
-<input type="text" bindinput="handle"/><button bindtap="handletap" data-operation="{{1}}">+</button><button bindtap="handletap" data-operation="{{-1}}">-</button>
+<input type="text" bindinput="handle"/>
+<button bindtap="handletap" data-operation="{{1}}">+</button><button bindtap="handletap" data-operation="{{-1}}">-</button>
 ```
 
-```javascript
-Page({  data: {    num:0  },  handle(e){    this.setData({      num:e.detail.value    })  },  handletap(e){    const operation = e.currentTarget.dataset.operation;    this.setData({      num:this.data.num + operation    })  }})
+```js
+Page({  
+  data: {    
+    num:0  
+  },  
+  handle(e){    
+    this.setData({      
+      num:e.detail.value    
+    })  
+  },  
+  handletap(e){    
+    const operation = e.currentTarget.dataset.operation;    
+    this.setData({      
+      num:this.data.num + operation    
+    })  
+  }
+})
 ```
+
+### 本地存储
+
+**web与小程序本地存储的区别**
+
+- 书写方式不同
+  - web：`localStorage.setItem("key","value")  localStorage.getItem("key")`
+  - 小程序：`wx.setStorageSync("key","value"); wx.getStorageSync("key");`
+- 存储时有无做类型转换
+  - web：不管存入什么类型的数据，最终都会通过`toString()`把数据转换成字符串再存入；
+  - 小程序：不做类型转换操作，存什么类型数据，就会获取什么类型。
 
 
 
@@ -10009,7 +10124,9 @@ Page({  data: {    num:0  },  handle(e){    this.setData({      num:e.detail.val
 - 在组件上使用`wx:if={{ 表达式的真假性 }}`来判断是否需要渲染该代码块
 
   ```
-  <view wx:if="{{ length >5 }}"> 1 </view><view wx:elif="{{ length >2 }}"> 2 </view><view wx:else="{{ length }}"> 3 </view>
+  <view wx:if="{{ length >5 }}"> 1 </view>
+  <view wx:elif="{{ length >2 }}"> 2 </view>
+  <view wx:else="{{ length }}"> 3 </view>
   ```
 
 ### `wx:if`与`hidden`属性的区别
@@ -10037,11 +10154,20 @@ Page({  data: {    num:0  },  handle(e){    this.setData({      num:e.detail.val
   - `wx:for-index`可以指定数组当前下标的变量名；
 
 ```wxml
-<view wx:for="{{ arr }}" wx:for-item="itemName" wx:for-index="idx">	{{ idx }}：{{ itemName.message }}</view>
+<view wx:for="{{ arr }}" wx:for-item="itemName" wx:for-index="idx">
+  {{ idx }}：{{ itemName.message }}
+</view>
 ```
 
 ```index.js
-Page({	data: {		arr: [			{ message: 'foo', },			{ message: 'bar', },		]	}})
+Page({	
+	data: {
+		arr: [			
+			{ message: 'foo', },			
+			{ message: 'bar', },		
+		]	
+	}
+})
 ```
 
 ### overflow属性
@@ -10062,22 +10188,6 @@ overflow：auto;手指滚动
 
 ## 样式
 
-### 图片大小
-
-- **`高度 = 750rpx * 图片高度/图片宽度;`**
-
-```wxss
-// 如轮播图图片 750rpx默认高度，图片宽520px,高280pxswiper {	width: 100%;	height: calc(750rpx * 280px / 520px);}image { width: 100%; }
-```
-
-##### **图片高度自适应**
-
-小程序图片高度自适应：给image标签定义属性`mode="widthFix"`
-
-```wxml
-<image src="{{item.cover}}" mode="widthFix" />
-```
-
 ### `tap-highlight-color`点击高亮透明
 
 - `tap-highlight-color：transparent；`
@@ -10089,7 +10199,14 @@ overflow：auto;手指滚动
 ### 文本行数
 
 ```wxss
-display: -webkit-box;overflow: hidden;-webkit-box-orient: vertical;-webkit-line-clamp: 2;	//white-space: normal;word-wrap: break-word;text-overflow: ellipsis;
+display: -webkit-box;
+overflow: hidden;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 2;	
+
+white-space: normal;
+word-wrap: break-word;
+text-overflow: ellipsis;
 ```
 
 - `-webkit-line-clamp` 是一个 不规范的属性（unsupported WebKit property），它没有出现在 CSS 规范草案中。为了实现该效果，它需要组合其他外来的WebKit属性。常见结合属性：
@@ -10106,10 +10223,79 @@ display: -webkit-box;overflow: hidden;-webkit-box-orient: vertical;-webkit-line-
 - `calc（750rpx * 100 / 375）`，750和rpx之间不能有空格
 
 ```
-1. 小程序中，不需要主动引入样式文件2. 需要把页面中某些元素的单位 由 px 改为 rpx	(1) 设计稿750px		750px = 750rpx		1px = 1rpx	(2) 把屏幕宽 改为 375px		375px = 750rpx		2rpx = 1px3. 存在设计稿 宽 414 或 未知 page	(1) 设计稿 page 存在一个元素宽度100px，去实现不同宽度的页面适配		page px = 750rpx		1 px = 750rpx / page		100px = 750rpx *100 / page
+1. 小程序中，不需要主动引入样式文件
+
+2. 需要把页面中某些元素的单位 由 px 改为 rpx	
+	(1) 设计稿750px		
+			750px = 750rpx		1px = 1rpx	
+	(2) 把屏幕宽 改为 375px		
+			375px = 750rpx		2rpx = 1px
+
+3. 存在设计稿 宽 414 或 未知 page	
+	(1) 设计稿 page 存在一个元素宽度100px，去实现不同宽度的页面适配		
+			page px = 750rpx		
+			1 px = 750rpx / page		
+			100px = 750rpx *100 / page
+```
+
+## 问题
+
+### 小程序没有npm
+
+1. 进入小程序根目录，打开终端(cmd)，输入：`npm init`
+2. 输入命令：`npm i miniprogram-sm-crypto --production`
+3. 执行命令完之后，然后再去微信开发者中点工具-构建npm，然后就成功了
+
+### `vant`组件的样式无法覆盖
+
+>普通样式类和外部样式类的优先级是未定义的，因此使用时请添加`!important`以保证外部样式类的优先级。
+
+```wxml
+<van-button type="primary">主要按钮</van-button>
+<van-cell
+  title="单元格"
+  value="内容"
+  title-class="cell-title"
+  value-class="cell-value"
+/>
+```
+
+```wxss
+/* page.wxss */
+.van-button--primary {
+  font-size: 20px;
+  background-color: pink;
+}
+
+.cell-title {
+  color: pink !important;
+  font-size: 20px !important;
+}
+.cell-value {
+  color: green !important;
+  font-size: 12px !important;
+}
+```
+
+在自定义组件中使用 Vant Weapp 组件时，需开启`styleIsolation: 'shared'`选项。
+
+```js
+Component({
+  options: {
+    styleIsolation: 'shared',
+  },
+});
 ```
 
 
+
+### 控制台报错
+
+#### `Unhandled promise rejection TypeError: WebAssembly.instantiate(): Argument 0 must be a buffer source or a WebAssembly. `
+
+原因：基础库版本过高
+
+打开 顶部工具栏-------设置-------项目设置：把测试基础库改为2.14.4
 
 # node.js
 
