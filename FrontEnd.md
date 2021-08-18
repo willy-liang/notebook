@@ -9274,7 +9274,29 @@ const VM = new Vue({
 
 # ag-Grid
 
-### 获取集中的单元格值
+### 单元格事件
+
+- onRowClicked行点击事件
+- onCellClicked单击单元格事件
+- onCellDoubleClicked双击单元格事件
+- 全部事件列表
+
+#### `onRowClicked`行点击事件
+
+> 注意：此事件发生在点击表格行的时候，事件写在gridOptions下。
+
+```js
+this.personGridOptions = gridOptions();
+// 获取左边点击行的数据
+this.personGridOptions.onCellClicked = event => {
+  //event.data 选中的行内数据，event.event 为鼠标事件，
+  console.log(event);
+  let itxst = JSON.stringify(event.data);
+  console(itxst);
+}
+```
+
+#### 获取集中的单元格值
 
 1. 通过`let focusCell = gridOptions.getFocusedCell()`获取焦点单元格；
 2. 或使用`onCellFocused`事件。
@@ -10448,6 +10470,8 @@ npm config get registry
 
 #2.切换淘宝源
 npm config set registry https://registry.npm.taobao.org
+
+#3.切换nrm  -->nrm use 源名
 ```
 
 #### 管理源
@@ -10456,8 +10480,9 @@ npm config set registry https://registry.npm.taobao.org
 #1.安装nrm
 npm install -g nrm
 
-#2.使用nrm
-执行命令 nrm ls 查看可选的源。 其中，带*的是当前使用的源，上面的输出表明当前源是官方源。
+#2.查看所拥有的源
+#执行命令 nrm ls 查看可选的源。 其中，带*的是当前使用的源，上面的输出表明当前源是官方源。
+nrm ls
 
 #3.切换nrm  -->nrm use 源名
 nrm use npm			#切换到https://registry.npmjs.org/
@@ -10469,12 +10494,8 @@ npm adduser
 
 #测试源的响应时间
 nrm test
+
 ```
-
-### NPX
-
-- NPX(npm package extention)
-- Node 自带 npm 模块，所以可以直接使用 npx 命令。万一不能用，就要手动安装一下`npm install -g npx`
 
 ### 上传自己的包
 
@@ -10561,9 +10582,214 @@ var hello = require('gp19-npm')
 hello.sayHello()
 ```
 
+### npm安装git上发布的包
 
+```bash
+# 这样适合安装公司内部的git服务器上的项目
+npm install git+https://git@github.com:lurongtao/gp-project.git
+
+# 或者以ssh的方式
+npm install git+ssh://git@github.com:lurongtao/gp-project.git
+```
+
+### npm脚本
+
+- npm允许在package.json文件里面，使用`scripts`字段定义脚本命令。
+- 如果npm脚本里面需要执行多个任务，就需要明确他们的执行顺序。
+  - 如果是并行执行（即同时的平行执行），可以使用 `&` 符号。`npm run script1 & npm run script2`
+  - 如果是继发执行（即只有前一个任务成功，才执行下一个任务），可以使用 `&&` 符号。`npm run script1 && npm run script2`
+
+```json
+"scripts": {
+  "script1": "node script1.js",
+  "script2": "node script2.js"
+}
+```
+
+### npm变量
+
+- npm 脚本可以使用 npm 的内部变量。
+
+- 通过 `npm_package_` 前缀，npm 脚本可以拿到 package.json 里面的字段。
+
+- >注意：一定要在 npm 脚本中运行（如：npm run view）才可以，直接在命令行中运行JS（如：node view.js）是拿不到值的
+
+- 通过环境变量 process.env 对象，拿到 package.json 的字段值。如果是 Bash 脚本，可以用`$npm_package_name` 和 `$npm_package_version `取到这两个值。
+
+```json
+{
+  "name": "foo", 
+  "version": "1.2.5",
+  "scripts": {
+    "view": "node view.js"
+  }
+}
+```
+
+```bash
+console.log(process.env.npm_package_name); // foo
+console.log(process.env.npm_package_version); // 1.2.5
+```
+
+### NPX
+
+- NPX(npm package extention)想要解决的主要问题是**调用项目内部安装的模块**。
+- Node 自带 npm 模块，所以可以直接使用 npx 命令。万一不能用，就要手动安装一下`npm install -g npx`
+
+#### 避免全局安装模块
+
+除了调用项目内部模块，npx 还能避免全局安装的模块。比如，`create-react-app`这个模块是全局安装，npx 可以运行它，而且不进行全局安装。
+
+> ```bash
+> $ npx create-react-app my-react-app
+> ```
+
+上面代码运行时，npx 将`create-react-app`下载到一个临时目录，使用以后再删除。所以，以后再次执行上面的命令，会重新下载`create-react-app`。
+
+下载全局模块时，npx 允许指定版本。
+
+> ```bash
+> $ npx uglify-js@3.1.0 main.js -o ./dist/main.js
+> ```
+
+上面代码指定使用 3.1.0 版本的`uglify-js`压缩脚本。
+
+注意，只要 npx 后面的模块无法在本地发现，就会下载同名模块。比如，本地没有安装`http-server`模块，下面的命令会自动下载该模块，在当前目录启动一个 Web 服务。
+
+> ```bash
+> $ npx http-server
+> ```
+
+#### `--no-install` 参数和`--ignore-existing` 参数
+
+如果想让 npx 强制使用本地模块，不下载远程模块，可以使用`--no-install`参数。如果本地不存在该模块，就会报错。
+
+> ```bash
+> $ npx --no-install http-server
+> ```
+
+反过来，如果忽略本地的同名模块，强制安装使用远程模块，可以使用`--ignore-existing`参数。比如，本地已经全局安装了`create-react-app`，但还是想使用远程模块，就用这个参数。
+
+> ```bash
+> $ npx --ignore-existing create-react-app my-react-app
+> ```
+
+#### 使用不同版本的 node
+
+利用 npx 可以下载模块这个特点，可以指定某个版本的 Node 运行脚本。它的窍门就是使用 npm 的 node 模块。
+
+> ```bash
+> $ npx node@0.12.8 -v
+> v0.12.8
+> ```
+
+上面命令会使用 0.12.8 版本的 Node 执行脚本。原理是从 npm 下载这个版本的 node，使用后再删掉。
+
+某些场景下，这个方法用来切换 Node 版本，要比 nvm 那样的版本管理器方便一些。
+
+#### `-p` 参数
+
+`-p`参数用于指定 npx 所要安装的模块。
+
+> ```bash
+> $ npx -p node@0.12.8 node -v 
+> v0.12.8
+> ```
+
+上面命令先指定安装`node@0.12.8`，然后再执行`node -v`命令。
+
+`-p`参数对于需要安装多个模块的场景很有用。
+
+> ```bash
+> $ npx -p lolcatjs -p cowsay [command]
+> ```
+
+#### -c 参数
+
+如果 npx 安装多个模块，默认情况下，所执行的命令之中，只有第一个可执行项会使用 npx 安装的模块，后面的可执行项还是会交给 Shell 解释。
+
+> ```bash
+> $ npx -p lolcatjs -p cowsay 'cowsay hello | lolcatjs'
+> # 报错
+> ```
+
+上面代码中，`cowsay hello | lolcatjs`执行时会报错，原因是第一项`cowsay`由 npx 解释，而第二项命令`localcatjs`由 Shell 解释，但是`lolcatjs`并没有全局安装，所以报错。
+
+`-c`参数可以将所有命令都用 npx 解释。有了它，下面代码就可以正常执行了。
+
+> ```bash
+> $ npx -p lolcatjs -p cowsay -c 'cowsay hello | lolcatjs'
+> ```
+
+`-c`参数的另一个作用，是将环境变量带入所要执行的命令。举例来说，npm 提供当前项目的一些环境变量，可以用下面的命令查看。
+
+> ```bash
+> $ npm run env | grep npm_
+> ```
+
+`-c`参数可以把这些 npm 的环境变量带入 npx 命令。
+
+> ```bash
+> $ npx -c 'echo "$npm_package_name"'
+> ```
+
+上面代码会输出当前项目的项目名。
+
+#### 执行 GitHub 源码
+
+npx 还可以执行 GitHub 上面的模块源码。
+
+> ```bash
+> # 执行 Gist 代码
+> $ npx https://gist.github.com/zkat/4bc19503fe9e9309e2bfaa2c58074d32
+> 
+> # 执行仓库代码
+> $ npx github:piuccio/cowsay hello
+> ```
+
+注意，远程代码必须是一个模块，即必须包含`package.json`和入口脚本。
+
+### `cross-env`
+
+- cross-env是运行跨平台设置和使用环境变量的脚本。cross-env 使得可以使用单个命令而不必担心为平台正确设置或使用环境变量。
+- **出现原因：**当使用如`NODE_ENV=production`来设置环境变量时，大多数 Windows 命令提示符将会阻塞(报错)。（异常是Windows上的Bash，它使用本机Bash。即**Windows不支持 NODE_ENV=production 的设置方式**）
+- **安装：**`npm install --save-dev cross-env`
+
+```bash
+#在Windows中
+#node中常用的到的环境变量是NODE_ENV，首先查看是否存在 
+set NODE_ENV 
+
+#如果不存在则添加环境变量 
+set NODE_ENV=production 
+
+#环境变量追加值 set 变量名=%变量名%;变量内容 
+set path=%path%;C:\web;C:\Tools 
+
+#某些时候需要删除环境变量 
+set NODE_ENV=
+
+
+#在linux中配置
+#node中常用的到的环境变量是NODE_ENV，首先查看是否存在
+echo $NODE_ENV
+
+#如果不存在则添加环境变量
+export NODE_ENV=production
+
+#环境变量追加值
+export path=$path:/home/download:/usr/local/
+
+#某些时候需要删除环境变量
+unset NODE_ENV
+
+#某些时候需要显示所有的环境变量
+env
+```
 
 ## 基本使用
+
+### CommonJS
 
 - nodejs是一种javascript的运行环境，能够使得javascript脱离浏览器运行。
 - node 的加载机制：node 会把整个待加载的 js 文件放入一个包装 load 中执行。在执行整个 load() 函数前，Node准备了 module 变量。
@@ -10571,6 +10797,32 @@ hello.sayHello()
   - `module.exports.foo = function () { return 'foo'; };`
   - `exports.foo = function () { return 'foo'; };`
 - 不限node版本的情况下，如果不声明严格模式`'use strict';`，往往es6语法不支持启动。
+
+**目录的加载规则**
+
+- 在目录中放置一个`package.json`文件，并且将入口文件写入`main`字段。
+- `require`发现参数字符串指向一个目录以后，会自动查看该目录的`package.json`文件，然后加载`main`字段指定的入口文件。如果`package.json`文件没有`main`字段，或者根本就没有`package.json`文件，则会加载该目录下的`index.js`文件或`index.node`文件。
+
+**模块的缓存**
+
+- 第一次加载某个模块时，Node会缓存该模块。以后再加载该模块，就直接从缓存取出该模块的`module.exports`属性。
+
+**清除模块缓存**
+
+- 所有缓存的模块保存在`require.cache`之中
+- 注意，缓存是根据绝对路径识别模块的，如果同样的模块名，但是保存在不同的路径，`require`命令还是会重新加载该模块。
+
+```js
+// 删除指定模块的缓存
+delete require.cache[moduleName];
+
+// 删除所有模块的缓存
+Object.keys(require.cache).forEach(function(key) {
+  delete require.cache[key];
+})
+```
+
+
 
  **`global`全局对象**
 
