@@ -91,6 +91,14 @@ Socket.send(JSON.stringify()) // 使用连接发送数据	注意：因为数据�
 Socket.close() // 关闭连接
 ```
 
+### websocket请求数据渲染，导致卡顿的优化
+
+- 原因：websocket发送数据或者接收数据是不会卡死的，只有当接收消息时频繁更改页面数据才会造成卡顿。
+- 优化：不要一收到数据就进行渲染，可以利用定时器每秒渲染或者使用DocumentFragment
+  1. 降低发送频率
+  2. 优化处理过程
+  3. 先获取数据，定时处理
+
 ## 前端性能优化
 
 - **内容**
@@ -949,7 +957,16 @@ text-overflow:ellipsis;
 display:-webkit-box;
 -webkit-box-orient:vertical;
 -webkit-line-clamp:2;
+word-wrap: break-word;	//换行（不设置，会不换行，从而导致只显示一行）
+line-height: 30rpx;
+height: 60rpx;	// 一般来说，应设定高度=行高*显示的行数,防止超出的文字露出
 ```
+
+**注意**
+
+1. **内容超出显示的，通过省略号来显示，需要制定高度和行高，防止超出的文字露出（**应设定 高度 = 行高*显示的行数）
+2. 给p::after添加渐变背景可避免文字只显示一半。
+3. 由于ie6-7不显示content内容，所以要添加标签兼容ie6-7（如：`<span>…<span/>`）；兼容ie8需要将::after替换成:after。
 
 ### 把文字下滑线与文字距离宽一点
 
@@ -2532,6 +2549,28 @@ let arr = [0,1,2,3,4,5,6,7,8,9];
 arr.copyWithin(0,3,10);
 console.log(arr)    // [ 3, 4, 5, 6, 7, 8, 9, 7, 8, 9 ]
 ```
+
+#### 过滤数组中重复的值
+
+```js
+var arr = [1,2,3,4,5];
+var resultArr = [];//去重后的数组
+var flag;
+for (var i in arr){
+  flag = true;
+  for (var j in resultArr) {
+    if (resultArr[j].id == arr[i].id) {
+      flag = false;
+      break;
+    }
+  }
+  if (flag) {
+    resultArr.push(arr[i]);
+  }
+}
+```
+
+
 
 ### `Object`的扩展方法
 
@@ -5272,7 +5311,9 @@ declare var jQuery: (selector: string) => any;
 jQuery('#foo');
 ```
 
-# less
+# CSS预编译
+
+## less
 
 ### `less`安装/引入
 
@@ -5584,6 +5625,11 @@ Less的作用域与CSS中的作用域类似。先在本地查找变量和混合�
 @import "library"; // library.less
 @import "type.css";
 ```
+
+## SCSS
+
+- https://www.cnblogs.com/wangpenghui522/p/5467560.html
+- https://www.sass.hk/docs/
 
 
 
@@ -9862,6 +9908,10 @@ swiper {
 }
 ```
 
+### navigator标签(超链接)
+
+
+
 
 
 ## 组件
@@ -9954,6 +10004,10 @@ swiper {
 
 
 ## 动态
+
+### 函数
+
+
 
 ### 冒泡事件
 
