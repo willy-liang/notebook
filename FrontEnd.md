@@ -2498,6 +2498,17 @@ guo.forEach((x,index)=>{
 })
 ```
 
+**forEach()跳出本次循环**
+
+1. 可使用`return`语句跳出本次循环，执行下一次循环。
+2. `forEach`无法通过正常流程(如break)终止循环，但可通过抛出异常的方式实现终止循环。
+
+```js
+
+```
+
+
+
 #### `map()`遍历数组
 
 - map() 方法按照原始数组元素顺序依次处理元素；返回一个新数组，数组中的元素为原始数组元素调用函数处理后的值。
@@ -2529,6 +2540,21 @@ console.log(newmap) // [ 98, 68, 73, 64 ]
 - `keys()`是对键名的遍历；
 - `values()`是对键值的遍历；
 - `entries()`是对键值对的遍历。
+
+##### 三层数组对象取数
+
+```js
+let a = [];
+this.werkOption.filter(first => {
+  first.children.filter((second) => {
+    if(second.code = this.werksOrg[i].children[j].code){
+      a = second.children;
+    }
+  })
+})
+```
+
+
 
 ####  `new Array().fill()`创建数组并赋值
 
@@ -2568,6 +2594,55 @@ for (var i in arr){
     resultArr.push(arr[i]);
   }
 }
+```
+
+#### 对数组对象排序sort()
+
+```js
+// 1. 数组排序
+var arr1 = [3, 5, 2, 1];
+// 从小到大排序
+arr1.sort(function (a, b) {
+  return a > b ? 1 : -1;	// 得到的结果：[1, 2, 3, 5]
+});
+
+
+// 2. 数组对象的排序
+var arr2 = [
+    { a : 2, b : 3.2}, 
+    { a : 3, b : 1.2}, 
+    { a : 4, b : 2.2}, 
+    { a : 6, b : 1.2}, 
+    { a : 5, b : 3.2}
+]
+arr2.sort(function(x, y){ // 从小到大按属性b排序
+    return x.b > y.b ? 1:-1;
+});
+
+// 3. 数组对象根据多个属性排序
+// 需求是：先按b属性从小到大排序，如果最小中有重复则再按a属性排序
+// 解决理念：在排序时先按b属性排序，如果x.b的大于y.b则将x移到y的右边，如果x.b等于y.b则再通过x.a和y.a进行比较
+arr2.sort(function (x, y) {
+  if (x.b > y.b) {
+    return 1;
+  } else if (x.b === y.b) {
+    return x.a > y.a ? 1 : -1;
+  } else if (x.b < y.b) {
+    return -1;
+  }
+})
+```
+
+####  `Cannot read property 'push' of undefined`原因
+
+- 问题代码：`this.listData[current].push(...data); //定义为一个对象`
+- 问题原因：当listData为空对象，`{}`由于内部为空而非空数组，导致无法push（**即需要给赋值的变量定义为数组类型**）
+- 解决方案：当listData内部为空时赋值为`[]`，push后重新赋值给回listData
+
+```js
+let oldList = this.listData[this.current] || [];
+oldList.push(...data);
+this.listData[this.current] = oldList;
 ```
 
 
@@ -9323,8 +9398,8 @@ const VM = new Vue({
 ### 单元格事件
 
 - onRowClicked行点击事件
-- onCellClicked单击单元格事件
-- onCellDoubleClicked双击单元格事件
+- onCellClicked单击单元格事件（放在定义单元格的某列中，就只能该列点击触发该事件；放在定义外面，点击所有列都生效）
+- onCellDoubleClicked双击单元格事件（放在定义单元格的某列中，就只能该列点击触发该事件；放在定义外面，点击所有列都生效）
 - 全部事件列表
 
 #### `onRowClicked`行点击事件
