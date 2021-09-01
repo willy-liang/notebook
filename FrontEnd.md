@@ -1,200 +1,3 @@
-# 网络请求
-
-## HTTP
-
-### http状态码
-
-#### **`1XX`：信息状态码**
-
-- `100 Continue` 继续，一般在发送`post`请求时，已发送了`http header`之后服务端将返回此信息，表示确认，之后发送具体参数信息。
-
-#### **`2XX`：成功状态码**
-
-- `200 OK` 正常返回信息。
-- `201 Created` 请求成功并且服务器创建了新的资源。
-- `202 Accepted` 服务器已接受请求，但尚未处理。
-- `204 No Content` 响应数据没有实体主体部分。
-
-#### **`3XX`：重定向**
-
-- `301 Moved Permanently`请求的网页已永久移动到新位置。
-- `302 Found` 临时性重定向。
-- `303 See Other` 查看其它地址。与301类似。使用GET和POST请求查看
-- `304 Not Modified`自从上次请求后，所请求的资源未修改过。
-
-#### **`4XX`：客户端错误**
-
-- `400 Bad Request` 服务器无法理解请求的格式，客户端不应当尝试再次使用相同的内容发起请求。
-- `401 Unauthorized` 请求未授权。
-- `403 Forbidden` 禁止访问。
-- `404 Not Found` 找不到如何与 URI 相匹配的资源。
-- `405 Method Not Allowed` 客户端请求中的方法被禁止。
-- `410 Gone` 客户端请求的资源已经不存在。
-
-#### **`5XX`: 服务器错误**
-
-- `500 Internal Server Error`最常见的服务器端错误。
-- `501 Not Implemented` 不支持请求功能。
-- `502 Bad Gateway` 作为网关或者代理工作的服务器尝试执行请求时，从远程服务器接收到了一个无效的响应。
-- `503 Service Unavailable` 服务器端暂时无法处理请求（可能是过载或维护）。
-- `504 Gateway Time-out` 网关超时，未及时获取请求。
-
-### 连接服务器超时
-
-```
-服务器连接超时就是在程序默认的等待时间内没有得到服务器的响应。
-
-网络连接超时可能的原因有：
-1、网络断开，不过经常显示无法连接。
-
-2、网络阻塞，导致你不能在程序默认等待时间内得到回复数据包。
-
-3、网络不稳定，网络无法完整传送服务器信息。
-
-4、系统问题，系统资源过低，无法为程序提供足够的资源处理服务器信息。
-
-5、设备不稳定，如网线松动、接口没插好等等。
-
-6、网络注册时系统繁忙，无法回应。
-
-7、网速过慢，如使用BT多线程下载，在线收看视频等大量占用带宽的软件，若使用共享带宽还要防范他人恶意占用带宽。
-
-8、计算机感染了恶意软件，计算机病毒，计算机木马等。
-```
-
-
-
-## webSocket
-
-- `WebSocket`是`HTML5`提供在单个`TCP`上连接进行 **全双工通讯**的协议
-- 很多网站为了实现数据推送，所用的技术都是ajax轮询。轮询是在特定的时间间隔，由浏览器主动发起请求，将服务器的数据拉回来。轮询需要不断的向服务器发送请求，会占用很多带宽和服务器资源。WebSocket建立TCP连接后，服务器可以主动给客户端传递数据，能够更好的节省服务器资源和带宽，实现更实时的数据通讯。
-
-```js
-// 创建 WebSocket 对象
-var Socket = new WebSocket(url, [protocol] ); 
-
-// WebSocket 属性
-Socket.readyState // 只读属性readyState表示连接状态
-// 0 - 连接尚未建立
-// 1 - 连接已建立，可以进行通信
-// 2 - 连接正在进行关闭
-// 3 - 连接已经关闭或者连接不能打开
-
-// WebSocket 事件
-Socket.onopen // 连接建立时触发
-Socket.onmessage // 客户端接收服务端数据时触发
-Socket.onerror // 通信发生错误时触发
-Socket.onclose // 连接关闭时触发
-
-// WebSocket 方法
-Socket.send(JSON.stringify()) // 使用连接发送数据	注意：因为数据需要JSON对象格式，所以需要转换
-Socket.close() // 关闭连接
-```
-
-### websocket请求数据渲染，导致卡顿的优化
-
-- 原因：websocket发送数据或者接收数据是不会卡死的，只有当接收消息时频繁更改页面数据才会造成卡顿。
-- 优化：不要一收到数据就进行渲染，可以利用定时器每秒渲染或者使用DocumentFragment
-  1. 降低发送频率
-  2. 优化处理过程
-  3. 先获取数据，定时处理
-
-## 前端性能优化
-
-- **内容**
-  - 减少http请求
-  - 减少DNS查询：DNS缓存，将资源分布到恰当数量的主机
-  - 减少DOM元素的数量
-
-- **服务器**
-  - 使用CDN
-  - 配置ETag
-    - ETag可让缓存更高效，节省带宽，如果内容没有改变，WEB服务器不需要发送完整的响应；如果内容发生改变，使用ETag有助于防止资源的同时更新相互覆盖。
-  - Gzip压缩
-
-- **CSS**
-  - 外部 & 顶部引入
-  - 不使用CSS表达式
-  - link替代@import
-
-- **JS**
-  - 外部 & 底部引入
-  - 减少DOM访问
-
-- **图片**
-  - 优化图片
-  - 压缩图片
-
-- **其他**
-  - 压缩css和js
-  - 用浏览器开发工具监控前端页面的性能
-  - 预加载
-  - 懒加载及延迟加载
-  - 避免404页面及favicon
-  - 缓存（HTTP、本地缓存）
-  - 首屏性能优化
-  - 按需加载
-  - 服务器渲染
-  - CSS动画优化
-  - 避免资源的重定向
-- **搜索引擎优化**
-  - 对网站的标题、关键字、描述精心设置
-  - 网站内容优化：内容与关键字的对应，增加关键字的密度
-  - 重要内容`HTML`代码放在最前
-  - 重要内容不要用`js`输出：爬虫不会执行js获取内容
-  - 少用`iframe`：搜索引擎不会抓取`iframe`中的内容
-  - 友情链接
-  - `img`非装饰性图片必须加 `alt`
-  - 提高网站速度：网站速度是搜索引擎排序的一个重要指标
-  - 语义化的`HTML`代码
-  - 生成针对搜索引擎友好的网站地图（包含了所有网站链接的文件，这些链接是这个网站中重要的页面，作用是让更多页面能最大化被搜索蜘蛛发现并收录）
-
-## 解决跨域
-
-### 封装jsonp函数
-
-```js
-function handleParam(data) {
-    let url = '';
-    for (let key in data) {
-        let value = data[key] !== undefined ? data[key] : '1'
-        url += `&${key}=${encodeURLComponent(value)}`
-    }
-}
-
-export default function originPJSONP(option) {
-    let count = 1;
-
-    //1、从传入的option中提取URL
-    const url = option.url;
-
-    //2、在body中添加script标签
-    const body = document.getElementsByTagName('body')[0];
-    const script = document.createElement('script');
-
-    //3、内部产生一个不重复的callback
-    const callback = 'jsonp' + count++;
-
-    //4、监听window上的jsonp的调用
-    return new Promise((resolve, reject) => {
-        try {
-            window[callbak] = function (result) {
-                body.removeChild(script);
-                resolve(result)
-            }
-            const params = handleParam(option, data);
-            script.src = url + '?callback=' + callback + params;
-            body.appendChild(script)
-        } catch (e) {
-            body.removeChild(script);
-            reject(e)
-        }
-    })
-}
-```
-
-
-
 # HTML
 
 ## 通用
@@ -590,7 +393,7 @@ font顺序 : font-style | font-variant | font-weight | font-size | line-height |
 		-->X轴，Y轴，模糊程度(不可是负值)，阴影颜色 ；4个参数中，X和Y是必须的
 
 5、添加到文本的修饰：text-decoration（下划线、上划线、删除线等）
-text-decoration:overline/line-through/underline
+text-decoration: underline/overline/line-through
 
 5、文本排列：text-align:left/center/right
 
@@ -600,6 +403,69 @@ text-decoration:overline/line-through/underline
 
 9、指定元素内的空白怎样处理：white-space: pre/nowrap
 ```
+
+#### 内容超出以后显示省略点
+
+```css
+display:block;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+
+//两行超出隐藏
+overflow: hidden;
+text-overflow:ellipsis;
+display:-webkit-box;
+-webkit-box-orient:vertical;
+-webkit-line-clamp:2;
+word-wrap: break-word;	//换行（不设置，会不换行，从而导致只显示一行）
+line-height: 30rpx;
+height: 60rpx;	// 一般来说，应设定高度=行高*显示的行数,防止超出的文字露出
+```
+
+**注意**
+
+1. **内容超出显示的，通过省略号来显示，需要制定高度和行高，防止超出的文字露出（**应设定 高度 = 行高*显示的行数）
+2. 给p::after添加渐变背景可避免文字只显示一半。
+3. 由于ie6-7不显示content内容，所以要添加标签兼容ie6-7（如：`<span>…<span/>`）；兼容ie8需要将::after替换成:after。
+
+#### 内容超出换行显示
+
+当内容过多时如果是英文不会造成换行，如果希望内容换行，在标签的样式中加入`word-wrap:break-word;`
+如果是中文会造成换行，如果不希望内容换行，在标签的样式中加入`white-space:nowrap;`
+
+```css
+word-break:normal;
+display:block;
+word-wrap:break-word;
+overflow: hidden;
+```
+
+### 盒子阴影`box-shadow`
+
+div盒子添加 box-shadow 属性，多边阴影需要用逗号隔开
+
+```css
+语法：box-shadow: h-shadow v-shadow blur spread color inset;
+```
+
+![image-20200921124214162](image/image-20200921124214162.png)
+
+```css
+//添加阴影最常见写法：
+div{ box-shadow: 10px 5px #888888; }
+
+// 例1、三边阴影
+div{ box-shadow: 0 0 0 gray,
+        		5px 5px 5px gray,
+        		0 5px 5px gray,
+        		-5px 5px 5px gray; }	
+
+// 例2、内阴影：塌陷
+div{ box-shadow: 0 0 15px black inset; }
+```
+
+
 
 ### 计量单位
 
@@ -798,30 +664,6 @@ display:block;		//显示元素
    （2）字体大小调为0    font-size:0px;
    （3）文字设置为透明色   color:transparent;
 
-### 盒子阴影
-
-div盒子添加 box-shadow 属性，多边阴影需要用逗号隔开
-
-```css
-语法：box-shadow: h-shadow v-shadow blur spread color inset;
-```
-
-![image-20200921124214162](image/image-20200921124214162.png)
-
-```css
-//添加阴影最常见写法：
-div{ box-shadow: 10px 5px #888888; }
-
-// 例1、三边阴影
-div{ box-shadow: 0 0 0 gray,
-        		5px 5px 5px gray,
-        		0 5px 5px gray,
-        		-5px 5px 5px gray; }	
-
-// 例2、内阴影：塌陷
-div{ box-shadow: 0 0 15px black inset; }
-```
-
 ### 精灵图
 
 首先精灵图是一张普通的图片,并且图片上**包含了若干张背景图片**
@@ -936,37 +778,6 @@ boder-box这个属性可以避免很多兼容性的问题，就是那种一个�
 ​    一、按照变化修改元素的宽高属性（不推荐）
 
 ​    二、将 box-sizing 设置为 border-box ，然后给元素添加border宽度
-
-### a标签内容超出换行
-
-在html的a标签中，当内容过多的时候 ，如果是英文不会造成换行，如果希望内容换行，在a标签的样式中加入`word-wrap:break-word;`
-
-如果是中文会造成换行，如果不希望内容换行，在a标签的样式中加入`white-space:nowrap;`
-
-### a标签内容超出以后显示省略点
-
-```css
-display:block;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
-
-//两行超出隐藏
-overflow: hidden;
-text-overflow:ellipsis;
-display:-webkit-box;
--webkit-box-orient:vertical;
--webkit-line-clamp:2;
-word-wrap: break-word;	//换行（不设置，会不换行，从而导致只显示一行）
-line-height: 30rpx;
-height: 60rpx;	// 一般来说，应设定高度=行高*显示的行数,防止超出的文字露出
-```
-
-**注意**
-
-1. **内容超出显示的，通过省略号来显示，需要制定高度和行高，防止超出的文字露出（**应设定 高度 = 行高*显示的行数）
-2. 给p::after添加渐变背景可避免文字只显示一半。
-3. 由于ie6-7不显示content内容，所以要添加标签兼容ie6-7（如：`<span>…<span/>`）；兼容ie8需要将::after替换成:after。
 
 ### 把文字下滑线与文字距离宽一点
 
@@ -2272,6 +2083,203 @@ oEvent.cancelBubble = true; //取消事件冒泡（否则点击按钮后，会�
 阻止浏览器默认事件à在函数结尾处 return false;
 这个方法比较暴力，他会同事阻止事件冒泡也会阻止默认事件；写上此代码，连接不会被打开，事件也不会传递到上一层的父元素；可以理解为return false就等于同时调用了event.stopPropagation()和event.preventDefault()
 
+
+
+# 网络请求
+
+### HTTP状态码
+
+#### **`1XX`：信息状态码**
+
+- `100 Continue` 继续，一般在发送`post`请求时，已发送了`http header`之后服务端将返回此信息，表示确认，之后发送具体参数信息。
+
+#### **`2XX`：成功状态码**
+
+- `200 OK` 正常返回信息。
+- `201 Created` 请求成功并且服务器创建了新的资源。
+- `202 Accepted` 服务器已接受请求，但尚未处理。
+- `204 No Content` 响应数据没有实体主体部分。
+
+#### **`3XX`：重定向**
+
+- `301 Moved Permanently`请求的网页已永久移动到新位置。
+- `302 Found` 临时性重定向。
+- `303 See Other` 查看其它地址。与301类似。使用GET和POST请求查看
+- `304 Not Modified`自从上次请求后，所请求的资源未修改过。
+
+#### **`4XX`：客户端错误**
+
+- `400 Bad Request` 服务器无法理解请求的格式，客户端不应当尝试再次使用相同的内容发起请求。
+- `401 Unauthorized` 请求未授权。
+- `403 Forbidden` 禁止访问。
+- `404 Not Found` 找不到如何与 URI 相匹配的资源。
+- `405 Method Not Allowed` 客户端请求中的方法被禁止。
+- `410 Gone` 客户端请求的资源已经不存在。
+
+#### **`5XX`: 服务器错误**
+
+- `500 Internal Server Error`最常见的服务器端错误。
+- `501 Not Implemented` 不支持请求功能。
+- `502 Bad Gateway` 作为网关或者代理工作的服务器尝试执行请求时，从远程服务器接收到了一个无效的响应。
+- `503 Service Unavailable` 服务器端暂时无法处理请求（可能是过载或维护）。
+- `504 Gateway Time-out` 网关超时，未及时获取请求。
+
+#### 连接服务器超时
+
+```
+服务器连接超时就是在程序默认的等待时间内没有得到服务器的响应。
+
+网络连接超时可能的原因有：
+1、网络断开，不过经常显示无法连接。
+
+2、网络阻塞，导致你不能在程序默认等待时间内得到回复数据包。
+
+3、网络不稳定，网络无法完整传送服务器信息。
+
+4、系统问题，系统资源过低，无法为程序提供足够的资源处理服务器信息。
+
+5、设备不稳定，如网线松动、接口没插好等等。
+
+6、网络注册时系统繁忙，无法回应。
+
+7、网速过慢，如使用BT多线程下载，在线收看视频等大量占用带宽的软件，若使用共享带宽还要防范他人恶意占用带宽。
+
+8、计算机感染了恶意软件，计算机病毒，计算机木马等。
+```
+
+
+
+### webSocket
+
+- `WebSocket`是`HTML5`提供在单个`TCP`上连接进行 **全双工通讯**的协议
+- 很多网站为了实现数据推送，所用的技术都是ajax轮询。轮询是在特定的时间间隔，由浏览器主动发起请求，将服务器的数据拉回来。轮询需要不断的向服务器发送请求，会占用很多带宽和服务器资源。WebSocket建立TCP连接后，服务器可以主动给客户端传递数据，能够更好的节省服务器资源和带宽，实现更实时的数据通讯。
+
+```js
+// 创建 WebSocket 对象
+var Socket = new WebSocket(url, [protocol] ); 
+
+// WebSocket 属性
+Socket.readyState // 只读属性readyState表示连接状态
+// 0 - 连接尚未建立
+// 1 - 连接已建立，可以进行通信
+// 2 - 连接正在进行关闭
+// 3 - 连接已经关闭或者连接不能打开
+
+// WebSocket 事件
+Socket.onopen // 连接建立时触发
+Socket.onmessage // 客户端接收服务端数据时触发
+Socket.onerror // 通信发生错误时触发
+Socket.onclose // 连接关闭时触发
+
+// WebSocket 方法
+Socket.send(JSON.stringify()) // 使用连接发送数据	注意：因为数据需要JSON对象格式，所以需要转换
+Socket.close() // 关闭连接
+```
+
+#### websocket请求数据渲染，导致卡顿的优化
+
+- 原因：websocket发送数据或者接收数据是不会卡死的，只有当接收消息时频繁更改页面数据才会造成卡顿。
+- 优化：不要一收到数据就进行渲染，可以利用定时器每秒渲染或者使用DocumentFragment
+  1. 降低发送频率
+  2. 优化处理过程
+  3. 先获取数据，定时处理
+
+### 前端性能优化
+
+- **内容**
+  - 减少http请求
+  - 减少DNS查询：DNS缓存，将资源分布到恰当数量的主机
+  - 减少DOM元素的数量
+
+- **服务器**
+  - 使用CDN
+  - 配置ETag
+    - ETag可让缓存更高效，节省带宽，如果内容没有改变，WEB服务器不需要发送完整的响应；如果内容发生改变，使用ETag有助于防止资源的同时更新相互覆盖。
+  - Gzip压缩
+
+- **CSS**
+  - 外部 & 顶部引入
+  - 不使用CSS表达式
+  - link替代@import
+
+- **JS**
+  - 外部 & 底部引入
+  - 减少DOM访问
+
+- **图片**
+  - 优化图片
+  - 压缩图片
+
+- **其他**
+  - 压缩css和js
+  - 用浏览器开发工具监控前端页面的性能
+  - 预加载
+  - 懒加载及延迟加载
+  - 避免404页面及favicon
+  - 缓存（HTTP、本地缓存）
+  - 首屏性能优化
+  - 按需加载
+  - 服务器渲染
+  - CSS动画优化
+  - 避免资源的重定向
+- **搜索引擎优化**
+  - 对网站的标题、关键字、描述精心设置
+  - 网站内容优化：内容与关键字的对应，增加关键字的密度
+  - 重要内容`HTML`代码放在最前
+  - 重要内容不要用`js`输出：爬虫不会执行js获取内容
+  - 少用`iframe`：搜索引擎不会抓取`iframe`中的内容
+  - 友情链接
+  - `img`非装饰性图片必须加 `alt`
+  - 提高网站速度：网站速度是搜索引擎排序的一个重要指标
+  - 语义化的`HTML`代码
+  - 生成针对搜索引擎友好的网站地图（包含了所有网站链接的文件，这些链接是这个网站中重要的页面，作用是让更多页面能最大化被搜索蜘蛛发现并收录）
+
+### 解决跨域
+
+#### 封装jsonp函数
+
+```js
+function handleParam(data) {
+    let url = '';
+    for (let key in data) {
+        let value = data[key] !== undefined ? data[key] : '1'
+        url += `&${key}=${encodeURLComponent(value)}`
+    }
+}
+
+export default function originPJSONP(option) {
+    let count = 1;
+
+    //1、从传入的option中提取URL
+    const url = option.url;
+
+    //2、在body中添加script标签
+    const body = document.getElementsByTagName('body')[0];
+    const script = document.createElement('script');
+
+    //3、内部产生一个不重复的callback
+    const callback = 'jsonp' + count++;
+
+    //4、监听window上的jsonp的调用
+    return new Promise((resolve, reject) => {
+        try {
+            window[callbak] = function (result) {
+                body.removeChild(script);
+                resolve(result)
+            }
+            const params = handleParam(option, data);
+            script.src = url + '?callback=' + callback + params;
+            body.appendChild(script)
+        } catch (e) {
+            body.removeChild(script);
+            reject(e)
+        }
+    })
+}
+```
+
+
+
 # ES6
 
 ### 面向对象
@@ -2459,7 +2467,8 @@ console.log(arr1.sum());	//66
 - **`some()、every()`方法->检测数组：查找数组中是否有满足条件的元素**
 
   - `array.some(function(currentValue, index, arr))`
-  - some()方法，遍历数组的每一项，若其中一项为 true，则返回true；every()方法，遍历数组每一项，若全部为true，则返回true.
+  - some()方法，遍历数组的每一项，若其中一项为 true，则返回true；
+  - every()方法，遍历数组每一项，若全部为true，则返回true.
 
 ```js
 let arr = [12, 1, 30, 22];
@@ -2502,10 +2511,6 @@ guo.forEach((x,index)=>{
 
 1. 可使用`return`语句跳出本次循环，执行下一次循环。
 2. `forEach`无法通过正常流程(如break)终止循环，但可通过抛出异常的方式实现终止循环。
-
-```js
-
-```
 
 
 
@@ -2643,6 +2648,32 @@ arr2.sort(function (x, y) {
 let oldList = this.listData[this.current] || [];
 oldList.push(...data);
 this.listData[this.current] = oldList;
+```
+
+#### 平铺数组`flat()、flatMap()`
+
+- `Array.prototype.flat()`用于将嵌套的数组“拉平”，变成一维数组。该方法返回一个新数组，对原数据没有影响
+
+- 可以传参数，平铺几维数组；如果不知道是多少层 可以传`Infinity`
+
+- 如果原数组有空位，flat()方法会跳过空位,但是不过滤`undefined`、`null`、以及空字符串
+
+- `flatMap()`方法对原数组的每个成员执行一个函数，相当于执行`Array.prototype.map()`,然后对返回值组成的数组执行`flat()`方法。该方法返回一个新数组，不改变原数组
+
+  **flatMap()只能展开一层数组**
+
+> 注意：**lat和flatMap方法为ES2019(ES10)方法，目前还未在所有浏览器完全兼容；需要升级浏览器到V71后才可使用**
+
+```js
+const a = [1, 2, ['a', 'b', 'c'], [2, ['e', 'r']], [undefined, null, '']];
+
+const b = a.flat(); //[1, 2, "a", "b", "c", 2,['e','r'], undefined, null, ""] 
+
+const c = a.flat(3); // [1, 2, "a", "b", "c", 2, "e", "r", undefined, null, ""]
+
+const d = a.flat(Infinity); // [1, 2, "a", "b", "c", 2, "e", "r", undefined, null, ""]
+
+let e = a.flatMap((x) => [x, x * 2, x + 2]) // [1, 2, 3, 2, 4, 4, Array(3), NaN, "a,b,c2", Array(2), NaN, "2,e,r2", Array(3), NaN, ",,2"]
 ```
 
 
@@ -4181,7 +4212,7 @@ async && await: 1910.646ms
 
 # JS排序算法
 
-## 冒泡排序
+### 冒泡排序
 
 **原理：从第一个元素开始，把当前元素和下一个索引元素进行比较。如果当前元素大，那么就交换位置，重复操作直到比较到最后一个元素**
 
@@ -4208,7 +4239,7 @@ bubbleSort = (arr) => {
 bubbleSort([2, 5, 2, 1, 4, 7, 9, 4, 9, 3, 5, 8, 7]);  // [ 1, 2, 2, 3, 4, 4, 5, 5, 7, 7, 8, 9, 9 ]
 ```
 
-### 双向冒泡排序（鸡尾酒排序）
+#### 双向冒泡排序（鸡尾酒排序）
 
 **原理：双向冒泡排序是从2个方向进行排序，“较大气泡从左到右移动，较小气泡从右到左移动”，2边遍历指针相遇时，排序结束。**
 
@@ -4237,7 +4268,7 @@ bothwayBubbleSort = (arr) => {
 bothwayBubbleSort([2, 5, 2, 1, 4, 7, 9, 4, 9, 3, 5, 8, 7]);  // "双向冒泡排序：" [ 1, 2, 2, 3, 4, 4, 5, 5, 7, 7, 8, 9, 9 ]
 ```
 
-## 选择排序
+### 选择排序
 
 **原理：遍历数组，设置最小值的索引为 0，如果取出的值比当前最小值小，就替换最小值索引，遍历完成后，将第一个元素和最小值索引上的值交换。如上操作后，第一个元素就是数组中的最小值，下次遍历就可以从索引 1 开始重复上述操作。**
 
@@ -4259,9 +4290,9 @@ selectionSort = (arr) => {
 selectionSort([2, 5, 2, 1, 4, 7, 9, 4, 9, 3, 5, 8, 7]);	// 12 '选择排序：' [ 1, 2, 2, 3, 4, 4, 5, 5, 7, 7, 8, 9, 9 ]
 ```
 
-## 插入排序
+### 插入排序
 
-### 直接插入排序
+#### 直接插入排序
 
 **原理：第一个元素默认是已排序元素，取出下一个元素和当前元素比较，如果当前元素大就交换位置。那么此时第一个元素就是当前的最小数，所以下次取出操作从第三个元素开始，向前对比，重复之前的操作。**
 
@@ -4291,7 +4322,7 @@ insertSort = arr => {
 insertSort([2, 5, 2, 1, 4, 7, 9, 4, 9, 3, 5, 8, 7]);  // 插入排序： [ 1, 2, 2, 3, 4, 4, 5, 5, 7, 7, 8, 9, 9 ]
 ```
 
-### 折半（二分）插入排序
+#### 折半（二分）插入排序
 
 直接插入排序的升级版，插入时与已排序好的序列的中间值（除2向下取整）对比，可缩小一般的对比范围。
 
@@ -4324,7 +4355,7 @@ function binaryInsertionSort(array){
 
 
 
-## 希尔排序
+### 希尔排序
 
 原理：
 
@@ -4397,7 +4428,7 @@ function shellSort(arr) {
 
 
 
-## 归并排序
+### 归并排序
 
 原理：
 
@@ -4476,7 +4507,7 @@ function merge(left, right) {
 
 
 
-## 快速排序
+### 快速排序
 
 **原理：在数据集之中，找一个基准点，建立两个数组，分别存储左边和右边的数组，利用递归进行下次比较。**
 
@@ -4605,7 +4636,7 @@ function quickSort(arr, i, j) {
 
 
 
-## 堆排序
+### 堆排序
 
 堆排序（Heapsort）是指利用堆这种数据结构所设计的一种排序算法。堆积是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。
 
@@ -4673,7 +4704,7 @@ function heapSort(arr) {
 
 
 
-## 计数排序
+### 计数排序
 
 计数排序是唯一不基于比较的排序算法。
 计数排序不是比较排序，排序的速度快于任何比较排序算法。
@@ -4721,7 +4752,7 @@ function countingSort(arr, maxValue) {
 
 
 
-## 桶排序
+### 桶排序
 
 桶排序（箱排序）是计数排序的升级版。
 它是将数组分配到有限数量的桶子里. 每个桶里再各自排序(因此有可能使用别的排序算法或以递归方式继续桶排序). 当每个桶里的元素个数趋于一致时, 桶排序只需花费O(n)的时间.
@@ -4775,7 +4806,7 @@ function bucketSort(arr, bucketSize) {
 
 
 
-## 基数排序
+### 基数排序
 
 基数排序是一种非比较型整数排序算法，其原理是将整数按位数切割成不同的数字，然后按每个位数分别比较。由于整数也可以表达字符串（比如名字或日期）和特定格式的浮点数，所以基数排序也不是只能使用于整数。
 按照优先从高位或低位来排序有两种实现方案:
@@ -4814,13 +4845,11 @@ function radixSort(array, max) {
 
 
 
-
-
 # JQ
 
-## 理念
+### 理念
 
-### load 和 ready 谁先执行？
+#### load 和 ready 谁先执行？
 
 ```js
 window.onload = function(){}
@@ -4840,9 +4869,9 @@ $(document).ready(fcuntion(){})
 
 ​			ready 可以执行多次，不会覆盖
 
-## 选择器
+### 选择器
 
-### 基本选择器
+#### 基本选择器
 
 ```js
 $("#div1")		//按id属性选择元素
@@ -4852,7 +4881,7 @@ $("*")			//选择所有元素
 $("#div2,span")	//并列选择元素
 ```
 
-### 层次选择器
+#### 层次选择器
 
 ```js
 $("body div") //选择body所有的div后代元素
@@ -4861,7 +4890,7 @@ $("#div1+div") //选择id值为div1的元素的后面相邻的兄弟元素
 $("#div1~div") //选择id值为div1的元素的后面所有的兄弟元素
 ```
 
-### 基本过滤选择器
+#### 基本过滤选择器
 
 ```js
 $("div:first")	//选择第一个div元素
@@ -4877,7 +4906,7 @@ $(":focus")		//选择成为焦点的元素
 $(":animated")	//选择所有动画元素
 ```
 
-### 内容过滤选择器
+#### 内容过滤选择器
 
 ```js
 $("div:contains(class为class1)") //改变所有包含文本"class为class1"的div元素
@@ -4886,7 +4915,7 @@ $("div:empty")//改变所有不包含子元素的div元素
 $("div:parent")//改变所有包含子元素的div元素
 ```
 
-### 属性过滤选择器
+#### 属性过滤选择器
 
 ```js
 $("div[title]") //改变所有有title属性的div元素
@@ -4899,14 +4928,14 @@ $("div[id],[title]") //改变包含属性为id和属性为title的div元素
 //注意："[],[]"是并集，"[][]"是交集（两个条件间隔一个空格）
 ```
 
-### 可见过滤选择器
+#### 可见过滤选择器
 
 ```js
 $("div:visible") //改变所有可见的的div元素
 $("div:hidden").show(3000);//显示所有不可见的的div元素背景色
 ```
 
-### 子元素过滤选择器
+#### 子元素过滤选择器
 
 ```js
 $("div.class1 :nth-child(2)") ;//选择所有class属性值为class1的div元素的第二个子元素
@@ -4915,7 +4944,11 @@ $("div.class1 :last-child") //改变所有class属性值为class1的div元素的
 $("div.class1 :only-child") //改变所有class属性值为class1的div元素的唯一一个子元素
 ```
 
-# TypeScript
+
+
+# CSS预编译
+
+## TypeScript
 
 ### 安装/运行编译
 
@@ -5385,8 +5418,6 @@ function getLength(input: string | number): number {
 declare var jQuery: (selector: string) => any;
 jQuery('#foo');
 ```
-
-# CSS预编译
 
 ## less
 
@@ -9393,6 +9424,8 @@ const VM = new Vue({
 </style>
 ```
 
+
+
 # ag-Grid
 
 ### 单元格事件
@@ -9672,6 +9705,68 @@ window.onresize = function () {
 
 
 
+# uni-app
+
+### 路由
+
+uni-app有两种页面路由跳转的方式：使用`navigator`组件跳转、调用`API`跳转。
+
+#### 页面栈
+
+框架以栈的形式管理当前页面，当发生路由跳转时，页面栈表现：
+
+1. 初始化：新页面入栈，uni-app打开的一个页面
+2. 打开新页面：新页面入栈，调用API`uni.navigateTo`、使用组件`<navigator open-type="navigate"/>`
+3. 页面重定向：当前页面出栈，新页面入栈
+4. 页面返回：页面不断出栈，知道目标返回页
+5. Tab切换：页面全部出栈，只留下新的Tab页面
+6. 重加载：页面全部出栈，只留下新的页面
+
+#### 运行环境判断
+
+uni-app可通过`process.env.NODE_ENV`判断当前的运行环境，一般用于连接测试服务器或生产服务器的动态切换。
+
+- 在`HBuilderX`中，点击“运行”编译出来的代码是开发环境，点击“发行“编译出来的代码时生产环境
+- cli模式下，是通行的编译环境处理方式。
+- 快捷代码块：HBuilderX 中敲入代码块 `uEnvDev`、`uEnvProd` 可以快速生成对应 `development`、`production` 的运行环境判定代码。
+
+```js
+// uEnvDev
+if (process.env.NODE_ENV === 'development') {
+    console.log('开发环境')
+}
+// uEnvProd
+if (process.env.NODE_ENV === 'production') {
+    console.log('生产环境')
+}
+```
+
+#### 平台判断
+
+因为不同平台编译出包后是不同的代码，所以需要判断某些方法
+
+运行期判断 运行期判断是指代码已经打入包中，仍然需要在运行期判断平台，此时可使用 `uni.getSystemInfoSync().platform` 判断客户端环境是 Android、iOS 还是小程序开发工具
+
+> 注意：`uni.getSystemInfoSync().platform` 返回值均为 devtools）
+
+```js
+switch(uni.getSystemInfoSync().platform){
+  case 'android':
+    console.log('运行Android上')
+    break;
+  case 'ios':
+    console.log('运行iOS上')
+    break;
+  default:
+    console.log('运行在开发者工具上')
+    break;
+}
+```
+
+
+
+
+
 # 小程序
 
 ## 描述
@@ -9875,6 +9970,12 @@ this.setData({ msg: "Hello World" })
 
 - 架构分为视图层(`wxml、wxss`)，逻辑层(`js`)，组件，API四部分。视图层负责页面结构，样式和数据展示。逻辑层负责业务逻辑，调用API等。
 - 视图层和逻辑层类似`vue的MVVM`模式，逻辑层只需对数据对象更新，就可改变视图层的数据显示，类似vue。组件是视图层封装好的基础组件，如按钮，输入框等。API提供了访问手机设备，网络，服务器，微信平台接口等能力。
+
+### 分包
+
+```
+
+```
 
 ## 标签
 
@@ -10112,7 +10213,7 @@ swiper {
 
 ### 自定义下拉刷新
 
-- 在`·`app.json`和`xx.json`中的`window`里配置,
+- 在`app.json`和`xx.json`中的`window`里配置,
 
   ```wxml
   {	"window": {		"enablePullDownRefresh": true,	}}
@@ -10172,6 +10273,147 @@ Page({
 - 存储时有无做类型转换
   - web：不管存入什么类型的数据，最终都会通过`toString()`把数据转换成字符串再存入；
   - 小程序：不做类型转换操作，存什么类型数据，就会获取什么类型。
+
+> **注意：本地缓存是永久存储的，但不建议将关键信息存放在localStorage，以防用户换设备的情况**
+
+#### 异步
+
+**`wx.setStorage(Object object)`：将数据存储在本地缓存中指定的 key 中，会覆盖掉原来该 key 对应的内容**
+
+```
+wx.setStorage({
+  key:"key",
+  data:"value"
+})
+```
+
+ **`wx.getStorage(Object object)`：从本地缓存中异步获取指定 key 的内容**
+
+```
+wx.getStorage({
+  key: 'key',
+  success: function(res) {
+      console.log(res.data)
+  }
+})
+```
+
+ **`wx.getStorageInfo(Object object)`：异步获取当前storage的相关信息**
+
+```
+wx.getStorageInfo({
+  success: function(res) {
+    console.log(res.keys)
+    console.log(res.currentSize)
+    console.log(res.limitSize)
+  }
+})
+```
+
+ **`wx.removeStorage(Object object)`：从本地缓存中移除指定的key**
+
+```
+wx.removeStorage({
+  key: 'key',
+  success (res) {
+    console.log(res)
+  }
+})
+```
+
+#### 同步
+
+1. `wx.setStorageSync(string key, any data)`：将 data 存储在本地缓存中指定的 key 中，会覆盖掉原来该 key 对应的内容。
+2. `wx.getStorageSync(string key)`：从本地缓存中同步获取指定 key 对应的内容。
+3.  `wx.getStorageInfoSync()`：同步获取当前storage的相关信息
+4.  `wx.removeStorageSync(string key)`：从本地缓存中同步移除指定 key 。
+
+#### 清理缓存
+
+1. 清理本地数据缓存：`wx.clearStorage()`
+2. 同步清理本地数据缓存：`wx.clearStorageSync()`
+
+#### 判断本地缓存中某key是否存值
+
+- 常用于判断用户是否已经登录
+
+```js
+onLoad: function() {
+  let value = wx.getStorageSync("key11");
+  if(!value) {
+    console.log("key值为key11的本地缓存为空");
+  } else {
+    console.log("key值为key11的本地缓存不为空")
+  }
+},
+```
+
+### 消息提示框
+
+- 显示消息提示框：**wx.showToast(OBJECT)**
+- 隐藏消息提示框：**wx.hideToast()**
+- 显示模态弹窗：**wx.showModal(OBJECT)**
+- 显示操作菜单：**wx.showActionSheet(OBJECT)**
+
+```js
+wx.showToast({
+ title: '成功',
+ icon: 'success',
+ duration: 2000
+})
+
+wx.showToast({
+ title: '加载中',
+ icon: 'loading',
+ duration: 10000
+})
+setTimeout(function(){
+ wx.hideToast()
+},2000)
+
+wx.showModal({
+ title: '提示',
+ content: '这是一个模态弹窗',
+ success: function(res) {
+  if (res.confirm) {
+   console.log('用户点击确定')
+  }
+ }
+})
+
+wx.showActionSheet({
+ itemList: ['A', 'B', 'C'],
+ success: function(res) {
+  if (!res.cancel) {
+   console.log(res.tapIndex)
+  }
+ }
+})
+```
+
+### 数组
+
+#### 数组无法使用push()
+
+- 在小程序中的类库中没有包含数组的push()方法来给数组添加元素，以为为替代方法
+
+```js
+let list = []
+let obj = {"willy","test"}
+list[obj.length] = obj;
+setData({ list: list })
+```
+
+#### 删除数组指定索引的数据
+
+```js
+var array = [“张三”,“李四”,“王五”,“赵云”];
+//删除王五（索引值为：2)
+array.splice(2,1);
+输出数组array的结果为： [“张三”,“李四”,“赵云”]
+```
+
+
 
 
 
@@ -10272,28 +10514,41 @@ text-overflow: ellipsis;
   - `-webkit-box-orient` 必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式 。
   - `text-overflow`：可以用来多行文本的情况下，用省略号“...”隐藏超出范围的文本 。
 
+### 文本显示空格、换行
+
+- 使用 css 属性 ：**white-space:pre-wrap**
+
+> 注意：设置space和decode属性必须在`<text>`标签中使用
+
+```wxml
+<view style="white-space:pre-wrap">
+	文本保留空格和回车
+</view>
+
+2.连续空格  注意：必须在<text>标签中使用
+<text space="ensp">你好 啊      哈哈哈（空格是中文字符一半大小）</text>
+<text space="emsp">你好 啊      哈哈哈（空格是中文字符大小）</text>
+<text space="nbsp">你好 啊      哈哈哈（空格根据字体设置）</text>
+<text decode="{{true}}">&ensp;（空格是中文字符一半大小）\n&emsp;（空格是中文字符大小）\n&nbsp;（空格根据字体设置）</text>
+```
+
 
 
 ### 尺寸单位`rpx`
 
 - 自适应屏幕大小，小程序的屏幕默认为`750rpx`
-- `1px=2rpx`
-- `calc（750rpx * 100 / 375）`，750和rpx之间不能有空格
+- `设计稿 1px / 设计稿基准宽度 = 框架样式 1rpx / 750rpx`
+- 页面的宽度：`calc（750rpx * 元素在设计稿中的宽度 / 设计稿基准宽度）`，750和rpx之间不能有空格
+  1. 若设计稿宽度为 750px，元素 A 在设计稿上的宽度为 100px，那么元素 A 在 `uni-app` 里面的宽度应该设为：`750 * 100 / 750`，结果为：100rpx。
+  2. 若设计稿宽度为 640px，元素 A 在设计稿上的宽度为 100px，那么元素 A 在 `uni-app` 里面的宽度应该设为：`750 * 100 / 640`，结果为：117rpx。
+  3. 若设计稿宽度为 375px，元素 B 在设计稿上的宽度为 200px，那么元素 B 在 `uni-app` 里面的宽度应该设为：`750 * 200 / 375`，结果为：400rpx。
 
 ```
-1. 小程序中，不需要主动引入样式文件
+1. 若设计稿宽度为 750px，元素 A 在设计稿上的宽度为 100px，那么元素 A 在 `uni-app` 里面的宽度应该设为：`750 * 100 / 750`，结果为：100rpx。
 
-2. 需要把页面中某些元素的单位 由 px 改为 rpx	
-	(1) 设计稿750px		
-			750px = 750rpx		1px = 1rpx	
-	(2) 把屏幕宽 改为 375px		
-			375px = 750rpx		2rpx = 1px
+2. 若设计稿宽度为 640px，元素 A 在设计稿上的宽度为 100px，那么元素 A 在 `uni-app` 里面的宽度应该设为：`750 * 100 / 640`，结果为：117rpx。
 
-3. 存在设计稿 宽 414 或 未知 page	
-	(1) 设计稿 page 存在一个元素宽度100px，去实现不同宽度的页面适配		
-			page px = 750rpx		
-			1 px = 750rpx / page		
-			100px = 750rpx *100 / page
+3. 若设计稿宽度为 375px，元素 B 在设计稿上的宽度为 200px，那么元素 B 在 `uni-app` 里面的宽度应该设为：`750 * 200 / 375`，结果为：400rpx。
 ```
 
 ## 问题
@@ -11111,7 +11366,7 @@ rs.pipe(ws, { end: false });	// 限制管理写入流
 
 
 
-# 桌面应用——electron开发
+# 桌面应用开发`electron`
 
 
 
