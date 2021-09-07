@@ -8,7 +8,28 @@
 
 ### 通用类名
 
-![HTML_通用类名](image/HTML_通用类名.png)
+```css
+头部：					header
+内容：					content/container
+页脚/尾部：		 footer
+导航：					nav
+侧栏：					sidebar
+栏目：					column
+滚动：					scroll
+登录条：			  loginbar
+标志：					logo
+广告：					banner
+页面主体：			 main
+热点：					hot
+新闻：					news
+下载：					download
+子导航：			 subnav
+菜单：					menu
+子菜单：			 submenu
+搜索：				  search
+友情链接：      friendlink
+版权：		      copyright
+```
 
 ### 标签语义化
 
@@ -1826,6 +1847,24 @@ var json = JSON.stringify({a: 'Hello', b: 'World'});
 //结果是 '{"a": "Hello", "b": "World"}'
 ```
 
+## 函数
+
+#### `encodeURIComponent() `
+
+encodeURIComponent() 函数可把字符串作为 URI 组件进行编码。
+
+该方法不会对 ASCII 字母和数字进行编码，也不会对这些 ASCII 标点符号进行编码： - _ . ! ~ * ' ( ) 。
+
+其他字符（比如 ：;/?:@&=+$,# 这些用于分隔 URI 组件的标点符号），都是由一个或多个十六进制的转义序列替换的。
+
+```js
+let url="http://w3cschool.cc/my test.php?name=ståle&car=saab";
+let a = encodeURIComponent(url);
+console.log(a);	// http%3A%2F%2Fw3cschool.cc%2Fmy%20test.php%3Fname%3Dst%C3%A5le%26car%3Dsaab
+```
+
+
+
 ## 对象
 
 ### 对象操作
@@ -1933,46 +1972,7 @@ let str = "13"
 let strAdd = srt.concat("-123","-456");
 ```
 
-### `proxy`代理对象
 
-- 在我们访问对象前添加一层拦截，可以过滤自定义的操作（代理完成对数据的处理、对构造函数的处理，对数据的验证）
-- `let p = new Proxy(target, handler);`
-  - 代理实例中没有指定的`handler`，实际就是操作原对象`target`。
-  - `target`：需要使用`Proxy`包装的目标对象（可以是任何类型的对象，包括原生数组、函数、甚至是另一个代理）
-  - `handler`：一个对象，其属性是当执行一个操作时定义代理的行为函数（可理解为某种触发器）
-
-```js
-let willy = {
-    name: "willy",
-    age: 22
-};
-willy = new Proxy(willy, {
-    get(target, key) {
-        let result = target[key];
-        if (key === 'age')
-            result += "岁";
-        return result;
-    },
-    set(target, key, value) {
-        if (key === 'age' && typeof value != 'number') {
-            // throw Error("age字段必须为number类型");
-            console.log("age字段必须为number类型");
-        }
-        return Reflect.set(target, key, value); // target[key] = value;
-    }
-});
-console.log(`我叫 ${willy.name}，今年 ${willy.age}。`);
-willy.age = "a";
-```
-
-`Reflect`拦截
-
-`Reflect`是一个内置对象，它提供拦截`JavaScript`操作的方法。这些方法与`Proxy handlers`的方法相同。
-
-> `Reflect`不是一个函数对象，因此它是不可构造的。
-
-因为不是构造函数，所以不能通过`new`来对其进行调用，或作为一个函数来调用。
-`Reflect`的所有属性和方法都是静态的。
 
 ## 页面宽高
 
@@ -2442,6 +2442,64 @@ let arr1 = new Array[11, 22, 33];
 console.log(arr1.sum());	//66
 ```
 
+### `proxy`代理对象
+
+- 在我们访问对象前添加一层拦截，可以过滤自定义的操作（代理完成对数据的处理、对构造函数的处理，对数据的验证）
+- `let p = new Proxy(target, handler);`
+  - 代理实例中没有指定的`handler`，实际就是操作原对象`target`。
+  - `target`：需要使用`Proxy`包装的目标对象（可以是任何类型的对象，包括原生数组、函数、甚至是另一个代理）
+  - `handler`：一个对象，其属性是当执行一个操作时定义代理的行为函数（可理解为某种触发器）
+
+- **`Reflect`反射**
+
+  - `Reflect`是一个内置对象，它提供拦截`JavaScript`操作的方法。这些方法与`Proxy handlers`的方法相同。
+
+  - > `Reflect`不是一个函数对象，因此它是不可构造的。
+
+  - 因为不是构造函数，所以不能通过`new`来对其进行调用，或作为一个函数来调用。
+    `Reflect`的所有属性和方法都是静态的。
+
+**propxy响应式改变数据**
+
+```js
+// 模拟vue3中实现响应式
+let person = {
+    a: "a", b: "b", c: {d: "e"},
+};
+const p = new Proxy(person, {
+    // 读取p某个属性时调用
+    get(target, propName) {
+        console.log(`读取了p的${propName}属性`);
+      	if (propName === 'date')
+            target[propName] += "天";
+        return target[propName]        
+    },
+  
+    // 修改p某个属性或给p追加属性时调用
+    set(target, propName, value) {
+        console.log(`修改了p的${propName}`);
+      
+      	// 字段过滤
+      	if (propName === 'age' && typeof value != 'number') {
+            // throw Error("age字段必须为number类型");
+            console.log("age字段必须为number类型");
+        }
+      
+      	// 返回数据
+        // target[propName] = value;
+      	return Reflect.set(target, propName, value); // 等同target[propName] = value;
+    },
+  
+    // 删除p的某个属性时调用
+    deleteProperty(target, propName) {
+        console.log(`删除p的${propName}属性`);
+        return delete target[propName]  // 返回的是true || false
+    }
+})
+```
+
+![image-20210906134840686](image/image-20210906134840686.png)
+
 ### `Array`的扩展方法
 
 #### 迭代遍历方法：
@@ -2662,7 +2720,7 @@ this.listData[this.current] = oldList;
 
   **flatMap()只能展开一层数组**
 
-> 注意：**lat和flatMap方法为ES2019(ES10)方法，目前还未在所有浏览器完全兼容；需要升级浏览器到V71后才可使用**
+> 注意：**flat和flatMap方法为ES2019(ES10)方法，目前还未在所有浏览器完全兼容；需要升级浏览器到V71后才可使用**
 
 ```js
 const a = [1, 2, ['a', 'b', 'c'], [2, ['e', 'r']], [undefined, null, '']];
@@ -2702,6 +2760,83 @@ Object.defineProperty(obj,'price',{
 delete obj.id;
 console.log(Object.keys(obj));
 console.log(obj)
+```
+
+**注意：当重复定义一个属性时，会出现报错**
+
+```js
+let obj = {}
+// Object.defineProperty
+try {
+  Object.defineProperty(obj, 'c', {
+    get() {
+      return 3
+    }
+  })
+  Object.defineProperty(obj, 'c', {
+    get() {
+      return 4
+    }
+  })
+}catch(err) {
+  console.log("Object DefineProperty error",err)
+}
+
+// Reflect.defineProperty
+const x1 = Reflect.defineProperty(obj, 'c', {
+  get() {
+    return 3
+  }
+})
+const x2 = Reflect.defineProperty(obj, 'c', {
+  get() {
+    return 4
+  }
+})
+if(x2) {
+  console.log('x2操作成功了')
+} else {
+  console.log('x2操作失败了');
+}
+console.log('Reflect.defineProperty 相对于 Object.defineProperty 更具优势，因为不会出现报错信息，只是把相同的覆盖，返回false');
+```
+
+#### 过滤数组对象中重复的属性名
+
+- **`Object.key(ObjName对象名)`**：获取对象所有的属性，返回的是一个数组
+
+```js
+let list = [
+  { name: "willy4", age: 22 },
+  { name: "willy1", age: 22 },
+  { name: "willy3", age: 22 },
+  { name: "willy2", age: 22 },
+  { name: "willy1", age: 22 },
+  { name: "willy3", age: 22 },
+];
+let hash = {};
+list.reduce((item, next) => {
+  let string = next.name;
+  hash[string] ? '' : hash[string] = true
+},[])
+console.log(hash) // { willy4: true, willy1: true, willy3: true, willy2: true }
+
+let newList = Object.keys(hash);
+console.log(newList)  // [ 'willy4', 'willy1', 'willy3', 'willy2' ]
+```
+
+#### 合并两个对象
+
+1. **遍历赋值**
+2. 浅拷贝：**Object.assign(target, ...sources)**
+3. 深拷贝：
+
+```js
+let obj1 = {'a': 1};
+let obj2 = {'a': 1};
+let obj3 = {'b': 2};
+let copy1 = Object.assign(obj1, obj3);  // { a: 1, b: 2 } { a: 1, b: 2 }  obj1会改变
+let copy2 = Object.assign({}, obj2, obj3); // { a: 1 } { a: 1, b: 2 } obj2不会改变
 ```
 
 #### 对象的拓展运算符 （...）
@@ -4206,6 +4341,56 @@ async && await result is 1500
 async && await: 1910.646ms
 */
 ```
+
+## demo
+
+### 数字位数不够，前面位数补零
+
+```js
+function formatZero(num, len) {
+  if(String(num).length > len) return num;
+  return (Array(len).join(0) + num).slice(-len);
+}
+let a = formatZero(123456, 5);
+let b = formatZero(123, 5);
+console.log(a,b); // 123456 '00123'
+```
+
+### id自增
+
+**闭包实现id自增**
+
+```js
+function next_id(){
+    var current_id = 0;
+    return function (){
+        return ++current_id;
+    }
+}
+var g =  next_id();
+for( let i = 0; i < 10; i++ ){
+    console.log(g());
+}
+```
+
+**迭代器generator实现id自增**
+
+```js
+function* next_id(){
+    let current_id =0;
+    while(true) {
+        current_id++;
+        yield current_id;
+    }
+}
+
+let g = next_id();
+
+for( var i = 0; i < 10; i++ ){
+    console.log( g.next().value )
+}
+```
+
 
 
 
@@ -6478,7 +6663,7 @@ var vm = new Vue({
 - watch支持异步；
 - 监听的函数接收两个参数，第一个参数是最新值；第二个参数是输入之前的值； 当一个属性发生变化时，需要执行对应的操作；一对多；
 - 监听数据必须是data中声明过或者父组件传递过来的props中的数据，当数据变化时，触发其他操作，函数有两个参数，
-  - immediate：组件加载立即触发回调函数执行，
+  - immediate：立即监听，
   - deep: 深度监听，为了发现**对象内部值**的变化，复杂类型的数据时使用，例如数组中的对象内容的改变，注意监听数组的变动不需要这么做。注意：deep无法监听到数组的变动和对象的新增，参考vue数组变异,只有以响应式的方式触发才会被监听到。
 
 ```vue
@@ -6840,13 +7025,20 @@ export default {
 ### **父子组件的通信**
 
 - 父传子：`props`		通过`props`向子组件传递数据
+
+  - 在子组件中使用`props`属性来接收父组件传来的数据（如果定义类型，就会对传来的数据做过滤）
+
+  - 在子组件中`$attrs`会保存父组件传来的数据中props不接收的数据（捡漏）
+
+  - > `$attrs`中接收的数据不会存在类型过滤（所以父组件传什么数据就会接收什么）
+
 - 子传父：`$emit`        通过事件(`events`)向父组件发送消息
 
 **父传子**
 
 ```html+vue
 <div id="app">
-    <cpn :cmovies="movies" :cmessage="message"></cpn>
+    <cpn :cmovies="movies" :cmessage="message" mname="willys"></cpn>
 </div>
 
 <template id="cpn1">
@@ -6855,6 +7047,7 @@ export default {
         <ul>
             <li v-for="item in cmovies">{{item}}</li>
         </ul>
+        <p>props中不接收的数据,$attrs来接收剩余数据 {{ $attrs.mname }}</p>
     <div>
 </template>
 
@@ -7210,6 +7403,8 @@ export default {
 ### slot组件的插槽
 
 组件的插槽目的是让我们封装的组件更具扩展性。（预留空间、抽取共性保留不同）
+
+> 可以通过$slots来获取所有插槽（$slots通过数组对象来存放定义的插槽）
 
 #### 普通插槽（携带的默认值可替换）
 
@@ -9424,6 +9619,317 @@ const VM = new Vue({
 </style>
 ```
 
+# vue3.0
+
+- 相对于vue2性能提升：打包大小减少、渲染时间减少、内存减少
+- vue3需要cli版本在4.5.0以上
+- 项目创建：`vue create projectName`
+- 使用vite（新一代前端构件工具）：尤雨溪
+  - 开发环境中，无需打包操作，可快速冷启动
+  - 轻量快速的热重载（HMR）
+  - 真正的按需编译，不再等待整个应用编译完成
+- vue3组件模板中可以没有根标签
+
+## 组合式API
+
+### setup
+
+- 组件中所用到的数据、方法等均要配置在setup中
+
+- setup有两种返回值
+
+  - 若返回一个对象，则对象中的属性、方法，在模板中均可直接使用
+  - 若返回一个渲染函数，则可以自定义渲染内容
+
+- 与vue2混合使用（一般不建议混合使用）
+
+  - vue2.x配置(data、methods、computed...)中可以访问到setup中的属性和方法。
+  - 但在setup中不能访问到vue2.x配置(但可以通过箭头函数调用)
+  - 如果有重名，setup会优先（因为setup是渲染时调用，所以会把之前重名的方法覆盖）
+
+- > setup不能是一个async函数，因为返回值不是return的对象，而是promise，模板看不到return对象中的属性。
+
+- **ref函数和reactive函数的作用**：
+
+  - 为了让数据可以响应式改变；
+  - 在vue2中，对象或者数组的数据改变，需要调用`this.$set或vue.set`方法来实现才可以做出响应式改变。
+
+- 执行时机
+  
+  - 在`beforeCreate`之前执行一次，`this`是undefined
+- setup的参数
+  - props：值为对象，包含组件外部传递过来且组件内部接收了的属性
+  - context：上下文对象
+    - attrs：值为对象，包含组件外部传递过来，但没有在props配置中声明的属性，相当于`this.$attrs`
+    - slots：收到的插槽内容，相当于`this.$slots`
+    - emit：分发自定义事件的函数，相当于`this.$emit`
+
+### ref函数
+
+- 作用：**把数据定义为响应式**
+- 语法：`let xx = ref(initValue);`
+  - 创建一个包含响应式数据的引用对象（reference对象，简称ref对象）
+  - js中操作数据：`xx.value`
+  - 模板中读取数据：不需要`.value`，直接`<div>{{ xx }}</div>`
+- 注意：
+  - 接受的数据可以是基本类型和对象类型
+  - 基本类型的数据：响应式考`object.definedProperty()`的`get`和`set`方法完成
+  - 对象类型的数据：内部“求助”了vue3的`reactive`函数（返回的是proxy(代理)对象）
+
+```vue
+<template>
+  <div>{{ name }}</div>
+  <div>{{ hobbies }}</div>
+  <div>{{ study }}</div>
+  <button @click="changeInfo">响应式修改数据</button>
+</template>
+
+<script>
+  import { ref } from "vue"
+  export default {
+    name: 'App',
+    setup() {
+      let name = ref("willy");
+      let hobbies = ref({
+        play: "basketball",
+        eat: "fruit",
+      });
+      let study = ref({
+        a: "vue2",
+        b: "vue3"
+      })
+      
+      function changeInfo() {
+        name.value = "willysliang";
+        hobbies.value.play = "game";
+        hobbies.value.eat = "meat";
+        study.value = {
+          a: "js",
+          b: "java"
+        }
+      }
+
+      return { name, hobbies, study, changeInfo }
+    },
+  }
+</script>
+```
+
+### reactive函数
+
+- 作用：定义一个**对象类型**的响应式数据
+- 语法：`let 代理对象 = reactive(被代理对象)`接收一个对象或数组，返回一个代理器对象(proxy对象)
+- reactive定义的响应式数据是“深层次的”
+- 内部基于ES6的Proxy实现，通过代理对象操作原对象内部数据都是响应式的
+
+```vue
+import { ref, reactive } from "vue"
+export default {
+  name: 'App',
+  setup() {
+    let name = ref("willy");
+    let hobbies = ref({
+      play: "basketball",
+      eat: "fruit",
+    });
+    let study = ref({
+      a: "vue2",
+      b: "vue3",
+    })
+    let drink = reactive({
+      a: "1",
+      b: {
+        c: {
+          d: "椰汁",
+        },
+      },
+    })
+    let move = reactive(["跳", "跑", "走"])
+
+    function changeInfo() {
+      name.value = "willysliang";
+      hobbies.value.play = "game";
+      hobbies.value.eat = "meat";
+      study.value = {
+        a: "js",
+        b: "java"
+      }
+
+      /* drink = {  // 不会响应式改变
+        a: "牛奶",
+        b: "可乐",
+      } */
+      drink.a = "牛奶"
+      drink.b.c.d = "可乐";
+
+      move[0] = "飞"
+    }
+
+    return { name, hobbies, study, drink, move, changeInfo }
+  },
+}
+```
+
+![image-20210906141443111](image/image-20210906141443111.png)
+
+### js响应式原理
+
+1. `Object.defineProperty`()
+2. `Reflect.defineProperty()`
+3. `Propx()`
+
+```js
+// 模拟vue3中实现响应式
+let person = { 
+  a: "a", b: "b", c: { d: "e" },
+};
+
+// 1.Proxy代理对象实现响应
+const p = new Proxy(person, {
+  // 读取p某个属性时调用
+  get(target, propName) {
+    console.log(`读取了p的${propName}属性`);
+    if (propName === 'date')
+      target[propName] += "天";
+    return target[propName]
+  },
+
+  // 修改p某个属性或给p追加属性时调用
+  set(target, propName, value) {
+    console.log(`修改了p的${propName}`);
+
+    // 字段过滤
+    if (propName === 'age' && typeof value != 'number') {
+      // throw Error("age字段必须为number类型");
+      console.log("age字段必须为number类型");
+    }
+
+    // 返回数据
+    // target[propName] = value;
+    return Reflect.set(target, propName, value); // 等同target[propName] = value;
+  },
+
+  // 删除p的某个属性时调用
+  deleteProperty(target, propName) {
+    console.log(`删除p的${propName}属性`);
+    return delete target[propName]  // 返回的是true || false
+  }
+})
+
+let obj = {}
+// Object.defineProperty 实现响应
+try {
+  Object.defineProperty(obj, 'c', {
+    get() {
+      return 3
+    }
+  })
+  Object.defineProperty(obj, 'c', {
+    get() {
+      return 4
+    }
+  })
+} catch (err) {
+  console.log("Object DefineProperty error", err)
+}
+
+// Reflect.defineProperty 实现响应
+const x1 = Reflect.defineProperty(obj, 'c', {
+  get() {
+    return 3
+  }
+})
+const x2 = Reflect.defineProperty(obj, 'c', {
+  get() {
+    return 4
+  }
+})
+if (x2) {
+  console.log('x2操作成功了')
+} else {
+  console.log('x2操作失败了');
+}
+console.log('Reflect.defineProperty 相对于 Object.defineProperty 更具优势，因为不会出现报错信息，只是把相同的覆盖，返回false');
+```
+
+### `computed`
+
+
+
+### `watch`
+
+- 监听`ref`所定义的一个数据`watch(变量, (newVal, oldVal) => {})`
+
+- 监听多个响应多个数据时，返回的也是一个数组``watch([变量1, 变量2], (newVal, oldVal) => {})`
+- 
+
+```vue
+let person = reactive({
+  firstName: "willys",
+  lastName: "liang",
+  job: {
+    j1: {
+    	kk: "job1"
+    }
+  }
+})
+// watch情况一：监听一个响应数据
+watch(num, (newVal, oldVal) => {
+  console.log('sum改变了', num, newVal, oldVal)
+},{immediate: true})
+
+// watch 情况二：监听多个响应数据
+watch([num, msg], (newVal, oldVal) => {
+  console.log('sum或msg改变了', newVal, oldVal)
+},{immediate: true})
+
+/* watch 情况三：监听reactive所定义的一个响应式数据。
+ 注意1：此处无法正确的获取oldVal值，都是新值；因为返回的是Proxy对象
+ 注意2：强制开启了深度监视（deep配置无效），且不可关闭深度监视（即多层内的数据都可以改变，但不可阻止其改变）
+*/
+watch(person, (newVal, oldVal) => {
+	console.log('person改变了', newVal, oldVal)
+},{immediate: true})
+
+
+```
+
+![image-20210906164951078](image/image-20210906164951078.png)
+
+![image-20210906165713959](image/image-20210906165713959.png)
+
+### watchEffect函数
+
+- 不用指明监听哪个属性，监听在watchREffect函数内部调用的属性（只要其属性发生改变，就执行回调，初次渲染立即执行一次）
+- **watchEffect与computed的区别**
+  - computed注重计算出的值(回调函数的返回值)，所以必须写返回值
+  - watchEffect更注重过程(回调函数的函数体)，所以不用返回值
+
+```js
+watchEffect(() => {
+  let x1 = num.value
+  let x2 = person.job.j1.kk
+  console.log("watchEffect执行了", x1, x2)
+})
+```
+
+### 生命周期
+
+- beforeCreate
+- created
+- beforeMount
+- mounted
+- beforeUpdate
+- Updated
+- beforeUnmount
+- unmounted
+
+
+
+
+
+
+
 
 
 # ag-Grid
@@ -10400,7 +10906,7 @@ wx.showActionSheet({
 ```js
 let list = []
 let obj = {"willy","test"}
-list[obj.length] = obj;
+list[list.length] = obj;
 setData({ list: list })
 ```
 
@@ -11906,6 +12412,14 @@ git config --global alias.unstage 'reset HEAD'
 - Git有很多图形界面工具，这里我们推荐[SourceTree](https://www.sourcetreeapp.com/)，它是由[Atlassian](https://www.atlassian.com/)开发的免费Git图形界面工具，可以操作任何Git库。
 - 使用SourceTree可以以图形界面操作Git，省去了敲命令的过程，对于常用的提交、分支、推送等操作来说非常方便。
 - SourceTree使用Git命令执行操作，出错时，仍然需要阅读Git命令返回的错误信息。
+
+### GitLab无需每次输入账号密码
+
+1. 添加SSH到本地，然后把SHH放入GitLab上
+2. 若再次拉取代码和提取代码应无需再输密码，若还需输入密码
+   1. 在命令行中输入`git config --global credential.helper store`
+   2. 然后操作pull/push 会让输入用户名密码，第一次输入进去。
+   3. 下次再操作pull/push时就不需要输入用户名密码了
 
 # 记注
 
