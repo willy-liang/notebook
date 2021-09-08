@@ -2291,28 +2291,26 @@ export default function originPJSONP(option) {
   - 优点：性能比面向对象高，适合跟硬件联系很紧密的东西，如单片机。
   - 缺点：没有面向对象易维护、易复用、易扩展
 
-###类
+#### `constructor`构造函数
 
-- `constructor`构造函数
+- `constructor()`方法是类的构造函数(默认方法)，用于传递参数，返回实例对象，通过`new`命令生成对象实例时自动调用该方法。如果没显示，类内部会自动创建一个。
+- 不可通过构造函数访问实例成员。
+- 静态成员只能怪通过构造函数访问
 
-  - `constructor()`方法是类的构造函数(默认方法)，用于传递参数，返回实例对象，通过`new`命令生成对象实例时自动调用该方法。如果没显示，类内部会自动创建一个。
-  - 不可通过构造函数访问实例成员。
-  - 静态成员只能怪通过构造函数访问
+#### 创建、调用类
 
-- 创建、调用类
+1. 通过`class`关键字创建类
+2. 类中有`constructor函数`(构造函数)，可接受传递来的参数同时返回实例对象；
+3. `constructor函数`只要`new`生成实例时，就会自动调用这个函数，如果不写这个函数，类也会自动生成这个函数；
+4. 生成实例`new`不能省略；
 
-  1. 通过`class`关键字创建类
-  2. 类中有`constructor函数`(构造函数)，可接受传递来的参数同时返回实例对象；
-  3. `constructor函数`只要`new`生成实例时，就会自动调用这个函数，如果不写这个函数，类也会自动生成这个函数；
-  4. 生成实例`new`不能省略；
+#### 类的继承与`super`
 
-- 类的继承与`super`
+- `super`必须在子类`this`之前调用
 
-  - `super`必须在子类`this`之前调用
+- `super`作为函数调用时，代表父类的构造函数。
 
-  - `super`作为函数调用时，代表父类的构造函数。
-
-  - > ES6要求，子类的构造函数必须执行一次`super`函数。注意：`super()`作为函数时，`super()`只能在子类的构造函数之中，用在其他地方就会报错。
+- > ES6要求，子类的构造函数必须执行一次`super`函数。注意：`super()`作为函数时，`super()`只能在子类的构造函数之中，用在其他地方就会报错。
 
 ```index.html
 <!DOCTYPE html>
@@ -2328,8 +2326,7 @@ export default function originPJSONP(option) {
 <script>
     class Father{
         constructor(name, age) {
-            console.log(this)
-            //constructor里面的 this 指向的是创建的实例对象
+            console.log(this)  //constructor里面的 this 指向的是创建的实例对象
             this.name = name;
             this.age = age;
             this.btn = document.querySelector('button');
@@ -4391,6 +4388,8 @@ for( var i = 0; i < 10; i++ ){
 }
 ```
 
+### 函数防抖
+
 
 
 
@@ -5923,133 +5922,6 @@ Less的作用域与CSS中的作用域类似。先在本地查找变量和混合�
 - https://www.sass.hk/docs/
 
 
-
-# 面试题
-
-## CSS
-
-### 重绘和回流(重排)
-
-- 重绘和回流是什么？
-
-  ​	1.重绘：不会影响页面布局的操作，如更改颜色；
-  ​	2.回流：布局的改变导致需要重新构建，就是回流
-  ​	注意：回流必将引起重绘，重绘不一定会引起回流
-
-- 重新绘制到屏幕上的过程称为重绘。引起重排的原因有
-       1.添加或者删除可见的DOM元素，
-       2.元素位置、尺寸、内容改变，
-       3.浏览器页面初始化，
-       4.浏览器窗尺寸改变，重排一定重绘，重绘不一定重排
-
-- 减少重绘和重排的方法：
-      1.不在布局信息改变时做 DOM 查询
-      2.使用 `cssText` 或者 `className` 一次性改变属性
-      3.使用 `fragment`
-      4.对于多次重排的元素，如动画，使用绝对定位脱离文档流，让他的改变不影响到其他元素
-
-### 对语义化的理解
-
-- 根据内容的结构选择适合的标签
-- 1、样式丢失或者去掉样式后，页面仍然可以呈现出清晰的结构
-- 2、有利于SEO，让爬虫可以抓到更多的有效信息
-- 3、方便其他设备渲染页面（盲人阅读器等）
-- 4、更具有可读性，便于团队开发维护
-
-### 为什么要初始化css样式
-
-因为浏览器的兼容问题，不同浏览器对有些标签的默认值不同，如果不初始化css，会导致不同浏览器页面间的显示差异。
-
-### 移动端适配1px问题
-
-问题：移动端的1px在有些机型上看去比较粗，虽然写着1px但看上去的效果可能是2px
-
-解决方法：伪类+transform方法，原理是把原先元素的`border`去掉，然后利用`:before`或者`:after`重做`border`，并`transform`的`scale`缩小一半，原先的元素相对定位，新做的`border`绝对定位。
-
-```css
-* {
-  margin: 0;
-  padding: 0;
-}
-ul, li{
-  list-style: none;
-}
-.hairlines {
-  width: 300px;
-  margin: 100px auto;
-}
-.hairlines li{
-  position: relative;
-  border:none;
-  margin-top: 10px;
-}
-.hairlines li:after{
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  background: #cccccc;
-  width: 100%;
-  height: 1px;
-  -webkit-transform: scaleY(0.5);
-  transform: scaleY(0.5);
-  -webkit-transform-origin: 0 0;
-  transform-origin: 0 0;
-}
-```
-
-### 居中为什么要使用transform(为什么不适用margin:Left/Top)
-
-transform： 属于合成属性，不会引起整个页面的回流重绘，节省性能借号，但是占用内存会大些；
-top/left：属于布局属性，会引起页面layout回流和repaint重绘。
-
-## JS/ES6
-
-### ES6的新特性
-
-const/let、模板字符串、箭头函数、函数的参数默认值、对象和数组结构、`for...of 和 for...in`
-
-### promise的使用、怎么用es5实现promise
-
-### if有作用域吗
-
-只有函数有作用域，if是没有作用域的。
-但是有一种情况会让if看上去有作用域，就是在`if{ }`语句中，使用`const、let`，他们会有块级作用域。
-
-### 原型链和作用域链的区别
-
-```
-（1）原型链
-当访问一个对象的某个属性时，会先在这个对象本身的属性上找，如果没有找到，会去这个属性的__proto__属性上找，即这个构造函数的prototype，如果还没找到，就会继续在__proto__上查找，直到最顶层，找不到即为undefined。这样一层一层往上找，彷佛是一条链子串起来，所以叫做原型链。
-
-（2）作用域链
-变量取值会到创建这个变量的函数的作用域中取值，如果找不到，就会向上级作用域去查，直到查到全局作用域，这么一个查找过程形成的链条就叫做作用域链。
-
-（3）区别
-作用域是对变量而言，原型链是对于对象的属性而言
-作用域链的顶层是window，原型链的顶层是Object
-```
-
-## Webpack
-
-### webpack里面的插件是怎么实现的
-
-### dev-server是怎么跑起来
-
-### 使用过webpack里面哪些plugin和loader
-
-### webpack整个生命周期，loader和plugin有什么区别
-
-### webpack打包的整个过程
-
-### 一般怎么组织CSS（Webpack）
-
-### 如何配置把js、css、html单独打包成一个文件
-
-### webpack和gulp的优缺点
-
-### 使用webpack构建时有无做一些自定义操作
-webpack的热更新是如何做到的？说明其原理？
 
 # Vue2.0
 
@@ -8041,9 +7913,9 @@ module.exports = {
 
 ### 可视化管理 `vue ui`
 
-在cmd中输入`vue ui`即可。
+在cmd中输入`vue ui`就会在浏览器中弹出可视化界面生成并管理项目。
 
-## 脚手架CLI
+### 脚手架CLI
 
 **概述**
 
@@ -9441,14 +9313,12 @@ Router.prototype.push = function push(location) {
 ### 跑马灯效果
 
 ```html_vue
-//HTML
 <div id="app">
     <p>{{info}}</p>
 	<input type="button" value="开启" v-on:click="go">
 	<input type="button" value="停止" v-on:click="stop">
 </div>
 
-//js	Vue实例
 // 创建 Vue 实例，得到 ViewModel
 var vm = new Vue({
     el: '#app',
@@ -9463,8 +9333,9 @@ var vm = new Vue({
                 return;
             }
             // 开始定时器
-            this.intervalId = setInterval(() => {this.info = this.info.substring(1) + this.info.substring(0, 1);}, 500);
-
+            this.intervalId = setInterval(() => {
+            	this.info = this.info.substring(1) + this.info.substring(0, 1);
+            }, 500);
         },
         stop() {
             clearInterval(this.intervalId);
@@ -9582,9 +9453,7 @@ const VM = new Vue({
 })
 ```
 
-### `router_cli@2`多页面内容切换--`TabBar`
-
-#### 选项卡切换
+### `router_cli@2实现选项卡切换
 
 **理念**：通过`onclick`带值事件和绑定三元`class`样式来显示。
 
@@ -9630,7 +9499,7 @@ const VM = new Vue({
   - 真正的按需编译，不再等待整个应用编译完成
 - vue3组件模板中可以没有根标签
 
-## 组合式API
+## 组合式`Composition API`
 
 ### setup
 
@@ -9648,6 +9517,7 @@ const VM = new Vue({
   - 如果有重名，setup会优先（因为setup是渲染时调用，所以会把之前重名的方法覆盖）
 
 - > setup不能是一个async函数，因为返回值不是return的对象，而是promise，模板看不到return对象中的属性。
+  > 注意：当使用Suspense和异步组件配合时，可以返回一个Promise实例，且可使用async函数
 
 - **ref函数和reactive函数的作用**：
 
@@ -9891,10 +9761,21 @@ watch(person, (newVal, oldVal) => {
 	console.log('person改变了', newVal, oldVal)
 },{immediate: true})
 
+//情况四：监视reactive定义的响应式数据中的某个属性
+watch(()=>person.job,(newValue,oldValue)=>{
+	console.log('person的job变化了',newValue,oldValue)
+},{immediate:true,deep:true}) 
 
+//情况五：监视reactive定义的响应式数据中的某些属性
+watch([()=>person.job,()=>person.name],(newValue,oldValue)=>{
+	console.log('person的job变化了',newValue,oldValue)
+},{immediate:true,deep:true})
+
+//特殊情况
+watch(()=>person.job,(newValue,oldValue)=>{
+    console.log('person的job变化了',newValue,oldValue)
+},{deep:true}) //此处由于监视的是reactive素定义的对象中的某个属性，所以deep配置有效
 ```
-
-![image-20210906164951078](image/image-20210906164951078.png)
 
 ![image-20210906165713959](image/image-20210906165713959.png)
 
@@ -9915,16 +9796,505 @@ watchEffect(() => {
 
 ### 生命周期
 
-- beforeCreate
-- created
-- beforeMount
-- mounted
-- beforeUpdate
-- Updated
-- beforeUnmount
-- unmounted
+- `beforeCreate`===>`setup()`
+- `created`=======>`setup()`
+- `beforeMount` ===>`onBeforeMount`
+- `mounted`=======>`onMounted`
+- `beforeUpdate`===>`onBeforeUpdate`
+- `updated` =======>`onUpdated`
+- `beforeUnmount` ==>`onBeforeUnmount`
+- `unmounted` =====>`onUnmounted`
+
+组合式API的钩子函数要比配置项的钩子函数要高(即如onUpdated比update的执行速度提前一点)
+
+### 自定义hook函数
+
+- hook本质是封装好的函数，把setup函数中使用的Composition API进行了封装。
+
+- 类似于vue2.x中的mixin。
+
+- 自定义hook的优势: 复用代码, 让setup中的逻辑更清楚易懂。
+
+```js
+// 封装鼠标“打点”功能
+import { reactive, onMounted, onBeforeUnmount } from 'vue'
+export default function() {
+  // 实现鼠标"打点"相关的数据
+  let point = reactive({
+    x: 0,
+    y: 0,
+  })
+
+  // 实现鼠标“打点“相关方法
+  function savePoint(event) {
+    point.x = event.pageX
+    point.y = event.pageY
+  }
+
+  // 实现鼠标“打点”相关的生命周期钩子	（此为使用了组合式API的函数进行封装）
+  onMounted(() => {
+    window.addEventListener('click', savePoint)
+  })
+  onBeforeUnmount(() => {
+    window.removeEventListener('click', savePoint)
+  })
+
+  return point
+}
+```
+
+```js
+// 使用封装的功能
+import usePoint from './clickPonit.js'
+export default {
+  setup() {
+    let point = usePoint();
+    console.log(point.x, point.y)
+  }
+}
+```
+
+### toRef函数
+
+- 作用：创建一个 ref 对象，其value值指向另一个对象中的某个属性（类似浅拷贝，跟原对象共同使用同一内存）。
+- 应用:   要将响应式对象中的某个属性单独提供给外部使用时不丢失响应式
 
 
+- 扩展：```toRefs``` 与```toRef```功能一致，但可以批量创建多个 ref 对象（类似ES10的flat()方法把获取对象中的属性平铺，但只平铺一层）
+- ```const name = toRef(person,'name');  const p = toRefs(person); ```
+
+```js
+import { reactive, toRef, toRefs  } from 'vue'
+export default {
+  setup() {
+    let person = reactive({
+      name: "aaa",
+      age: 14,
+      job: {
+        job1: {
+          select: "frontEnd"
+        }
+      }
+    })
+    return {
+      person,
+      name: person.name,  // 不会改变person中的name值
+      jobs: toRef(person.job.job1, 'select'), // 会改变person中的值
+      ...toRefs(person),  // 如ES10的flat()对toRef()平铺,但是只平铺一层 调用时直接属性名，深层次的数据则一层一层引用
+    }
+  }
+}
+```
+
+
+
+### shallowReactive 与 shallowRef
+
+- shallowReactive：只处理对象最外层属性的响应式（浅层次响应式）。
+- shallowRef：只处理基本数据类型的响应式, 不进行对象的响应式处理。
+
+- 什么时候使用?（用作性能优化）
+  -  如果有一个对象数据，结构比较深, 但变化时只是外层属性变化 ===> shallowReactive。
+  -  如果有一个对象数据，后续功能不会修改该对象中的属性，而是生新的对象来替换 ===> shallowRef。
+
+### readonly 与 shallowReadonly
+
+- readonly: 让一个响应式数据变为只读的（深只读）。
+- shallowReadonly：让一个响应式数据变为只读的（浅只读，即深层次的数据是可以响应式修改的）。
+- 应用场景: 不希望数据被修改时。
+
+### toRaw 与 markRaw
+
+- toRaw：
+  - 作用：将一个由```reactive```生成的<strong style="color:orange">响应式对象</strong>转为<strong style="color:orange">普通对象</strong>。
+  - 使用场景：用于读取响应式对象对应的普通对象，对这个普通对象的所有操作，不会引起页面更新。
+- markRaw：
+  - 作用：标记一个对象，使其永远不会再成为响应式对象。
+  - 应用场景:
+    1. 有些值不应被设置为响应式的，例如复杂的第三方类库等。
+    2. 当渲染具有不可变数据源的大列表时，跳过响应式转换可以提高性能。
+    3. 如果给定义为reactive的对象添加属性，其属性必然是响应式的；但可通过markRaw使得其添加的属性不可响应式改变。
+
+### 自定义ref:`customRef`
+
+- 作用：创建一个自定义的 ref，并对其依赖项跟踪和更新触发进行显式控制。
+
+- 实现防抖效果：当你不断输入时，下面内容不会更新；当停止输入才更新
+
+  ```vue
+  <template>
+  	<input type="text" v-model="keyword">
+  	<h3>{{keyword}}</h3>
+  </template>
+  
+  <script>
+  	import {ref,customRef} from 'vue'
+  	export default {
+  		name:'Demo',
+  		setup(){
+  			//自定义一个myRef
+  			function myRef(value,delay){	// delay为延迟时间
+  				let timer	// 设置定时器
+  				//通过customRef去实现自定义
+  				return customRef((track,trigger)=>{
+  					return{
+  						get(){
+  							track() //告诉Vue这个value值是需要被“追踪”的
+  							return value
+  						},
+  						set(newValue){
+  							clearTimeout(timer)	// 防止触发set方法时定时器不断触发而导致崩溃
+  							timer = setTimeout(()=>{
+  								value = newValue
+  								trigger() //触发器：通知Vue去解析页面，重新执行get()方法
+  							},delay)
+  						}
+  					}
+  				})
+  			}
+  			let keyword = myRef('hello',500) //使用程序员自定义的ref
+  			return {
+  				keyword
+  			}
+  		}
+  	}
+  </script>
+  ```
+  
+
+### provide 与 inject
+
+- 作用：实现<strong style="color:#DD5145">祖与后代组件间</strong>通信
+
+- 父组件有一个 `provide` 选项来提供数据，后代组件有一个 `inject` 选项来开始使用这些数据
+
+  1. 祖组件中：
+
+     ```js
+     setup(){
+     	......
+         let car = reactive({name:'奔驰',price:'40万'})
+         provide('car',car)
+         ......
+     }
+     ```
+
+  2. 后代组件中：
+
+     ```js
+     setup(props,context){
+     	......
+         const car = inject('car')
+         return {car}
+     	......
+     }
+     ```
+
+### 响应式数据的判断
+
+- isRef: 检查一个值是否为一个 ref 对象
+- isReactive: 检查一个对象是否是由 `reactive` 创建的响应式代理
+- isReadonly: 检查一个对象是否是由 `readonly` 创建的只读代理
+- isProxy: 检查一个对象是否是由 `reactive` 或者 `readonly` 方法创建的代理
+
+### `composition API、Options API`
+
+- 使用vue2传统的`Options API`开发，若新增或修改一个需求，需要在`data、methods、computed、watch`等中修改，当项目过于庞大时，会非常消耗时间查找相关数据和函数；
+- 使用vue3的`composition API`开发，可更加优雅的组织相关的变量和函数，让相关功能的代码有序的放在一起，便于维护项目。
+
+![image-20210908171147165](image/image-20210908171147165.png)
+
+## 组件
+
+### Fragment
+
+- 在Vue2中: 组件必须有一个根标签
+- 在Vue3中: 组件可以没有根标签, 内部会将多个标签包含在一个Fragment虚拟元素中
+- 好处: 减少标签层级, 减小内存占用
+
+
+
+### Teleport
+
+- `Teleport` 是一种能够将我们的<strong style="color:#DD5145">组件html结构</strong>移动到指定位置的技术
+- 作用：可作为弹层使用
+
+```vue
+<!-- 弹层案例 -->
+<template>
+  <button @click="isShow = true">点我弹个窗</button>
+  <teleport to="移动位置">
+    <div v-if="isShow" class="mask">
+      <div class="dialog">
+        <h3>我是一个弹窗</h3>
+        <button @click="isShow = false">关闭弹窗</button>
+    </div>
+    </div>
+  </teleport>
+</template>
+<script>
+	import {ref} from 'vue'
+	export default {
+		name:'Dialog',
+		setup(){
+			let isShow = ref(false)
+			return {isShow}
+		}
+	}
+</script>
+<style>
+	.mask{
+		position: absolute;
+		top: 0;bottom: 0;left: 0;right: 0;
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+	.dialog{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%,-50%);
+		text-align: center;
+		width: 300px;
+		height: 300px;
+		background-color: green;
+	}
+</style>
+```
+
+### Suspense
+
+- 等待异步组件时渲染一些额外内容，让应用有更好的用户体验（类似vue2的路由懒加载）
+
+- 作用：当所加载的组件的数据渲染比较缓慢时，可以让页面不出现内容缺失(该组件未完成加载)
+
+- 使用步骤： 
+
+  - 异步引入组件（页面会先加载渲染父组件再渲染子组件，因为父组件在import前就请求了)
+    若是同步(直接import导入组件)，则会等所有组件请求完再渲染页面
+
+    > 注意：异步请求会使得未加载到的组件所占的位置出现空缺的情况；
+    >
+    > 所以通过Suspense通过插槽来展示为为加载到组件时，该组件所在位置渲染的内容
+
+    ```js
+    import {defineAsyncComponent} from 'vue'
+    const Child = defineAsyncComponent(()=>import('./components/Child.vue'))
+    ```
+
+  - 使用```Suspense```包裹组件，并配置好```default``` 与 ```fallback```
+    default放本应该放置的组件
+    fallback放置当尚未加载到default中组件时，所显示的内容（如显示页面图片还在加载中的临时背景图）
+
+    ```vue
+    <template>
+    	<div class="app">
+    		<h3>我是App组件</h3>
+    		<Suspense>
+    			<template v-slot:default>
+    				<Child/>
+    			</template>
+    			<template v-slot:fallback>
+    				<h3>加载中.....</h3>
+    			</template>
+    		</Suspense>
+    	</div>
+    </template>
+    ```
+
+## 其他
+
+### .全局API的转移
+
+- Vue 2.x 有许多全局 API 和配置。
+
+  - 例如：注册全局组件、注册全局指令等。
+
+    ```js
+    //注册全局组件
+    Vue.component('MyButton', {
+      data: () => ({
+        count: 0
+      }),
+      template: '<button @click="count++">Clicked {{ count }} times.</button>'
+    })
+    
+    //注册全局指令
+    Vue.directive('focus', {
+      inserted: el => el.focus()
+    }
+    ```
+
+- Vue3.0中对这些API做出了调整：
+
+  - 将全局的API，即：```Vue.xxx```调整到应用实例（```app```）上
+
+    | 2.x 全局 API（```Vue```） | 3.x 实例 API (`app`)                        |
+    | ------------------------- | ------------------------------------------- |
+    | Vue.config.xxxx           | app.config.xxxx                             |
+    | Vue.config.productionTip  | <strong style="color:#DD5145">移除</strong> |
+    | Vue.component             | app.component                               |
+    | Vue.directive             | app.directive                               |
+    | Vue.mixin                 | app.mixin                                   |
+    | Vue.use                   | app.use                                     |
+    | Vue.prototype             | app.config.globalProperties 全局属性        |
+
+### 其他改变
+
+- data选项应始终被声明为一个函数。
+
+- 过度类名的更改：
+
+  - Vue2.x写法
+
+    ```css
+    .v-enter,
+    .v-leave-to {
+      opacity: 0;
+    }
+    .v-leave,
+    .v-enter-to {
+      opacity: 1;
+    }
+    ```
+
+  - Vue3.x写法
+
+    ```css
+    .v-enter-from,
+    .v-leave-to {
+      opacity: 0;
+    }
+    
+    .v-leave-from,
+    .v-enter-to {
+      opacity: 1;
+    }
+    ```
+
+- <strong style="color:#DD5145">移除</strong>keyCode作为 v-on 的修饰符，同时也不再支持```config.keyCodes```
+
+- <strong style="color:#DD5145">移除</strong>```v-on.native```修饰符
+
+  - 父组件中绑定事件
+
+    ```vue
+    <my-component
+      v-on:close="handleComponentEvent"
+      v-on:click="handleNativeClickEvent"
+    />
+    ```
+
+  - 子组件中声明自定义事件
+
+    ```vue
+    <script>
+      export default {
+        emits: ['close']
+      }
+    </script>
+    ```
+
+- <strong style="color:#DD5145">移除</strong>过滤器（filter）
+
+  > 过滤器虽然这看起来很方便，但它需要一个自定义语法，打破大括号内表达式是 “只是 JavaScript” 的假设，这不仅有学习成本，而且有实现成本！建议用方法调用或计算属性去替换过滤器。
+
+
+
+# react
+
+## 了解
+
+- 特点：采用**组件化**模式、**声明式编码**，提高开发效率及组件复用率。
+- 使用虚拟DOM和Diffing算法(最小化页面重绘)，尽量减少与真实DOM的交互。
+- 创建虚拟DOM
+  - js：**React.createElement(component, props, ...children)**
+  - JSX：**`` const VDOM = <h1>Hello,React</h1>``**
+- 渲染虚拟DOM： **ReactDOM.render(virtualDOM, containerDOM)**
+
+- 使用React开发者工具调试：`React Developer Tools`
+
+### JSX
+
+- jsx：js+XML；XML早期用于存储和传输数据(后来被JSON替代，因为JSON格式简便且可跟字符串相互转换)。
+- 使用JSX的原因：因为用纯js写生成的html代码，当为多层标签嵌套时，会产生很多嵌套循环语句，代码相对不简便
+- jsx语法规则
+  1. 虚拟DOM元素**只能有一个根元素**
+  2. DOM元素标签必须闭合
+  3. 定义虚拟DOM时，不能用引号
+  4. 标签中混入JS**表达式**要用`{}`(注意：只能混入表达式，不能混入语句)
+  5. 样式的类名指定用`className`，而不是class
+  6. 内联样式要用`style={key:value}`的形式写，且样式要用驼峰法
+  7. 标签首字母大小写
+     1. 若小写字母开头，则将该标签转为html中同名标签元素，若html中无该标签对应的同名元素，会导致因该标签不存在Html定义中而报错
+     2. 若大写字母开头，react就会渲染对应的组件，若该组件名没有定义，则报错
+- 渲染类组件标签的基本流程
+  1. React内部会创建组件实例对象
+  2. 调用render()得到虚拟DOM, 并解析为真实DOM
+  3. 插入到指定的页面元素内部
+
+### 模块/组件化
+
+- 模块
+  - 向外提供特定功能的js程序, 一般就是一个js文件
+  - 拆成模块原因：随着业务逻辑增加，代码越来越多且复杂
+  - 作用：复用js, 简化js的编写, 提高js运行效率
+- 组件
+  - 理解：用来实现局部功能效果的代码和资源的集合(html/css/js/image等等)
+  - 为什么要用组件： 一个界面的功能更复杂
+  - 作用：复用编码, 简化项目编码, 提高运行效率
+- 模块化
+  - 当应用的js都以模块来编写的, 这个应用就是一个模块化的应用
+- 组件化
+  - 当应用是以多组件的方式实现, 这个应用就是一个组件化的应用
+
+模块是按功能开发，组件是按区域开发
+
+- 函数式组件
+
+  - **函数名开头需要大写**
+
+  - **函数里面的this是undefined**，因为script中定义的`type='text/babel'`，babel编译后会开启成严格模式
+
+  - ```jsx
+    function Demo() {	// 函数开头需要大写（即Deom是一个组件
+      console.log(this)		// undefined
+      return <p>函数式组件Demo</p>
+    }
+    ReactDOM.render(<Demo/>, document.getElementById('app'))
+    ```
+
+- 类式组件
+
+  - 
+
+## 面向组件编程
+
+### state
+
+- 概念
+  - state是组件对象最重要的属性, 值是对象(可以包含多个key-value的组合)
+  - 组件被称为"状态机", 通过更新组件的state来更新对应的页面显示(重新渲染组件)
+- 注意
+  - 组件中render方法中的this为组件实例对象
+  - 组件自定义的方法中this为undefined
+    - 强制绑定this: 通过函数对象的bind()箭头函数
+  - 状态数据，不能直接修改或更新
+
+
+
+### props
+
+- 概念
+
+  - 每个组件对象都会有props(properties)属性
+  - 组件标签的所有属性都保存在props
+
+  - 作用：通过标签属性从组件外向组件内传递变化的数据
+  - 注意: 组件内部不要修改props数据
+
+- 编码操作
+
+  - 
 
 
 
