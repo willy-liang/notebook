@@ -2304,6 +2304,8 @@ export default function originPJSONP(option) {
 3. `constructor函数`只要`new`生成实例时，就会自动调用这个函数，如果不写这个函数，类也会自动生成这个函数；
 4. 生成实例`new`不能省略；
 
+**注意：类中的方法默认开启局部严格模式`'user strict'`，所以在实例中用this调用其方法会是undefined**
+
 #### 类的继承与`super`
 
 - `super`必须在子类`this`之前调用
@@ -2338,22 +2340,23 @@ export default function originPJSONP(option) {
         }
     }
     class Son extends Father {
-        constructor(x, y) {
+        constructor(x, y, study) {
             super(x,y);
             this.x = x;
             this.y = y;
-
+            this.study = study;
+						
             this.btn = document.querySelector('button');
             //这个this指向的是 btn 这个按钮，因为该按钮调用了sing函数
             this.btn.onclick = this.sing('大星星');
         }
         sing(song) {
-            console.log(this.x + '唱：' + song);
+            console.log(this.x + '唱：' + song + "学：" + this.study);
         }
     }
     let willy = new Father('willy', 23);
     willy.sing('小星星1号');
-    let son = new Son('son', 22);
+    let son = new Son('son', 22, "es6");
 </script>
 </body>
 </html>
@@ -6042,6 +6045,23 @@ M：指保存的是每个页面中的单独数据，js中data的数据
 - java中只有方法，没有函数（方法面对对象的）
 
 - 方法在类中定义的，函数是在外边定义
+
+## Diff算法
+
+- `snabbdom` 是著名的`虚拟DOM`库，是 `diff` 算法的奠基者
+- 虚拟DOM渲染：会比较跟之前元素是否有相同项，只重新渲染与之前元素的不同项
+
+![image-20210910105541211](image/image-20210910105541211.png)
+
+- diff` 算法是发生在 新旧`虚拟DOM`之上的，算出如何最小更新，最后反映到`真实DOM
+  - 遍历旧虚拟DOM，遍历新虚拟DOM，比较不同，重新排序
+  - 只比较同一层级，不跨级比较虚拟DOM
+  - 先判断key值再判断标签名是否相同，都相同则认为是相同节点，不再继续深度比较
+
+![img](image/998023-20180519213134497-676744027.png)
+
+
+
 
 
 ## 模板语法
@@ -10227,10 +10247,6 @@ export default {
   7. 标签首字母大小写
      1. 若小写字母开头，则将该标签转为html中同名标签元素，若html中无该标签对应的同名元素，会导致因该标签不存在Html定义中而报错
      2. 若大写字母开头，react就会渲染对应的组件，若该组件名没有定义，则报错
-- 渲染类组件标签的基本流程
-  1. React内部会创建组件实例对象
-  2. 调用render()得到虚拟DOM, 并解析为真实DOM
-  3. 插入到指定的页面元素内部
 
 ### 模块/组件化
 
@@ -10249,56 +10265,168 @@ export default {
 
 模块是按功能开发，组件是按区域开发
 
-- 函数式组件
+### 组件类别
 
-  - **函数名开头需要大写**
+#### 函数式组件(适用于简单组件的定义)
 
-  - **函数里面的this是undefined**，因为script中定义的`type='text/babel'`，babel编译后会开启成严格模式
+- **函数名开头需要大写**
+- **函数里面的this是undefined**，因为script中定义的`type='text/babel'`，babel编译后会开启成严格模式
 
-  - ```jsx
-    function Demo() {	// 函数开头需要大写（即Deom是一个组件
-      console.log(this)		// undefined
-      return <p>函数式组件Demo</p>
-    }
-    ReactDOM.render(<Demo/>, document.getElementById('app'))
-    ```
+```jsx
+function Demo() {	// 函数开头需要大写（即Deom是一个组件
+  console.log(this)		// undefined
+  return <p>函数式组件[适用于简单组件的定义]</p>
+}
+ReactDOM.render(<Demo/>, document.getElementById('app'))
+```
 
-- 类式组件
+#### 类式组件(适用于复杂组件的定义)
 
-  - 
+- 类式组件的类必须继承`React.Compoment`
+- 类中render的this指向实例对象
+
+```js
+class MyCompoment extends React.Compoment {
+  render() {
+    console.log(this)		// 指向MyCompoment这个实例对象
+    return <h1>类定义的组件[适用于复杂组件的定义]</h1>
+  }
+}
+ReactDOM.render(<MyCompoment/>, document.getElementById('app'))
+```
+
+
+
+**渲染类组件标签的基本流程**
+
+1. React内部解析组件标签，通过new来创建组件实例对象
+2. 通过该实例来调用render()得到虚拟DOM, 并解析为真实DOM
+3. 插入到指定的页面元素内部
 
 ## 面向组件编程
+
+### constructor
+
+
+
+
 
 ### state
 
 - 概念
-  - state是组件对象最重要的属性, 值是对象(可以包含多个key-value的组合)
-  - 组件被称为"状态机", 通过更新组件的state来更新对应的页面显示(重新渲染组件)
+  - state是组件对象最重要的属性, 值是对象(可以包含多个key-value的组合)；通过更新组件的state来更新对应的页面显示(重新渲染组件)
 - 注意
   - 组件中render方法中的this为组件实例对象
   - 组件自定义的方法中this为undefined
-    - 强制绑定this: 通过函数对象的bind()箭头函数
-  - 状态数据，不能直接修改或更新
+    - **强制绑定this: 通过函数对象的bind()箭头函数**
+    - 因为在类中默认开启局部严格模式，所以在类中定义的函数通过`oldFun`中的this为undeined
+    - 所以在构造函数中通过赋值并给函数绑定`this.newFun = this.oldFun.bind(this)`来绑定类中的函数(使得函在函数中的this指向实例对象)，在React渲染中调用则通过`this.newFun`来调用
+  - 状态数据不能直接修改或更新，需借助内置API`this.setState()`
+  - 构造函数执行1次，函数调用几次就执行几次，render()函数为函数调用次数+1(因为有次为初始化渲染)
+
+```js
+<script type="text/babel">
+		class Weather extends React.Component{
+			constructor(props){
+				super(props)
+				//初始化状态
+				this.state = {isHot:false,wind:'微风'}
+				//解决changeWeather中this指向问题
+				this.test = this.change.bind(this)
+			}
+
+			render(){
+				const {isHot,wind} = this.state
+				return <h1 onClick={this.test}>今天天气很{isHot ? '炎热' : '凉爽'}，{wind}</h1>
+			}
+      
+			change(){
+				const isHot = this.state.isHot
+				this.setState({isHot:!isHot})
+			}
+		}
+		//2.渲染组件到页面
+		ReactDOM.render(<Weather/>,document.getElementById('test'))
+	</script>
+```
+
+#### 简写
+
+```js
+// 简写
+class Weather extends React.Component{
+	state = {isHot:false,wind:'微风'}
+	render(){
+		const {isHot,wind} = this.state
+		return <h1 onClick={this.change}>今天天气很{isHot ? '炎热' : '凉爽'}，{wind}</h1>
+	}
+	change = ()=>{
+		const isHot = this.state.isHot
+		this.setState({isHot:!isHot})
+	}
+}
+ReactDOM.render(<Weather/>,document.getElementById('test'))
+```
 
 
 
 ### props
 
-- 概念
+- 每个组件对象都会有props(properties)属性
+- 组件标签的所有属性都保存在props
+- 作用：通过标签属性从组件外向组件内传递变化的数据
 
-  - 每个组件对象都会有props(properties)属性
-  - 组件标签的所有属性都保存在props
+**注意: 组件内部props数据只读，无法修改**
 
-  - 作用：通过标签属性从组件外向组件内传递变化的数据
-  - 注意: 组件内部不要修改props数据
+```js
+class Person extends React.Component {
+	//对标签属性进行类型、必要性的限制
+	static propTypes = {
+		name: PropTypes.string.isRequired, //限制name必传，且为字符串
+		sex: PropTypes.string,//限制sex为字符串
+		age: PropTypes.number,//限制age为数值
+		speak: PropTypes.func,//限制speak为函数
+	}
+	//指定默认标签属性值
+	static defaultProps = {
+		sex: '男',
+		age: 18
+	}
 
-- 编码操作
+	render() {
+		const { name, age, sex, speak } = this.props
+		const speaks = speak.bind(this)  // 绑定实例对象的this
+	
+		return (
+			<ul>
+				<li onClick={speaks}>姓名：{name}</li>
+				<li>性别：{sex}</li>
+				<li>年龄：{age + 1}</li>
+			</ul>
+		)
+	}
+}
 
-  - 
+function speak() {
+	console.log(this,`我说话了`);
+}
+
+ReactDOM.render(<Person name="tom" age={18} sex="女" speak={speak} />, document.getElementById('test1'))
+const p = { name: '老刘', age: 18, sex: '女', speak: speak }
+ReactDOM.render(<Person {...p} />, document.getElementById('test2'))
+
+```
+
+#### props传递函数
+
+1. 当方法没有参数时调用：`<button onClick="{getFunc}">按钮</button>`
+2. 当方法有参数时调用：`<button onClick="{() => getFunc("参数值")}">按钮</button>`
 
 
 
+### refs与事件处理
 
+- 
 
 
 
