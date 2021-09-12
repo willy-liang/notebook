@@ -4395,6 +4395,20 @@ for( var i = 0; i < 10; i++ ){
 
 
 
+### 逆向递归--多维数组根据子节点ID查找所有相关联父节点ID
+
+
+
+
+
+### 数组转树形结构
+
+
+
+
+
+
+
 
 
 # JS排序算法
@@ -10419,14 +10433,58 @@ ReactDOM.render(<Person {...p} />, document.getElementById('test2'))
 
 #### props传递函数
 
-1. 当方法没有参数时调用：`<button onClick="{getFunc}">按钮</button>`
-2. 当方法有参数时调用：`<button onClick="{() => getFunc("参数值")}">按钮</button>`
+1. 当方法没有参数时调用：`<button onClick={getFunc}>按钮</button>`
+2. 当方法有参数时调用：`<button onClick={() => getFunc("参数值")}>按钮</button>`
 
 
 
-### refs与事件处理
+### refs
 
-- 
+- 组件内的标签通过定义`ref`属性来标识自己，然后通过`this.refs.ref定义的属性名`来获取其标签（注意：该种定义获取ref的方式已过时）
+- 字符串形式的ref：`<input ref="input1" />`
+
+- **回调函数形式的ref**：`<p ref={ c => {this.input1 = c }} />`
+- **createRef创建ref容器**，然后绑定函数
+  - `myRef = React.createRef() `
+  - `<input ref={this.myRef}/>`
+
+
+
+### 事件处理
+
+- 通过onXxx属性指定事件处理函数(注意大小写)
+  - React使用的是自定义(合成)事件, 而不是使用的原生DOM事件
+  - React中的事件是通过事件委托方式处理的(委托给组件最外层的元素)
+- 通过event.target得到发生事件的DOM元素对象
+
+```js
+myRef = React.createRef()
+//展示左侧输入框的数据
+showData = (event)=>{
+  console.log(event.target);
+  alert(this.myRef.current.value);
+}
+render(){
+  return(
+    <div>
+    	<input ref={this.myRef} type="text" placeholder="点击按钮提示数据"/>&nbsp;
+			<button onClick={this.showData}>点我提示左侧的数据</button>&nbsp;
+		</div>
+	)
+}
+```
+
+### 组件生命周期
+
+![image-20210912212616540](image/image-20210912212616540.png)
+
+![image-20210912212430578](image/image-20210912212430578.png)
+
+
+
+
+
+
 
 
 
@@ -12635,9 +12693,52 @@ git push -u origin master
 
 ### 克隆GitHub项目到本地
 
-- `git clone git@github.com:willy-liang/test1.git`
+- `git clone 仓库地址`
 - git支持多种协议，包括https（速度慢、每次推送必须输入口令），但ssh协议速度最快。
 - 在自己的账号下clone仓库才能有权限推送修改；别人的仓库会因无权限而没法修改。
+
+### 拉取子模块
+
+#### 添加git子模块
+
+- 先克隆想要添加子模块的仓库`git clone 仓库地址`，克隆的是主目录
+- 进入仓库(主目录下)，添加子模块：`git submodule add 子模块地址`
+- ls查看会有`.gitmodules`和子模块的项目名，将生成的文件和目录Push到主仓库中。
+
+#### 克隆有子模块的仓库
+
+- 添加过子模块的仓库，如果想重新克隆，在克隆仓库后需要在仓库目录下执行`git submodule init`和`git submodule update`，如果不执行，子模块中会没有文件
+  1. `git clone 仓库地址`
+  2. `cd 克隆的仓库文件夹名`
+  3. `git submodule init`
+  4. `git submodule update`
+
+#### 更改子模块的分支
+
+- 切换到子模块目录，默认子模块是master分支，`git submodule foreach git checkout dev`
+- 然后使用`git submodule foreach git pull`切换分支
+
+#### submodule可进行tag和merge
+
+- `git submodule foreach`可以分别对子模块进行操作，所以对所有子模块进行tag和merge操作，就相当于对总项目进行相应的操作
+
+```bash
+# 1. 首次克隆仓库及其子模块
+git clone --recursive 仓库地址
+
+# 2. 仓库首次拉取子模块
+git submodule update --init --recursive
+
+# 3. 更新子模块
+git submodule update --recursive 							// (git1.7.3版本以上)
+git submodule update --recursive --remote    // (git1.8.2版本以上)
+git pull --recurse-submodules								 // 合并写法
+
+```
+
+
+
+
 
 ### 分支管理
 
