@@ -249,9 +249,62 @@ Filter : .8s ; //代表过渡时间为0.8s
 - css指的是层叠样式表，也称级联样式表。
 - CSS引入方式：行内式、嵌入式、链接式。
 
+### CSS选择器
+
+- 简单选择器：{根据名称、id、类来选取元素}
+- 组合选择器：{根据他们之间的特定关系来选取元素}
+- 伪类选择器：{根据特定的状态选取元素}
+- 伪元素选择器：{选取元素的一部分并设置其样式}
+- 属性选择器：{根据属性或属性值来获取元素}，如 a[target]
+
+#### 样式选择器
+
+```
+1、td[title="a"]
+	-->title属性值为a的td元素会被选择
+
+2、td[title~="c"]  
+	-->title属性值包含“c，且c前后只能有空格”的td元素会被选择
+
+3、td[title|="h"]  
+	-->title属性值为“h开头，且h只能为独立单词，后面可跟连字符”的td元素会被选择
+
+4、td[title^="l"]
+	-->title属性值为“l开头”的td元素会被选择
+
+5、td[title$="o"]
+	-->title属性值为“o结尾”的td元素会被选择
+
+6、td[title*="x"]
+	-->title属性值“包含x”的td元素会被选择
+```
+
+#### 属性选择器
+
+```
+1、CSS并集选择器    
+
+2、CSS交集选择器 
+
+3、CSS派生选择器
+	-->	子代：p > em{}    
+		兄弟：p+em{} p    
+		后代：p em{}      
+		元素1~元素2：
+
+4、CSS伪类选择器    
+	-->必须按顺序写：a:link，a:visited， a:hover，	a:active；还有其他伪类：li:first-child       input:focus
+
+5、伪元素选择器
+	-->h1:before，h2:afte， p:first-line
+
+6、兄弟选择器：
+-->元素1~元素2：第1 个元素之后所有的元素2 都会被选择，且这些元素和第一个元素拥有同一个父元素（两个元素之间不一定要相邻）
+```
+
 ### **CSS优先级**
 
-- !important > 内联样式 > id > class > 标签 > 通配符 > 继承 > 默认
+- **!important > 内联样式 > id > class > 标签 > 通配符 > 继承 > 默认**
 - 内联样式'1000'；ID选择器'100'；类、伪类和属性选择器'10'；标签选择器和伪元素选择器'1'；通用选择器(*)、子选择器(>)、相邻同胞选择器(+)权值为0；且在同权重下，前面的会被后面的样式覆盖。
 
 ### 图片模糊处理
@@ -526,60 +579,7 @@ em = 希望得到的像素大小 / 父元素字体像素大小
 
 如故宫行高小于盒子高度，文字会偏上，如果行高大于盒子高度，则文字偏下。
 
-### CSS选择器
-
-- 简单选择器：{根据名称、id、类来选取元素}
-- 组合选择器：{根据他们之间的特定关系来选取元素}
-- 伪类选择器：{根据特定的状态选取元素}
-- 伪元素选择器：{选取元素的一部分并设置其样式}
-- 属性选择器：{根据属性或属性值来获取元素}，如 a[target]
-
-#### 样式选择器
-
-```
-1、td[title="a"]
-	-->title属性值为a的td元素会被选择
-
-2、td[title~="c"]  
-	-->title属性值包含“c，且c前后只能有空格”的td元素会被选择
-
-3、td[title|="h"]  
-	-->title属性值为“h开头，且h只能为独立单词，后面可跟连字符”的td元素会被选择
-
-4、td[title^="l"]
-	-->title属性值为“l开头”的td元素会被选择
-
-5、td[title$="o"]
-	-->title属性值为“o结尾”的td元素会被选择
-
-6、td[title*="x"]
-	-->title属性值“包含x”的td元素会被选择
-```
-
-#### 属性选择器
-
-```
-1、CSS并集选择器    
-
-2、CSS交集选择器 
-
-3、CSS派生选择器
-	-->	子代：p > em{}    
-		兄弟：p+em{} p    
-		后代：p em{}      
-		元素1~元素2：
-
-4、CSS伪类选择器    
-	-->必须按顺序写：a:link，a:visited， a:hover，	a:active；还有其他伪类：li:first-child       input:focus
-
-5、伪元素选择器
-	-->h1:before，h2:afte， p:first-line
-
-6、兄弟选择器：
--->元素1~元素2：第1 个元素之后所有的元素2 都会被选择，且这些元素和第一个元素拥有同一个父元素（两个元素之间不一定要相邻）
-```
-
-## 定位
+### 定位
 
 1. 作用： 通过定位可以移动元素位置。
 2. 使用场景：当页面中出现盒子压盒子的效果时，推荐使用定位。
@@ -587,7 +587,7 @@ em = 希望得到的像素大小 / 父元素字体像素大小
 4. 分类：静态定位      绝对定位       相对定位       固定定位
 5. 定位问题：要设置坐标，必须先脱离文档流（即设置定位）
 
-### 静态定位
+#### 静态定位
 
  语法：  position: static;
 以下语法不能使用：  left: 10px； top: ;  bottom: ;   right:;
@@ -595,7 +595,7 @@ em = 希望得到的像素大小 / 父元素字体像素大小
 		◇ 静态定位不能移动元素位置
 		◇ 静态定位的元素就是标准流元素的显示方式
 
-### 绝对定位
+#### 绝对定位
 
 语法： position: absolute;
 绝对定位的位置移动特点：
@@ -605,7 +605,7 @@ em = 希望得到的像素大小 / 父元素字体像素大小
 		☞ 绝对定位的元素脱标不占位置
 		☞ 绝对定位可以实现模式转换
 
-### 相对定位
+#### 相对定位
 
 语法：position: relative;
 特点：
@@ -614,7 +614,7 @@ em = 希望得到的像素大小 / 父元素字体像素大小
 		☞ 不能实现模式转换
 		☞ 一般情况下要设置 子绝父相
 
-### 固定定位
+#### 固定定位
 
 语法：position: fixed;
 特点：
@@ -622,7 +622,7 @@ em = 希望得到的像素大小 / 父元素字体像素大小
 		☞固定定位的元素可以实现模式转换
 		☞ 固定定位的元素始终是以body(浏览器)可视区域（在可以看到的区域内，滑动到下面，还是固定在那个位置）为参照设置定位。
 
-### z-inde
+#### z-index
 
 定位元素的特点：
 
@@ -642,7 +642,7 @@ em = 希望得到的像素大小 / 父元素字体像素大小
 
 越高的显示在越在上层。
 
-### 定位盒子居中
+#### 定位盒子居中
 
 盒子居中：margin: 0 auto;==》标准流的盒子居中显示
 
@@ -652,21 +652,23 @@ em = 希望得到的像素大小 / 父元素字体像素大小
 
 ​    Margin-left:元素自己宽度的一半
 
-### vertical-align属性
+### 垂直方式vertical-align
 
 ☞ text-align   水平对齐
 ☞ vertical-align  垂直对齐
 ☞ 默认行内块元素（img,input）,有默认的vertical-align属性值。table标签也可以设置。
 vertical-align: baseline(默认值)       top(顶部对齐)      middle(中部对齐)      bottom(底部对齐)
 
-### 网页布局如何规避脱标流
+### 网页布局规避脱标流
 
 1. 网页布局优先考虑标准流
 2. 然后考虑使用浮动
 3. 最后使用定位
 4. 元素模式转换必须使用display
 
-###  CSS元素的可见性(把元素隐藏起来)
+###  元素的可见性
+
+- 即把元素隐藏起来
 
 ```css
 overflow:hidden;	//将溢出的部分隐藏
@@ -674,6 +676,169 @@ visibility:hidden;	//元素隐藏（隐藏的内容占位置一般用于)
 display:none;		//元素隐藏（隐藏的内容不占位置一般用于导航栏部分内容的隐藏)
 display:block;		//显示元素
 ```
+
+## 不常见
+
+### BFC
+
+**概念**
+
+1. BFC(Block formatting context)直译为“块级格式化上下文”。BFC是一个独立的渲染区域，只有Block-level box（块元素）参与，它规定了内部的Block-level box如何布局，并且与这个区域外部毫不相关。
+2. w3c规范：display属性为block, list-item ,table的元素才会产生BFC，且BFC仍属于文档中的普通流。
+
+**BFC的原理**
+1）内部的Box会在垂直方向，一个接一个地放置。
+2）Box垂直方向的距离由margin决定。属于同一个BFC的两个相邻Box的margin会发生重叠
+3）每个元素的margin box的左边， 与包含块border box的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此。
+4）BFC的区域不会与float box重叠。
+5）**BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素。反之也如此。**
+6）计算BFC的高度时，浮动元素也参与计算
+
+**如何创建BFC**
+1）根元素
+2）float属性不为none
+3）position不为static和relative
+4）overflow不为visible
+5）display为inline-block, table-cell, table-caption, flex, inline-flex
+
+**BFC作用**
+
+1. 防止外边距重叠。
+   - bfc导致的属于同一个bfc中的子元素的margin重叠
+     (Box垂直方向的距离由margin决定。属于同一个BFC的两个相邻Box的margin会发生重叠)
+   - 我们可以在div外面包裹一层容器，并触发该容器生成一个BFC。则两个div便不属于同一个BFC，也就不会产生margin重叠。
+2. 清除浮动的影响
+   - 块级子元素浮动，如果块级父元素没有设置高度，其会有高度塌陷的情况发生。
+   - 原因：子元素浮动后，均开启了BFC，父元素不会被子元素撑开。
+   - 解决方法：由第六条原理得，计算BFC的高度时，浮动元素也参与计算。所以只要将父容器设置为bfc
+     就可以把子元素包含进去：这个容器将包含浮动的子元素，它的高度将扩展到可以包含它的
+     子元素，在这个BFC，这些元素将会回到页面的常规文档流。
+3. 防止文字环绕
+   
+
+
+
+
+
+### 对语义化的理解
+
+- 根据内容的结构选择适合的标签
+- 1、样式丢失或者去掉样式后，页面仍然可以呈现出清晰的结构
+- 2、有利于SEO，让爬虫可以抓到更多的有效信息
+- 3、方便其他设备渲染页面（盲人阅读器等）
+- 4、更具有可读性，便于团队开发维护
+
+### 初始化css样式原因
+
+因为浏览器的兼容问题，不同浏览器对有些标签的默认值不同，如果不初始化css，会导致不同浏览器页面间的显示差异。
+
+### 浏览器渲染原理
+
+#### 渲染流程
+
+- `解析html以构建DOM树/CSS RULE TREE -> 构建render树 -> 布局render树 -> 绘制render树`
+
+- **回流(reflow)**：当浏览器发现某个部分发生了点变化影响了布局，需要倒回去重新渲染，这个回退的过程叫回流。
+
+- **重绘(repaint)**：改变某个元素的背景色、文字颜色、边框颜色等等不影响它周围或内部布局的属性时，屏幕的一部分要重画，但是元素的几何尺寸没有变。
+
+```txt
+解析过程：
+  1. 浏览器会将HTML解析成一个DOM树，DOM 树的构建过程是一个深度遍历过程：当前节点的所有子节点都构建好后才会去构建当前节点的下一个兄弟节点。
+
+  2. 将CSS解析成 CSS Rule Tree 。
+
+  3. 根据DOM树和CSSOM来构造 Rendering Tree。注意：Rendering Tree 渲染树并不等同于 DOM 树，因为一些像Header或display:none的东西就没必要放在渲染树中了。
+
+  4. 有了Render Tree，浏览器已经能知道网页中有哪些节点、各个节点的CSS定义以及他们的从属关系。下一步操作称之为layout，顾名思义就是计算出每个节点在屏幕中的位置。
+
+  5. 再下一步就是绘制，即遍历render树，并使用UI后端层绘制每个节点。
+
+	注意：上述这个过程是逐步完成的，为了更好的用户体验，渲染引擎将会尽可能早的将内容呈现到屏幕上，并不会等到所有的html都解析完成之后再去构建和布局render树。它是解析完一部分内容就显示一部分内容，同时，可能还在通过网络下载其余内容。
+```
+
+
+
+**webkit的流程**
+
+![image-20210914235451051](image/image-20210914235451051.png)
+
+**Geoko的流程**
+
+![image-20210914235521432](image/image-20210914235521432.png)
+
+
+
+
+
+#### 重绘和回流(重排)
+
+**重绘和回流是什么？**
+
+1. 重绘：不会影响页面布局的操作，重新绘制到屏幕上的过程称为重绘；如更改颜色；
+
+2. 回流：布局的改变导致需要重新构建，就是回流
+
+3. > 注意：回流必将引起重绘，重绘不一定会引起回流
+
+**引起重排的原因?**
+    1.添加或者删除可见的DOM元素，
+    2.元素位置、尺寸、内容改变，
+    3.浏览器页面初始化，
+    4.浏览器窗尺寸改变，重排一定重绘，重绘不一定重排
+
+**减少重绘和重排的方法?**
+    1.不在布局信息改变时做 DOM 查询
+    2.使用 `cssText` 或者 `className` 一次性改变属性
+    3.使用 `fragment`
+    4.对于多次重排的元素，如动画，使用绝对定位脱离文档流，让他的改变不影响到其他元素
+
+### 移动端适配1px问题
+
+问题：移动端的1px在有些机型上看去比较粗，虽然写着1px但看上去的效果可能是2px
+
+解决方法：伪类+transform方法，原理是把原先元素的`border`去掉，然后利用`:before`或者`:after`重做`border`，并`transform`的`scale`缩小一半，原先的元素相对定位，新做的`border`绝对定位。
+
+```css
+* {
+  margin: 0;
+  padding: 0;
+}
+ul, li{
+  list-style: none;
+}
+.hairlines {
+  width: 300px;
+  margin: 100px auto;
+}
+.hairlines li{
+  position: relative;
+  border:none;
+  margin-top: 10px;
+}
+.hairlines li:after{
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background: #cccccc;
+  width: 100%;
+  height: 1px;
+  -webkit-transform: scaleY(0.5);
+  transform: scaleY(0.5);
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+}
+```
+
+### 居中的方式
+
+**1. 居中为什么要使用transform(为什么不适用margin:Left/Top)**
+
+- transform： 属于合成属性，不会引起整个页面的回流重绘，节省性能借号，但是占用内存会大些；
+- top/left：属于布局属性，会引起页面layout回流和repaint重绘。
+
+
 
 ## 案例
 
@@ -1962,7 +2127,7 @@ Math.max()	//最大值	Math.min()	//最小值
 
 - `split()`方法是将一个字符串按照某一分隔符进行拆分为数组，而`join()`则正好相反。
   `join()`方法用于把数组中的所有元素放入一个字符串，元素是通过指定的分隔符进行分隔的。
-- 使用``concat`函数,在字符串后面追加一个或多个字符
+- 使用`concat`函数,在字符串后面追加一个或多个字符
 
 ```js
 let arr = [1,2,3];	
@@ -2083,6 +2248,107 @@ oEvent.cancelBubble = true; //取消事件冒泡（否则点击按钮后，会�
 阻止浏览器默认事件à在函数结尾处 return false;
 这个方法比较暴力，他会同事阻止事件冒泡也会阻止默认事件；写上此代码，连接不会被打开，事件也不会传递到上一层的父元素；可以理解为return false就等于同时调用了event.stopPropagation()和event.preventDefault()
 
+## JQ
+
+### 理念
+
+#### load 和 ready 谁先执行？
+
+```js
+window.onload = function(){}
+$(document).ready(fcuntion(){})
+```
+
+**DOM文档加载步骤：**
+
+1. 解析 HTML 结构
+2. 加载外部脚本和样式表文件
+3. 解析并执行脚本代码
+4. 构造 HTML DOM 模型（ready 方法执行）
+5. 加载图片、视频等外部文件
+6. 页面加载完毕（load 方法执行）
+
+注意：onload 只执行一次，若有多次，则最后一次覆盖前面的
+
+​			ready 可以执行多次，不会覆盖
+
+### 选择器
+
+#### 基本选择器
+
+```js
+$("#div1")		//按id属性选择元素
+$(".class1") 	//按class属性选择元素
+$("div")		//按元素名称选择元素
+$("*")			//选择所有元素
+$("#div2,span")	//并列选择元素
+```
+
+#### 层次选择器
+
+```js
+$("body div") //选择body所有的div后代元素
+$("body>div") //选择body所有的直接div后代元素
+$("#div1+div") //选择id值为div1的元素的后面相邻的兄弟元素
+$("#div1~div") //选择id值为div1的元素的后面所有的兄弟元素
+```
+
+#### 基本过滤选择器
+
+```js
+$("div:first")	//选择第一个div元素
+$("div:last")	//选择最后一个div元素
+$("div:eq(4)")	//选择第五个div元素
+$("div:gt(5)") 	//选择所有索引值大于5的div元素
+$("div:lt(5)") 	//选择所有索引值小于5的div元素
+$("div:even")	//选择所有索引值为偶数的div元素
+$("div:odd")	//选择所有索引值为奇数的div元素
+$("div:not(.class1)") //选择不包含class属性值为class1的所有div元素
+$(":header")	//选择所有的标题元素
+$(":focus")		//选择成为焦点的元素
+$(":animated")	//选择所有动画元素
+```
+
+#### 内容过滤选择器
+
+```js
+$("div:contains(class为class1)") //改变所有包含文本"class为class1"的div元素
+$("div:has('.subClass1')") //改变所有包含class值为subClass1子元素的div元素
+$("div:empty")//改变所有不包含子元素的div元素
+$("div:parent")//改变所有包含子元素的div元素
+```
+
+#### 属性过滤选择器
+
+```js
+$("div[title]") //改变所有有title属性的div元素
+$("div[title=title1]") //改变所有有title属性为title1的div元素
+$("div[title!=title1]") //改变所有有title属性不为title1的div元素
+$("div[title^=ti]") //改变所有有title属性值以ti开头的div元素
+$("div[title$=1]") //改变所有有title属性以1结尾的div元素
+$("div[title*=Pre]") //改变所有有title属性值包含Pre的div元素
+$("div[id],[title]") //改变包含属性为id和属性为title的div元素
+//注意："[],[]"是并集，"[][]"是交集（两个条件间隔一个空格）
+```
+
+#### 可见过滤选择器
+
+```js
+$("div:visible") //改变所有可见的的div元素
+$("div:hidden").show(3000);//显示所有不可见的的div元素背景色
+```
+
+#### 子元素过滤选择器
+
+```js
+$("div.class1 :nth-child(2)") ;//选择所有class属性值为class1的div元素的第二个子元素
+$("div.class1 :first-child") //改变所有class属性值为class1的div元素的第1个子元素
+$("div.class1 :last-child") //改变所有class属性值为class1的div元素的最后1个子元素
+$("div.class1 :only-child") //改变所有class属性值为class1的div元素的唯一一个子元素
+```
+
+
+
 
 
 # 网络请求
@@ -2190,38 +2456,34 @@ Socket.close() // 关闭连接
   - 减少http请求
   - 减少DNS查询：DNS缓存，将资源分布到恰当数量的主机
   - 减少DOM元素的数量
-
-- **服务器**
-  - 使用CDN
-  - 配置ETag
-    - ETag可让缓存更高效，节省带宽，如果内容没有改变，WEB服务器不需要发送完整的响应；如果内容发生改变，使用ETag有助于防止资源的同时更新相互覆盖。
-  - Gzip压缩
-
-- **CSS**
-  - 外部 & 顶部引入
-  - 不使用CSS表达式
-  - link替代@import
-
-- **JS**
-  - 外部 & 底部引入
-  - 减少DOM访问
-
-- **图片**
-  - 优化图片
-  - 压缩图片
-
-- **其他**
-  - 压缩css和js
+- 页面的首页要尽可能包含大多数页面链接(以避免存在死页面的存在)
+  - 压缩CSS、JS和图片
   - 用浏览器开发工具监控前端页面的性能
-  - 预加载
+- **页面加载**
+  - 预加载：先把js/css文件预加载好，加快页面渲染的速率
   - 懒加载及延迟加载
   - 避免404页面及favicon
-  - 缓存（HTTP、本地缓存）
+  - 离线缓存（HTTP、本地缓存）
   - 首屏性能优化
   - 按需加载
   - 服务器渲染
   - CSS动画优化
   - 避免资源的重定向
+- **服务器**
+  - 使用CDN
+  - 配置ETag
+    - ETag可让缓存更高效，节省带宽，如果内容没有改变，WEB服务器不需要发送完整的响应；如果内容发生改变，使用ETag有助于防止资源的同时更新相互覆盖。
+  - Gzip压缩
+- **CSS**
+  - 外部 & 顶部引入
+  - 不使用CSS表达式
+  - link替代@import
+- **JS**
+  - 外部 & 底部引入
+  - 减少DOM访问
+- **图片**
+  - 优化图片：把通过`http`链接放取的图片转换为`base64`编码的图片信息
+  - 压缩图片
 - **搜索引擎优化**
   - 对网站的标题、关键字、描述精心设置
   - 网站内容优化：内容与关键字的对应，增加关键字的密度
@@ -2277,6 +2539,8 @@ export default function originPJSONP(option) {
     })
 }
 ```
+
+
 
 
 
@@ -2416,6 +2680,29 @@ console.log(Object.prototype.__proto__) //null
 ![image-20210422131258473](image/image-20210422131258473.png)
 
 >注意： 当重新设置构造函数的prototype，一定要重新设置constructor属性
+
+#### 原型链和作用域链的区别
+
+```txt
+（1）原型链
+当访问一个对象的某个属性时，会先在这个对象本身的属性上找；
+如果没有找到，会去这个属性的__proto__属性上找，即这个构造函数的prototype；
+如果还没找到，就会继续在__proto__上查找，直到最顶层，找不到即为undefined。
+这样一层一层往上找，彷佛是一条链子串起来，所以叫做原型链。
+
+（2）作用域链
+变量取值会到创建这个变量的函数的作用域中取值；
+如果找不到，就会向上级作用域去查，直到查到全局作用域。
+这么一个查找过程形成的链条就叫做作用域链。
+
+（3）区别
+作用域是对变量而言，原型链是对于对象的属性而言
+作用域链的顶层是window，原型链的顶层是Object
+```
+
+
+
+
 
 #### 扩展内置对象
 
@@ -3127,11 +3414,7 @@ JS中存在垃圾回收机制，其原理是：使用引用计数法，就是语
 
 ### 作用域
 
-**1. 公有作用域、私有作用域**
-
-外部的为全局变量，内部的为局部变量
-
-**2. var 和没有 var 的区别**
+#### 有var 和没有 var 的区别
 
 - 加var为局部变量（在方法内），不加var为全局变量（当方法使用后才能生效）
 - 全局变量可以不用声明var，函数内变量必须声明var；
@@ -3150,11 +3433,15 @@ console.log(b); //2
 
 ![image-20200921174923845](image/image-20200921174923845.png)
 
-#### 块作用域（ES6新增）
+#### 块级作用域
 
-- 块作用域由`{}`包括，if语句和for语句里面的`{}`也属于块作用域。
-- JS中使用var来声明一个变量时，变量的作用域主要是和函数的定义有关
-- 针对于其他块定义来说是没有作用域的，如:`if、for`等
+1. 外部的为全局变量(公有作用域)，内部的为局部变量(私有作用域)
+2. 块作用域由`{}`包括，if语句和for语句里面的`{}`语句块也属于块作用域。
+   - 在`if`执行的`{ }`语句快中，使用`const、let`，他们会有块级作用域
+3. JS中使用var来声明一个变量时，变量的作用域主要是和函数的定义有关
+4. 针对于其他块定义来说是没有作用域的，如:`if、for`等
+
+**注意：只有函数有作用域，if是没有作用域的。**
 
 
 ### 闭包
@@ -4395,7 +4682,80 @@ for( var i = 0; i < 10; i++ ){
 
 
 
-### 逆向递归--多维数组根据子节点ID查找所有相关联父节点ID
+### 根据子节点ID找父节点
+
+**逆向递归--多维数组根据子节点ID查找所有相关联父节点ID**
+
+1. 判断数组是否为空，以此来跳出循环
+2. 对数组进行遍历，查找子节点的id的位置
+   - 若该层数组没有找到，则通过递归往深一层找
+3. 找到父节点后，则把父节点Id取出，并根据父节点id继续递归查找
+
+```js
+let arr = [  //数组树型结构
+  {
+    children: '',
+    id: '11111'
+  },
+  {
+    children: [
+      {
+        children: '',
+        id: '22221'
+      },
+      {
+        name: [
+          {
+            children: '',
+            id: '33332'
+          }
+        ],
+        id: '22222'
+      }
+    ],
+    id: '11112'
+  },
+  {
+    children: [
+      {
+        children: [
+          {
+            children: [
+              {
+                children: [],
+                id: '44444'
+              }
+            ],
+            id: '33334'
+          }
+        ],
+        id: '22224'
+      }
+    ],
+    id: '11114'
+  },
+]
+
+let result = [];  //用来接收相关联父级id的集合
+getParentNode = (arr, id) => {
+  if (!arr.length) return;
+  arr.forEach(item => {
+    // 数组不存在子节点 或 子节点长度为0，则不执行
+    if (!item.children || !item.children.length) return;
+    // 利用some筛选子级有没有符合条件的，有就重新递归，没有就继续递归
+    if (item.children.some(row => row.id == id)) {
+      result.unshift(item.id)
+      //重新递归
+      getParentNode(a, item.id)
+    } else {
+      //继续递归
+      getParentNode(item.children, id)
+    }
+  });
+
+}
+getParentNode(arr, '44444');	// 要查找的子节点id
+```
 
 
 
@@ -4405,745 +4765,27 @@ for( var i = 0; i < 10; i++ ){
 
 
 
-
-
-
-
-
-
-# JS排序算法
-
-### 冒泡排序
-
-**原理：从第一个元素开始，把当前元素和下一个索引元素进行比较。如果当前元素大，那么就交换位置，重复操作直到比较到最后一个元素**
-
-> 冒泡排序是从低到高（或从高到低）的单向排序。
->
-> 注意：一般来说，排好序的元素都是放在数组最后面（因为大的会放后面），所以第二个循环要`-i`
-
-![åæ³¡æåº](image/bubbleSort.gif)
-
 ```js
-/* 冒泡排序 */
-bubbleSort = (arr) => {
-  let len = arr.length;
-  for (let i = 0; i < len - 1; i++) {
-    for (let j = 0; j < len - 1 - i; j++) {	// -i 是因为最后面的元素都已经排好序，不需要再比较
-      if (arr[j] > arr[j + 1]) {
-        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-      }
-    }
-  }
-    console.log("冒泡排序：", arr);
-  return arr;
+const json = require("./json")
+let data = json.data.rows.qmQmsRalUserareaList;
+toTree = (arr) => {
+  let werks = {};
+  let list = [];
+  arr.forEach((item, i) => {
+    werks[item.werksShortname] ? werks[item.werksShortname] = [...werks[item.werksShortname], i]  : werks[item.werksShortname] = [i]
+  });
+  Object.keys(werks).forEach((item, i) => {
+    item.forEach((val, j) => {
+      // list[i].push({})
+    })
+  })
+  console.log( werks)
 }
-bubbleSort([2, 5, 2, 1, 4, 7, 9, 4, 9, 3, 5, 8, 7]);  // [ 1, 2, 2, 3, 4, 4, 5, 5, 7, 7, 8, 9, 9 ]
-```
+toTree(data)
 
-#### 双向冒泡排序（鸡尾酒排序）
-
-**原理：双向冒泡排序是从2个方向进行排序，“较大气泡从左到右移动，较小气泡从右到左移动”，2边遍历指针相遇时，排序结束。**
-
-```js
-/* 鸡尾酒排序 */
-// 双向冒泡排序是从2个方向进行排序，奇数趟从低到高，偶数趟从高到底，2边遍历指针相遇时，排序结束。
-bothwayBubbleSort = (arr) => {
-  let left = 0, right = arr.length - 1;
-  while (left < right) {
-    for (let i = left + 1; i <= right; i++) { // 较大起泡从左向右移动
-      if (arr[left] > arr[i]) {
-        [arr[left], arr[i]] = [arr[i], arr[left]];
-      }
-    }
-    left++;
-    for (let i = right - 1; i >= left; i--) { // 较小起泡从右向左移动
-      if (arr[i] > arr[right]) {
-        [arr[right], arr[i]] = [arr[i], arr[right]];
-      }
-    }
-    right--;
-  }
-  console.log("双向冒泡排序：", arr);
-  return arr;
-}
-bothwayBubbleSort([2, 5, 2, 1, 4, 7, 9, 4, 9, 3, 5, 8, 7]);  // "双向冒泡排序：" [ 1, 2, 2, 3, 4, 4, 5, 5, 7, 7, 8, 9, 9 ]
-```
-
-### 选择排序
-
-**原理：遍历数组，设置最小值的索引为 0，如果取出的值比当前最小值小，就替换最小值索引，遍历完成后，将第一个元素和最小值索引上的值交换。如上操作后，第一个元素就是数组中的最小值，下次遍历就可以从索引 1 开始重复上述操作。**
-
-![img](image/1342059-20190514171046967-1633143483.gif)
-
-```js
-selectionSort = (arr) => {
-  let n = 0;
-  for (let i = 0; i < arr.length - 1; i++, n++) {
-    let minindex = i;
-    for (let j = i + 1; j < arr.length; j++) {
-      minindex = arr[j] < arr[minindex] ? j : minindex;
-    }
-    [arr[i], arr[minindex]] = [arr[minindex], arr[i]]
-  }
-  console.log(n, "选择排序：", arr);
-  return arr;
-}
-selectionSort([2, 5, 2, 1, 4, 7, 9, 4, 9, 3, 5, 8, 7]);	// 12 '选择排序：' [ 1, 2, 2, 3, 4, 4, 5, 5, 7, 7, 8, 9, 9 ]
-```
-
-### 插入排序
-
-#### 直接插入排序
-
-**原理：第一个元素默认是已排序元素，取出下一个元素和当前元素比较，如果当前元素大就交换位置。那么此时第一个元素就是当前的最小数，所以下次取出操作从第三个元素开始，向前对比，重复之前的操作。**
-
-![img](image/1342059-20190514171140724-291814375.gif)
-
-```js
-/* 插入排序
-取后面的数跟前面的数比较，如果比前面的数小，则放到前面去；直到前面没有数比他小为止
-如果比前面的数大，则跳出此次，开始下一次循环 */
-insertSort = arr => {
-  let i = 1;
-  for (let i = 1; i < arr.length; i++) {
-    for (let j = i; j > 0; j--) {
-      if (arr[j] >= arr[j - 1]) {
-        break;
-      } else {
-        [arr[j - 1], arr[j]] = [arr[j], arr[j - 1]];
-        console.log("调换顺序的位置：",j,"，值：",arr[j-1],arr[j])
-      }
-
-    }
-    console.log("插入排序：", arr);
-  }
-  console.log("插入排序：", arr);
-  return arr;
-}
-insertSort([2, 5, 2, 1, 4, 7, 9, 4, 9, 3, 5, 8, 7]);  // 插入排序： [ 1, 2, 2, 3, 4, 4, 5, 5, 7, 7, 8, 9, 9 ]
-```
-
-#### 折半（二分）插入排序
-
-直接插入排序的升级版，插入时与已排序好的序列的中间值（除2向下取整）对比，可缩小一般的对比范围。
-
-```js
-function binaryInsertionSort(array){
-    var current, i, j, low, high, m;
-    for(i = 1; i < array.length; i++){
-        low = 0;
-        high = i - 1;
-        current = array[i];
-        
-        while(low <= high){            //步骤1&2:折半查找
-            m = (low + high)>>1;
-            if(array[i] >= array[m]){//值相同时, 切换到高半区，保证稳定性
-                low = m + 1;        //插入点在高半区
-            }else{
-                high = m - 1;        //插入点在低半区
-            }
-        }
-        for(j = i; j > low; j--){     //步骤3:插入位置之后的元素全部后移一位
-            array[j] = array[j-1];
-        }
-        array[low] = current;         //步骤4:插入该元素
-    }
-    return array;
-}
-```
-
-`x>>1`是位运算中的右移运算, 表示右移一位, 等同于x除以2再取整, 即`x>>1 == Math.floor(x/2)`.
-
-
-
-### 希尔排序
-
-原理：
-
-选择一个增量序列 t1，t2，……，tk，其中 ti > tj, tk = 1；
-
-按增量序列个数 k，对序列进行 k 趟排序；
-
-每趟排序，根据对应的增量 ti，将待排序列分割成若干长度为 m 的子序列，分别对各子表进行直接插入排序。仅增量因子为 1 时，整个序列作为一个表来处理，表长度即为整个序列的长度。
-
-![img](image/1342059-20190514171533876-2034809224.jpg)
-
-```js
-function shellSort(arr) {
-  var len = arr.length,
-    temp,
-    gap = 1;
-  // 动态定义间隔序列，也可以手动定义，如 gap = 5；
-  while (gap < len / 5) {
-    gap = gap * 5 + 1;
-  }
-  for (gap; gap > 0; gap = Math.floor(gap / 5)) {
-    for (var i = gap; i < len; i++) {
-      temp = arr[i];
-      for (var j = i - gap; j >= 0 && arr[j] > temp; j -= gap) {
-        arr[j + gap] = arr[j];
-      }
-      arr[j + gap] = temp;
-    }
-  }
-  return arr;
-}
-```
-
-希尔排序，也称递减增量排序算法，是插入排序的一种更高效的改进版本
-
-1. 将数组拆分为若干个子分组, 每个分组由相距一定”增量”的元素组成.
-2. 然后对每个子分组应用直接插入排序.
-3. 逐步减小”增量”, 重复步骤1,2.
-4. 直至”增量”为1, 这是最后一个排序, 此时的排序, 也就是对全数组进行直接插入排序.
-
-增量 = 待分组序列长度 / 2 ，向下取整 （常规）
-
-------
-
-1. 选择一个增量序列 t1，t2，……，tk，其中 ti > tj, tk = 1；
-2. 按增量序列个数 k，对序列进行 k 趟排序；
-3. 每趟排序，根据对应的增量 ti，将待排序列分割成若干长度为 m 的子序列，分别对各子表进行直接插入排序。仅增量因子为 1 时，整个序列作为一个表来处理，表长度即为整个序列的长度。
-
-```js
-function shellSort(arr) {
-  for(let gap = Math.floor(arr.length/2); gap > 0; gap = Math.floor(gap/2)) {
-    // 内层循环与插入排序的写法基本一致，只是每次移动的步长变为 gap
-    for(let i = gap; i < arr.length; i++) {
-      let j = i;
-      let temp = arr[j];
-      for(; j> 0; j -= gap) {
-        if(temp >= arr[j-gap]) {
-          break;
-        }
-        arr[j] = arr[j-gap];
-      }
-      arr[j] = temp;
-    }
-  }
-  return arr;
-}
 ```
 
 
-
-
-
-### 归并排序
-
-原理：
-
-（1） 把长度为n的输入序列分成两个长度为n/2的子序列；
-
-（2）对这两个子序列分别采用归并排序；
-
-（3） 将两个排序好的子序列合并成一个最终的排序序列。
-
-![img](image/1342059-20190514171753267-9059541.gif)
-
-```js
-function mergeSort(arr) {  //采用自上而下的递归方法
-  var len = arr.length;
-  if (len < 2) {
-    return arr;
-  }
-  var middle = Math.floor(len / 2),
-    left = arr.slice(0, middle),
-    right = arr.slice(middle);
-  return merge(mergeSort(left), mergeSort(right));
-}
-
-function merge(left, right) {
-  var result = [];
-  while (left.length && right.length) {
-    // 不断比较left和right数组的第一项，小的取出存入res
-    left[0] < right[0] ? result.push(left.shift()) : result.push(right.shift());
-  }
-  return result.concat(left, right);
-}
-```
-
-归并排序（Merge sort）是建立在归并操作上的一种有效的排序算法。该算法是采用分治法（Divide and Conquer）的一个非常典型的应用。
-将数组拆分为两个子数组, 分别排序, 最后才将两个子数组合并; 拆分的两个子数组, 再继续递归拆分为更小的子数组, 进而分别排序, 直到数组长度为1, 直接返回该数组为止。
-
-归并排序可通过两种方式实现：
-
-1. 自上而下的递归
-2. 自下而上的迭代
-
-```js
-function mergeSort(arr) {  // 采用自上而下的递归方法
-  var len = arr.length;
-  if (len < 2) {
-    return arr;
-  }
-  var middle = Math.floor(len / 2),
-    left = arr.slice(0, middle),
-    right = arr.slice(middle);
-  return merge(mergeSort(left), mergeSort(right));
-}
-
-function merge(left, right) {
-  var result = [];
-
-  while (left.length && right.length) {
-    if (left[0] <= right[0]) {
-      result.push(left.shift());
-    } else {
-      result.push(right.shift());
-    }
-  }
-
-  while (left.length)
-    result.push(left.shift());
-
-  while (right.length)
-    result.push(right.shift());
-
-  return result;
-}
-```
-
-
-
-
-
-### 快速排序
-
-**原理：在数据集之中，找一个基准点，建立两个数组，分别存储左边和右边的数组，利用递归进行下次比较。**
-
-![img](image/1342059-20190514171256294-17717518.gif)
-
-```js
-function quickSort(arr) {
-  if (!Array.isArray(arr)) return;
-  if (arr.length <= 1) return arr;
-  var left = [], right = [];
-  var num = Math.floor(arr.length / 2);
-  var numValue = arr.splice(num, 1)[0];
-  for (var i = 0; i < arr.length; i++) {
-    if (arr[i] > numValue) {
-      right.push(arr[i]);
-    } else {
-      left.push(arr[i]);
-    }
-  }
-  return [...quickSort(left), numValue, ...quickSort(right)]
-}
-```
-
-1. 从数列中挑出一个元素，称为 "基准"（pivot）;
-2. 重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作；
-3. 递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序；
-
-它将数组拆分为两个子数组, 其中一个子数组的所有元素都比另一个子数组的元素小, 然后对这两个子数组再重复进行上述操作, 直到数组不可拆分, 排序完成。
-
-![å¿«éæåº](image/quickSort.gif)
-
-```js
-function quickSort(arr, left, right) {
-  var len = arr.length,
-    partitionIndex,
-    left = typeof left != 'number' ? 0 : left,
-    right = typeof right != 'number' ? len - 1 : right;
-
-  if (left < right) {
-    partitionIndex = partition(arr, left, right);
-    quickSort(arr, left, partitionIndex - 1);
-    quickSort(arr, partitionIndex + 1, right);
-  }
-  return arr;
-}
-
-function partition(arr, left, right) {     // 分区操作
-  var pivot = left,                      // 设定基准值（pivot）
-    index = pivot + 1;
-  for (var i = index; i <= right; i++) {
-    if (arr[i] < arr[pivot]) {
-      swap(arr, i, index);
-      index++;
-    }
-  }
-  swap(arr, pivot, index - 1);
-  return index - 1;
-}
-
-function swap(arr, i, j) {
-  var temp = arr[i];
-  arr[i] = arr[j];
-  arr[j] = temp;
-}
-
-// or
-
-function partition2(arr, low, high) {
-  let pivot = arr[low];
-  while (low < high) {
-    while (low < high && arr[high] > pivot) {
-      --high;
-    }
-    arr[low] = arr[high];
-    while (low < high && arr[low] <= pivot) {
-      ++low;
-    }
-    arr[high] = arr[low];
-  }
-  arr[low] = pivot;
-  return low;
-}
-
-function quickSort2(arr, low, high) {
-  if (low < high) {
-    let pivot = partition2(arr, low, high);
-    quickSort2(arr, low, pivot - 1);
-    quickSort2(arr, pivot + 1, high);
-  }
-  return arr;
-}
-
-// or 
-
-// 快排
-function quickSort(arr, i, j) {
-  if (i < j) {
-    let left = i;
-    let right = j;
-    let pivot = arr[left];
-    while (i < j) {
-      while (arr[j] >= pivot && i < j) {  // 从后往前找比基准小的数
-        j--;
-      }
-      if (i < j) {
-        arr[i++] = arr[j];
-      }
-      while (arr[i] <= pivot && i < j) {  // 从前往后找比基准大的数
-        i++;
-      }
-      if (i < j) {
-        arr[j--] = arr[i];
-      }
-    }
-    arr[i] = pivot;
-    quickSort(arr, left, i - 1);
-    quickSort(arr, i + 1, right);
-    return arr;
-  }
-}
-```
-
-
-
-
-
-
-
-### 堆排序
-
-堆排序（Heapsort）是指利用堆这种数据结构所设计的一种排序算法。堆积是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。
-
-1. 大顶堆：每个节点的值都大于或等于其子节点的值，在堆排序算法中用于升序排列；
-2. 小顶堆：每个节点的值都小于或等于其子节点的值，在堆排序算法中用于降序排列；
-
-------
-
-1. 比较父节点是否大于叶子节点（把最大的放在父子节点），直到一趟建堆完成，最大的一定在堆顶。
-2. 把堆顶和最右下的叶子节点对换，再把右下叶子节点（最大值）抽出。
-
-![å æåº](image/heapSort.gif)
-
-```js
-var len;    // 因为声明的多个函数都需要数据长度，所以把len设置成为全局变量
-
-function buildMaxHeap(arr) {   // 建立大顶堆
-  len = arr.length;
-  for (var i = Math.floor(len / 2); i >= 0; i--) {
-    heapify(arr, i);
-  }
-}
-
-// 2 * i  非叶子节点
-function heapify(arr, i) {     // 堆调整
-  var left = 2 * i + 1,
-    // 左叶子节点
-    right = 2 * i + 2,
-    // 右叶子节点
-    largest = i;
-
-  if (left < len && arr[left] > arr[largest]) {
-    largest = left;
-  }
-
-  if (right < len && arr[right] > arr[largest]) {
-    largest = right;
-  }
-
-  if (largest != i) {
-    swap(arr, i, largest);
-    heapify(arr, largest);
-  }
-}
-
-function swap(arr, i, j) {
-  var temp = arr[i];
-  arr[i] = arr[j];
-  arr[j] = temp;
-}
-
-function heapSort(arr) {
-  buildMaxHeap(arr);
-
-  for (var i = arr.length - 1; i > 0; i--) {
-    swap(arr, 0, i);
-    len--;
-    heapify(arr, 0);
-  }
-  return arr;
-}
-```
-
-
-
-
-
-### 计数排序
-
-计数排序是唯一不基于比较的排序算法。
-计数排序不是比较排序，排序的速度快于任何比较排序算法。
-适合处理一定范围内的整数排序。
-计数排序利用了一个特性, 对于数组的某个元素, 一旦知道了有多少个其它元素比它小(假设为m个), 那么就可以确定出该元素的正确位置(第m+1位)
-
-1. 找出待排序的数组中最大和最小的元素
-2. 统计数组中每个值为i的元素出现的次数，存入数组C的第i项
-3. 对所有的计数累加（从C中的第一个元素开始，每一项和前一项相加）
-4. 反向填充目标数组：将每个元素i放在新数组的第C(i)项，每放一个元素就将C(i)减去1
-
-------
-
-1. 花O(n)时间获取数组A的最小值min，最大值max
-2. 开辟新的空间创建新数组B，长度为(`max - min + 1`)
-3. B中`index`元素记录的是A中某元素出现的次数
-4. 遍历数组B，输出相应的元素及其个数
-
-![è®¡æ°æåº](image/countingSort.gif)
-
-```js
-function countingSort(arr, maxValue) {
-  var bucket = new Array(maxValue + 1),
-    sortedIndex = 0;
-  arrLen = arr.length,
-    bucketLen = maxValue + 1;
-
-  for (var i = 0; i < arrLen; i++) {
-    if (!bucket[arr[i]]) {
-      bucket[arr[i]] = 0;
-    }
-    bucket[arr[i]]++;
-  }
-
-  for (var j = 0; j < bucketLen; j++) {
-    while (bucket[j] > 0) {
-      arr[sortedIndex++] = j;
-      bucket[j]--;
-    }
-  }
-
-  return arr;
-}
-```
-
-
-
-### 桶排序
-
-桶排序（箱排序）是计数排序的升级版。
-它是将数组分配到有限数量的桶子里. 每个桶里再各自排序(因此有可能使用别的排序算法或以递归方式继续桶排序). 当每个桶里的元素个数趋于一致时, 桶排序只需花费O(n)的时间.
-桶排序的核心就在于怎么把元素平均分配到每个桶里, 合理的分配将大大提高排序的效率.
-当输入的数据可以均匀的分配到每一个桶中的时候最快。
-
-![æ¡¶æåº2](image/Bucket_sort_2.svg_.png)
-
-```js
-function bucketSort(arr, bucketSize) {
-  if (arr.length === 0) {
-    return arr;
-  }
-
-  var i;
-  var minValue = arr[0];
-  var maxValue = arr[0];
-  for (i = 1; i < arr.length; i++) {
-    if (arr[i] < minValue) {
-      minValue = arr[i];                // 输入数据的最小值
-    } else if (arr[i] > maxValue) {
-      maxValue = arr[i];                // 输入数据的最大值
-    }
-  }
-
-  //桶的初始化
-  var DEFAULT_BUCKET_SIZE = 5;            // 设置桶的默认数量为5
-  bucketSize = bucketSize || DEFAULT_BUCKET_SIZE;
-  var bucketCount = Math.floor((maxValue - minValue) / bucketSize) + 1;
-  var buckets = new Array(bucketCount);
-  for (i = 0; i < buckets.length; i++) {
-    buckets[i] = [];
-  }
-
-  //利用映射函数将数据分配到各个桶中
-  for (i = 0; i < arr.length; i++) {
-    buckets[Math.floor((arr[i] - minValue) / bucketSize)].push(arr[i]);
-  }
-
-  arr.length = 0;
-  for (i = 0; i < buckets.length; i++) {
-    insertionSort(buckets[i]);                      // 对每个桶进行排序，这里使用了插入排序
-    for (var j = 0; j < buckets[i].length; j++) {
-      arr.push(buckets[i][j]);
-    }
-  }
-
-  return arr;
-}
-```
-
-
-
-### 基数排序
-
-基数排序是一种非比较型整数排序算法，其原理是将整数按位数切割成不同的数字，然后按每个位数分别比较。由于整数也可以表达字符串（比如名字或日期）和特定格式的浮点数，所以基数排序也不是只能使用于整数。
-按照优先从高位或低位来排序有两种实现方案:
-
-- MSD: 由高位为基底, 先按k1排序分组, 同一组中记录, 关键码k1相等, 再对各组按k2排序分成子组, 之后, 对后面的关键码继续这样的排序分组, 直到按最次位关键码kd对各子组排序后. 再将各组连接起来, 便得到一个有序序列. MSD方式适用于位数多的序列.
-- LSD: 由低位为基底, 先从kd开始排序，再对kd-1进行排序，依次重复，直到对k1排序后便得到一个有序序列. LSD方式适用于位数少的序列.
-
-![åºæ°æåº](image/radixSort.gif)
-
-```js
-function radixSort(array, max) {
-  var buckets = [],
-    unit = 10,
-    base = 1;
-  for (var i = 0; i < max; i++, base *= 10, unit *= 10) {
-    for (var j = 0; j < array.length; j++) {
-      var index = ~~((array[j] % unit) / base);//依次过滤出个位,十位等等数字
-      if (buckets[index] == null) {
-        buckets[index] = []; //初始化桶
-      }
-      buckets[index].push(array[j]);//往不同桶里添加数据
-    }
-    var pos = 0,
-      value;
-    for (var j = 0, length = buckets.length; j < length; j++) {
-      if (buckets[j] != null) {
-        while ((value = buckets[j].shift()) != null) {
-          array[pos++] = value; //将不同桶里数据挨个捞出来,为下一轮高位排序做准备,由于靠近桶底的元素排名靠前,因此从桶底先捞
-        }
-      }
-    }
-  }
-  return array;
-}
-```
-
-
-
-# JQ
-
-### 理念
-
-#### load 和 ready 谁先执行？
-
-```js
-window.onload = function(){}
-$(document).ready(fcuntion(){})
-```
-
-**DOM文档加载步骤：**
-
-1. 解析 HTML 结构
-2. 加载外部脚本和样式表文件
-3. 解析并执行脚本代码
-4. 构造 HTML DOM 模型（ready 方法执行）
-5. 加载图片、视频等外部文件
-6. 页面加载完毕（load 方法执行）
-
-注意：onload 只执行一次，若有多次，则最后一次覆盖前面的
-
-​			ready 可以执行多次，不会覆盖
-
-### 选择器
-
-#### 基本选择器
-
-```js
-$("#div1")		//按id属性选择元素
-$(".class1") 	//按class属性选择元素
-$("div")		//按元素名称选择元素
-$("*")			//选择所有元素
-$("#div2,span")	//并列选择元素
-```
-
-#### 层次选择器
-
-```js
-$("body div") //选择body所有的div后代元素
-$("body>div") //选择body所有的直接div后代元素
-$("#div1+div") //选择id值为div1的元素的后面相邻的兄弟元素
-$("#div1~div") //选择id值为div1的元素的后面所有的兄弟元素
-```
-
-#### 基本过滤选择器
-
-```js
-$("div:first")	//选择第一个div元素
-$("div:last")	//选择最后一个div元素
-$("div:eq(4)")	//选择第五个div元素
-$("div:gt(5)") 	//选择所有索引值大于5的div元素
-$("div:lt(5)") 	//选择所有索引值小于5的div元素
-$("div:even")	//选择所有索引值为偶数的div元素
-$("div:odd")	//选择所有索引值为奇数的div元素
-$("div:not(.class1)") //选择不包含class属性值为class1的所有div元素
-$(":header")	//选择所有的标题元素
-$(":focus")		//选择成为焦点的元素
-$(":animated")	//选择所有动画元素
-```
-
-#### 内容过滤选择器
-
-```js
-$("div:contains(class为class1)") //改变所有包含文本"class为class1"的div元素
-$("div:has('.subClass1')") //改变所有包含class值为subClass1子元素的div元素
-$("div:empty")//改变所有不包含子元素的div元素
-$("div:parent")//改变所有包含子元素的div元素
-```
-
-#### 属性过滤选择器
-
-```js
-$("div[title]") //改变所有有title属性的div元素
-$("div[title=title1]") //改变所有有title属性为title1的div元素
-$("div[title!=title1]") //改变所有有title属性不为title1的div元素
-$("div[title^=ti]") //改变所有有title属性值以ti开头的div元素
-$("div[title$=1]") //改变所有有title属性以1结尾的div元素
-$("div[title*=Pre]") //改变所有有title属性值包含Pre的div元素
-$("div[id],[title]") //改变包含属性为id和属性为title的div元素
-//注意："[],[]"是并集，"[][]"是交集（两个条件间隔一个空格）
-```
-
-#### 可见过滤选择器
-
-```js
-$("div:visible") //改变所有可见的的div元素
-$("div:hidden").show(3000);//显示所有不可见的的div元素背景色
-```
-
-#### 子元素过滤选择器
-
-```js
-$("div.class1 :nth-child(2)") ;//选择所有class属性值为class1的div元素的第二个子元素
-$("div.class1 :first-child") //改变所有class属性值为class1的div元素的第1个子元素
-$("div.class1 :last-child") //改变所有class属性值为class1的div元素的最后1个子元素
-$("div.class1 :only-child") //改变所有class属性值为class1的div元素的唯一一个子元素
-```
 
 
 
@@ -9522,6 +9164,12 @@ const VM = new Vue({
 </style>
 ```
 
+### 实现文件接收或`base64`后下载/打印pdf功能
+
+
+
+
+
 # vue3.0
 
 - 相对于vue2性能提升：打包大小减少、渲染时间减少、内存减少
@@ -10455,7 +10103,10 @@ ReactDOM.render(<Person {...p} />, document.getElementById('test2'))
 - 通过onXxx属性指定事件处理函数(注意大小写)
   - React使用的是自定义(合成)事件, 而不是使用的原生DOM事件
   - React中的事件是通过事件委托方式处理的(委托给组件最外层的元素)
+  
 - 通过event.target得到发生事件的DOM元素对象
+
+- > 注意：不要过度使用ref，可以把数据保存在state中
 
 ```js
 myRef = React.createRef()
@@ -10474,11 +10125,258 @@ render(){
 }
 ```
 
+### 受控/非受控组件
+
+- 非受控组件
+
+  - 只能临时存放，在触发按钮时，才能得以获取数据
+
+  - ```js
+    handleSubmit = (event)=>{
+    	event.preventDefault() //阻止表单提交
+    	const {username,password} = this
+    	alert(`你输入的用户名是：${username.value},你输入的密码是：${password.value}`)
+    }
+    render(){
+    	return(
+    		<form onSubmit={this.handleSubmit}>
+    			用户名：<input ref={c => this.username = c} type="text" name="username"/>
+    			密码：<input ref={c => this.password = c} type="password" name="password"/>
+    			<button>登录</button>
+    		</form>
+    	)
+    }
+    ```
+
+  - 
+
+- 受控组件(类比vue的数据双向绑定)
+
+  - 当内容改变时，触发`onChange`事件，改变其存在state中的值；调用时，直接调状态的值即可。
+
+  - ```js
+    //初始化状态
+    state = {
+    	username:'', //用户名
+    	password:'' //密码
+    }
+    
+    //保存表单数据到状态中
+    saveFormData = (dataType)=>{
+      return (event)=>{
+        this.setState({[dataType]:event.target.value})
+      }
+    }
+    
+    //表单提交的回调
+    handleSubmit = (event)=>{
+    	event.preventDefault() //阻止表单提交
+    	const {username,password} = this.state
+    	alert(`你输入的用户名是：${username},你输入的密码是：${password}`)
+    }
+    
+    render(){
+    	return(
+    		<form onSubmit={this.handleSubmit}>
+    			用户名：<input onChange={this.saveFormData('username')} type="text" name="username"/>
+    			密码：<input onChange={this.saveFormData('password')} type="password" name="password"/>
+    			<button>登录</button>
+    		</form>
+    	)
+    }
+    ```
+
+
+
 ### 组件生命周期
+
+**重要的钩子函数**
+
+1. render：初始化渲染或更新渲染调用
+2. componentDidMount：开启监听, 发送ajax请求
+3. componentWillUnmount：做一些收尾工作, 如: 清理定时器
+
+**即将废弃的钩子**
+
+1. componentWillMount
+2.  componentWillReceiveProps
+3. componentWillUpdate
+
+注意：现在使用会出现警告，下一个大版本需要加上**UNSAFE_**前缀才能使用，以后可能会被彻底废弃，不建议使用。
+
+#### 旧生命周期
 
 ![image-20210912212616540](image/image-20210912212616540.png)
 
+```txt
+1. 初始化阶段: 由ReactDOM.render()触发---初次渲染
+					1.	constructor()
+					2.	componentWillMount()
+					3.	render()
+					4.	componentDidMount() =====> 常用
+									一般在这个钩子中做一些初始化的事，例如：开启定时器、发送网络请求、订阅消息
+									
+2. 更新阶段: 由组件内部this.setSate()或父组件render触发 (父组件接收数据)
+          1.	componentWillReceiveProps(props)
+								注意：第一次接收子组件的数据时会不做处理（不触发该事件）,能接收一个参数
+          2.	shouldComponentWillUpdate()
+          			必须要返回一个boolean, 当返回true时，继续执行下列的钩子函数，否则中断执行
+          3.	componentWillUpdate()	
+          4.	render() =====> 必须使用的一个
+          5.	componentDidUpdate()
+					
+3. 卸载组件: 由ReactDOM.unmountComponentAtNode()触发
+					1.	componentWillUnmount()  =====> 常用
+									一般在这个钩子中做一些收尾的事，例如：关闭定时器、取消订阅消息
+```
+
+注意：componentWillReceiveProps第一次接收子组件的数据时会不做处理（不触发该事件），能接收一个参数
+
+```js
+//父组件A
+class A extends React.Component{
+	//初始化状态
+	state = {carName:'奔驰'}
+
+	changeCar = ()=>{
+		this.setState({carName:'奥拓'})
+	}
+
+	render(){
+		return(
+			<div>
+				<div>我是A组件</div>
+				<button onClick={this.changeCar}>换车</button>
+				<B carName={this.state.carName}/>
+			</div>
+		)
+	}
+}
+
+//子组件B
+class B extends React.Component{
+	//组件将要接收新的props的钩子
+	componentWillReceiveProps(props){
+		console.log('B---componentWillReceiveProps',props);
+	}
+
+	//控制组件更新的“阀门”
+	shouldComponentUpdate(){
+		console.log('B---shouldComponentUpdate');
+		return true
+	}
+	//组件将要更新的钩子
+	componentWillUpdate(){
+		console.log('B---componentWillUpdate');
+	}
+
+	//组件更新完毕的钩子
+	componentDidUpdate(){
+		console.log('B---componentDidUpdate');
+	}
+
+	render(){
+		console.log('B---render');
+		return(
+			<div>我是B组件，接收到的车是:{this.props.carName}</div>
+		)
+	}
+}
+		
+//渲染组件
+ReactDOM.render(<A/>,document.getElementById('test'))
+```
+
+
+
+#### 新生命周期
+
 ![image-20210912212430578](image/image-20210912212430578.png)
+
+```txt
+1. 初始化阶段: 由ReactDOM.render()触发---初次渲染
+				1.	constructor()
+				2.	getDerivedStateFromProps 
+				3.	render()
+				4.	componentDidMount() =====> 常用
+							一般在这个钩子中做一些初始化的事，例如：开启定时器、发送网络请求、订阅消息
+							
+2. 更新阶段: 由组件内部this.setSate()或父组件重新render触发
+				1.	getDerivedStateFromProps(props, state)
+						必须要返回一个 state Obj（状态对象） 或 null	来更新状态信息
+              此定义的props是：state的值任何时候都取决于 props
+              return props
+						
+				2.	shouldComponentUpdate()
+				3.	render()
+				4.	getSnapshotBeforeUpdate()
+				5.	componentDidUpdate()
+				
+3. 卸载组件: 由ReactDOM.unmountComponentAtNode()触发
+				1.	componentWillUnmount()  =====> 常用
+							一般在这个钩子中做一些收尾的事，例如：关闭定时器、取消订阅消息
+```
+
+
+
+### 虚拟DOM与Diffing算法
+
+![image-20210914141112782](image/image-20210914141112782.png)
+
+1
+
+#### key的渲染机制
+
+```txt
+1). react/vue中的key有什么作用？（key的内部原理是什么？）
+2). 为什么遍历列表时，key最好不要用index?
+
+1. 虚拟DOM中key的作用：
+		1). 简单的说: key是虚拟DOM对象的标识, 在更新显示时key起着极其重要的作用。
+		2). 详细的说: 当状态中的数据发生变化时，react会根据【新数据】生成【新的虚拟DOM】, 
+									随后React进行【新虚拟DOM】与【旧虚拟DOM】的diff比较，比较规则如下：
+						a. 旧虚拟DOM中找到了与新虚拟DOM相同的key：
+									(1).若虚拟DOM中内容没变, 直接使用之前的真实DOM
+									(2).若虚拟DOM中内容变了, 则生成新的真实DOM，随后替换掉页面中之前的真实DOM
+						b. 旧虚拟DOM中未找到与新虚拟DOM相同的key
+									根据数据创建新的真实DOM，随后渲染到到页面
+						
+2. 用index作为key可能会引发的问题：
+					1. 若对数据进行：逆序添加、逆序删除等破坏顺序操作:
+									会产生没有必要的真实DOM更新 ==> 界面效果没问题, 但效率低。
+					2. 如果结构中还包含输入类的DOM：
+									会产生错误DOM更新 ==> 界面有问题。
+					3. 注意！如果不存在对数据的逆序添加、逆序删除等破坏顺序操作，
+						仅用于渲染列表用于展示，使用index作为key是没有问题的。
+		
+3. 开发中如何选择key?:
+					1.最好使用每条数据的唯一标识作为key, 比如id、手机号、身份证号、学号等唯一值。
+					2.如果确定只是简单的展示数据，用index也是可以的。
+```
+
+
+
+
+
+## react CLI
+
+**创建项目**
+
+1. 全局安装：`npm i -g create-react-app`
+2. 创建项目文件夹：`create-react-app 项目名`
+3. 启动项目：`npm start`
+
+
+
+
+
+## 消息订阅-发布机制
+
+
+
+
+
+fetch
 
 
 
