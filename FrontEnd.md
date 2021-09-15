@@ -175,17 +175,43 @@
 
 ![image-20210525110836359](image/image-20210525110836359.png)
 
-## H5
+## CSS3
 
-### 变形transform（旋转、缩放、移动、倾斜）
+### 变形transform
 
-- 旋转rotate(<angle>)    //angle为旋转角度，用deg作单位，如为负数，则表示逆时针旋转
-- 缩放`scale(x,y)     scaleX(x)      scaleY(y)      //x,y为缩放倍数，值>1为放大，值<1为缩小
-- 移动translate(x,y)      translateX(x)  translate(y)   //x,y为x轴y轴移动的距离
-- 扭曲skew(x,y)     skewX(x)      skewY(y)      //x,y为数值，以deg作单位，水平/垂直
-- 矩阵matrix(n,n,n,n,n,n)      matrix3d(n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n)      //2d为6值，3d为16值
-- 3D  translate3d(x,y,z)    scale3d(x,y,z)    rotate3d(x,y,z,angle)
-- perspective(n)     // 为3D 转换元素定义透视视图
+（旋转、缩放、移动、倾斜、矩阵、3D<=>2D互换、）
+
+```txt
+1. 旋转：
+		rotate(<angle>)    
+		angle为旋转角度，用deg作单位，如为负数，则表示逆时针旋转
+
+2. 缩放：
+		scale(x,y)、 scaleX(x)、 scaleY(y)      
+		x,y为缩放倍数，值>1为放大，值<1为缩小
+
+3. 移动：
+		translate(x,y)、 translateX(x)、 translate(y)   
+		x,y为x轴y轴移动的距离
+
+4. 扭曲（倾斜）：
+		skew(x,y)、 skewX(x)、 skewY(y)      
+		x,y为数值，以deg作单位，水平/垂直
+
+5. 矩阵：
+		matrix(n,n,n,n,n,n)、 matrix3d(n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n)      
+		2d为6值，3d为16值
+
+6. 3D ：
+		让某个元素呈3D显示：给其父元素添加属性->  transform-style: preserve-3d;//增加一个3d效果
+		translate3d(x,y,z)、 scale3d(x,y,z)、 rotate3d(x,y,z,angle)
+
+7. 定义3D元素距离视图的距离
+		perspective(n)：为3D 转换元素定义透视视图
+		例：perspective: 500px;		
+```
+
+
 
 ```css
 {//解决transform的兼容性问题    transform多个属性可以并写且不区分前后
@@ -234,7 +260,11 @@ context.fillRect(0,0,800,600);
 
 ### SVG
 
-### 滤镜：filter（过渡效果）
+
+
+### 滤镜：filter()
+
+（过渡效果）
 
 ```css
 // filter:函数(); 
@@ -1335,11 +1365,11 @@ alert（浏览器警示框）、console.log（控制台打印）、prompt（浏�
 
 ![image-20210809102215222](image/image-20210809102215222.png)
 
-1. 首先执行同步代码，这属于宏任务
+1. 首先**执行同步代码**，这属于宏任务
 2. 当执行完所有同步代码后，执行栈为空，查询是否有异步代码需要执行
-3. 执行所有微任务
+3. **执行所有微任务**
 4. 当执行完所有微任务后，如有必要，会渲染页面
-5. 然后开始下一轮`Event Loop`，执行宏任务的异步代码，即`setTimeout`中的回调函数
+5. 然后开始下一轮`Event Loop`，**执行宏任务的异步代码**，即`setTimeout`中的回调函数
 
 **以上整体为一次`Tick`**
 
@@ -1348,6 +1378,8 @@ alert（浏览器警示框）、console.log（控制台打印）、prompt（浏�
 - 不同的任务源会被分配到不同的`Task`队列中，任务源分为微任务(task)和宏任务(jobs)。
 - 微任务包括`process.nextTick、promise、MutationObserver`；
 - 宏任务包括`script、setTimeout、setInterval、setImmediate、I/O、UI rendering`
+
+![image-20210915182429917](image/image-20210915182429917.png)
 
 ```js
 console.log('script start')
@@ -1374,7 +1406,8 @@ new Promise(resolve => {
   })
 console.log('script end')
 
-/* script start
+/* 
+script start
 async2 end
 Promise
 script end
@@ -1383,6 +1416,8 @@ promise2
 async1 end
 setTimeout */
 ```
+
+
 
 #### 浏览器与Node的事件循环(Event Loop)的区别
 
@@ -1415,6 +1450,12 @@ https://blog.csdn.net/Fundebug/article/details/86487117
 - `CDN`缓存：内容分发网络，就近节点获取
 - 浏览器缓存：浏览器在用户磁盘上，对最新请求过的文档进行了存储
 - 服务器缓存：将需要频繁访问的Web页面和对象保存在离用户更近的系统中，当再次访问这些对象时加快访问速度。
+
+
+
+
+
+
 
 ## DOM
 
@@ -1483,10 +1524,10 @@ get(获取)、set(设置)、remove(移除)、create(创建)、insert(插入)、r
 
 ### DOM访问
 
-- document.getElementById
-- document.getElementByClassName
-- document.getElementsByTagName
-- document.getElementsByName
+- 获取id标签：document.getElementById
+- 获取类标签：document.getElementByClassName
+- 获取标签：document.getElementsByTagName
+- 获取name标签：document.getElementsByName
 
 因为id是单数，所以不用s，name等可以多个，为复数，所以需要s
 
@@ -1503,6 +1544,8 @@ document.getElementById('ul').style.color = "lightgray";
 ```
 
 **动态创建元素**（innerHTML、document.write、inerText）:动态创建元素优点-->提高网页性能，降低流量使用
+
+**注意：通过`attribute`和设置`style`只能通过获取id标签来更改**
 
 **innerHTML 和 innerText 区别**
 
@@ -1858,6 +1901,13 @@ function create() {
 
 ## 数据类型
 
+### 运算规则
+
+- 运算的优先级：`括号 > 字符串 > 数字 > 布尔`
+- 如`'[3]' + (1 + 1 + true + null + 'ccc' + 1 + 1 + true + null) =  "[3]3ccc11truenull"`
+
+
+
 push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
 
 通过typeof运算符来确定JS变量的数据类型
@@ -1887,6 +1937,22 @@ typeof null                   // 返回 "object"
 （3）对象没有赋值的属性，该属性的值为undefined。
 （4）函数没有返回值时，默认返回undefined。
 
+
+
+### **数字Number**
+
+![image-20210331160629187](image/image-20210331160629187.png)
+
+![image-20210331160240361](image/image-20210331160240361.png)
+
+### **字符串String**
+
+- 数字0、NaN、空字符串""、false、undefined、null都会被识别为false。
+- undefined：未定义或未初始化的变量，都为undefined。
+- undefined和null的区别：如果变量为null，说明变量存在，只不过值是空值null。
+
+![image-20210331160948708](image/image-20210331160948708.png)
+
 ### 数据类型转换
 
 **转换为字符串类型：**x.toString()或String(x)
@@ -1911,19 +1977,21 @@ x.toString()
 
 **转换为布尔类型：**Boolean(x)
 
-### **数字Number**
+### 隐式转换
 
-![image-20210331160629187](image/image-20210331160629187.png)
 
-![image-20210331160240361](image/image-20210331160240361.png)
 
-### **字符串String**
+![image-20210915145032445](image/image-20210915145032445.png)
 
-- 数字0、NaN、空字符串""、false、undefined、null都会被识别为false。
-- undefined：未定义或未初始化的变量，都为undefined。
-- undefined和null的区别：如果变量为null，说明变量存在，只不过值是空值null。
+![img](image/153802557624752e85feeed.png)
 
-![image-20210331160948708](image/image-20210331160948708.png)
+![jsé¢è¯é¢å¤§åââéå¼ç±»åè½¬æ¢](image/15380256636038c4d44912e.png)
+
+![img](image/1538025799063ed1e9da3cf.png)
+
+
+
+
 
 ### 计算精度问题
 
@@ -2012,81 +2080,6 @@ var json = JSON.stringify({a: 'Hello', b: 'World'});
 //结果是 '{"a": "Hello", "b": "World"}'
 ```
 
-## 函数
-
-#### `encodeURIComponent() `
-
-encodeURIComponent() 函数可把字符串作为 URI 组件进行编码。
-
-该方法不会对 ASCII 字母和数字进行编码，也不会对这些 ASCII 标点符号进行编码： - _ . ! ~ * ' ( ) 。
-
-其他字符（比如 ：;/?:@&=+$,# 这些用于分隔 URI 组件的标点符号），都是由一个或多个十六进制的转义序列替换的。
-
-```js
-let url="http://w3cschool.cc/my test.php?name=ståle&car=saab";
-let a = encodeURIComponent(url);
-console.log(a);	// http%3A%2F%2Fw3cschool.cc%2Fmy%20test.php%3Fname%3Dst%C3%A5le%26car%3Dsaab
-```
-
-
-
-## 对象
-
-### 对象操作
-
-- 对象由属性(事物的特征，常用名词)和方法（事务的行为，常用动作，通常是继承的属性）组成。
-
-- 创建对象三种方式：对象直接法、关键字 new 和 Object.create() 函数来创建对象。
-
-- 删除对象中的某个属性
-
-  - 方法1：`delete obj.name;`，但它的工作比其“替代”设置慢100倍`object[key] = undefined`
-
-    > 删除`delete`是删除对象的属性没有任何剩菜剩下的唯一真正的方法。
-
-  - 方法2：`obj.name=undfined;`但其属性还在，只是内容为空
-
-  ```js
-  let obj = {
-    name: "willy",
-    age: "age",
-  }
-  obj.name = undefined;
-  console.log(obj); // { name: undefined, age: 'age' }
-  delete obj.age;
-  console.log(obj)  // { name: undefined }
-  ```
-
-- 在数组中使用`delete`，null会在数组中留下空缺，而且长度不变。
-
-  ```js
-  let array = [1,2,3];
-  delete array[2];
-  ```
-
-  
-
-### this
-
-```js
-// 函数中this --> window对象
-function fn(){
-    console.log(this);
-}
-fn();
-//方法中this --> 是调用该方法的独享
-var obj = {
-    name: 'zs',
-    say: function(){
-        console.log(this);
-    }
-}
-obj.say();
-//构造函数中this --> 当前对象
-
-//事件处理函数中this --> 触发事件的对象 事件源
-```
-
 ### `Math`对象
 
 - Math对象不是构造函数，它具有数学常数和函数的属性和方法。跟数学相关的运算（求绝对值、取整、最大值等）可使用。
@@ -2099,45 +2092,6 @@ Math.max()	//最大值	Math.min()	//最小值
 ```
 
 - Date对象是构造函数，需实例化后才能使用，Date实例用来处理日期和时间。
-
-### `Array`对象
-
-#### 数组调用方法
-
-- push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
-- pop() 方法用于删除并返回数组的最后一个元素。
-- unshift() 方法可向数组的开头添加一个或更多元素，并返回新的长度。
-- Shift() 方法可向数组的开头删除一个或更多元素，并返回新的长度。
-- sort() 方法用于对数组的元素进行排序。
-- join() 方法用于把数组中的所有元素放入一个字符串。
-- a.concat(b); 把b数组添加到a数组最后面
-
-#### Array prototype函数（数组原型）
-
-- prototype函数允许向Array()对象添加新属性和方法。
-- 构造属性时，将为所有数组提供属性及其值，作为默认值。
-- 构造方法时，所有数组将使用此方法。
-
-**注意**：
-
-- Array.prototype不是指单个数组，而是指Array()对象本身。
-- prototype是一个全局对象构造函数，可用于所有JavaScript对象。
-
-#### 字符串与数组转换
-
-- `split()`方法是将一个字符串按照某一分隔符进行拆分为数组，而`join()`则正好相反。
-  `join()`方法用于把数组中的所有元素放入一个字符串，元素是通过指定的分隔符进行分隔的。
-- 使用`concat`函数,在字符串后面追加一个或多个字符
-
-```js
-let arr = [1,2,3];	
-let res = arr.join(",");	// 1,2,3
-
-let str = "13"
-let strAdd = srt.concat("-123","-456");
-```
-
-
 
 ## 页面宽高
 
@@ -2626,7 +2580,141 @@ export default function originPJSONP(option) {
 </html>
 ```
 
-### 原型
+### 作用域`Scope`
+
+#### 有var 和没有 var 的区别
+
+- 加var为局部变量（在方法内），不加var为全局变量（当方法使用后才能生效）
+- 全局变量可以不用声明var，函数内变量必须声明var；
+- 在定义局部变量时加或不加var关键字没什么影响；但在定义局部变量时如果不加var关键字JS解释程序会将其解释为全局变量。
+
+```js
+var a = 1;
+function aa(){b=2;};
+console.log(a);	//1
+//console.log(b); //b uis no defind
+aa();
+console.log(b); //2
+```
+
+![image-20200921174900757](image/image-20200921174900757.png)
+
+![image-20200921174923845](image/image-20200921174923845.png)
+
+#### 块级作用域
+
+1. 外部的为全局变量(公有作用域)，内部的为局部变量(私有作用域)
+2. 块作用域由`{}`包括，if语句和for语句里面的`{}`语句块也属于块作用域。
+   - 在`if`执行的`{ }`语句快中，使用`const、let`，他们会有块级作用域
+3. JS中使用var来声明一个变量时，变量的作用域主要是和函数的定义有关
+4. 针对于其他块定义来说是没有作用域的，如:`if、for`等
+
+**注意：只有函数有作用域，if是没有作用域的。**
+
+#### 作用域链
+
+- 当该作用域内本身不存在该变量，就会**逐级向上寻找**，知道找到全局作用域还是没找到，就宣布放弃。这种逐级的关系称为作用域链。
+
+```js
+var a = 100
+function F1() {
+    var b = 200
+    function F2() {
+        var c = 300
+        console.log(a) // 自由变量，顺作用域链向父作用域找
+        console.log(b) // 自由变量，顺作用域链向父作用域找
+        console.log(c) // 本作用域的变量
+    }
+    F2()
+}
+F1()
+```
+
+
+
+#### 作用域与执行上下文
+
+- js的执行分为解释阶段和执行阶段
+- 解释阶段：
+  - 词法分析
+  - 语法分析
+  - **作用域规则确定**
+- 执行阶段：
+  - **创建执行上下文**（生成this指向）
+  - 执行函数代码
+  - 垃圾回收（清除该函数和变量）
+
+**作用域和执行上下文的最大区别：**
+
+1. **执行上下文在运行时确认，随时可改变；作用域在定义时确认，并且不会被改变。**
+2. 一个作用域可能包含若干个上下文环境。有可能没有上下文(函数从未被调用)；有可能有过，函数已调用完毕后，上下文环境被销毁了；有可能同时存在一个或多个(闭包)。
+3. 同一个作用域下，不同的调用会产生不同的执行上下文环境，继而产生不同的变量的值。
+
+
+
+
+
+### 闭包
+
+- 闭包指有权访问另一个函数作用域中变量的函数，即一个作用域可以访问另一个函数内部的局部变量。
+
+- 闭包里面函数用自己的作用域，调用外面的变量，在闭包里面执行/改变变量，不会影响外面的变量。
+
+- 闭包主要作用：**延伸了变量的作用范围-->执行完所有调用的函数，才会销毁函数里面的变量**
+
+
+> 闭包作用：可以读取另一个函数内部的变量；保持函数中变量的值始终保持在内存中。
+>
+> 闭包缺点：会保持函数中变量的值始终保持在内存中，导致内存泄露；还会在父函数外部改变父函数内部的值；this的指向问题。
+>
+> 建议：闭包灵活，但不好用，无奈之下才使用
+
+```js
+function fn() {
+    let num = 10;
+    function fun() {
+        console.log(num);
+    }
+    fun();
+}
+let f = fn();
+f();   //延伸变量作用范围，当f()执行完，才会销毁num变量；fun函数可以访问fn函数的作用域，所以fun函数是闭包
+//等价： let f = function fun() { console.log(num); }
+```
+
+```html
+<h1>经典案例：点击li，显示对应的li</h1>
+<ul>
+    <li>消息1</li>
+    <li>消息2</li>
+    <li>消息3</li>
+    <li>消息4</li>
+</ul>
+<script>
+    let lis = document.querySelectorAll('li');
+    //1. 利用动态添加属性的方式
+    /* for(let i=0;i<lis.length;i++) {
+        lis[i].index = i;
+        lis[i].onclick = function() {
+            console.log(this.index);
+        }
+    } */
+
+    //2. 利用闭包获得当前li的索引号
+    for(let i = 0; i < lis.length; i++) {
+        // 利用for循环创建4个立即执行函数，立即执行函数也成为小闭包
+        (function(i) {
+            lis[i].onclick =  function() {
+                console.log(i);
+            }
+        })(i);
+    }
+</script>
+```
+
+
+
+### 原型链
 
 #### 原型对象`prototype`
 
@@ -2649,7 +2737,7 @@ function Star(name, age){
 }
 //很多情况下，需手动的利用constructor这个属性只会原来的构造函数
 Star.prototype.sing = function(){
-    console.log(this.name+ '我会唱歌');
+    console.log(this.name+ 'sing');
 }
 Star.prototype = {
     //如果我们修改了原来的原型对象，给原型对象赋值的是一个对象，则必须手动利用construtor指回原来的构造函数
@@ -2787,9 +2875,50 @@ const p = new Proxy(person, {
 
 ![image-20210906134840686](image/image-20210906134840686.png)
 
+### Array对象
+
+#### 数组调用方法
+
+- push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
+- pop() 方法用于删除并返回数组的最后一个元素。
+- unshift() 方法可向数组的开头添加一个或更多元素，并返回新的长度。
+- Shift() 方法可向数组的开头删除一个或更多元素，并返回新的长度。
+- sort() 方法用于对数组的元素进行排序。
+- join() 方法用于把数组中的所有元素放入一个字符串。
+- a.concat(b); 把b数组添加到a数组最后面
+
+#### Array prototype函数（数组原型）
+
+- prototype函数允许向Array()对象添加新属性和方法。
+- 构造属性时，将为所有数组提供属性及其值，作为默认值。
+- 构造方法时，所有数组将使用此方法。
+
+**注意**：
+
+- Array.prototype不是指单个数组，而是指Array()对象本身。
+- prototype是一个全局对象构造函数，可用于所有JavaScript对象。
+
+#### 字符串与数组转换
+
+- `split()`方法是将一个字符串按照某一分隔符进行拆分为数组，而`join()`则正好相反。
+  `join()`方法用于把数组中的所有元素放入一个字符串，元素是通过指定的分隔符进行分隔的。
+- 使用`concat`函数,在字符串后面追加一个或多个字符
+
+```js
+let arr = [1,2,3];	
+let res = arr.join(",");	// 1,2,3
+
+let str = "13"
+let strAdd = srt.concat("-123","-456");
+```
+
+
+
 ### `Array`的扩展方法
 
-#### 迭代遍历方法：
+
+
+#### 迭代遍历
 
 - 迭代遍历方法有：`forEach()、map()、some()、every()、filter()`
 
@@ -3023,6 +3152,113 @@ let e = a.flatMap((x) => [x, x * 2, x + 2]) // [1, 2, 3, 2, 4, 4, Array(3), NaN,
 
 
 
+### Object对象
+
+
+
+#### 对象操作
+
+- 对象由属性(事物的特征，常用名词)和方法（事务的行为，常用动作，通常是继承的属性）组成。
+
+- 创建对象三种方式：对象直接法、关键字 new 和 Object.create() 函数来创建对象。
+
+- 删除对象中的某个属性
+
+  - 方法1：`delete obj.name;`，但它的工作比其“替代”设置慢100倍`object[key] = undefined`
+
+    > 删除`delete`是删除对象的属性没有任何剩菜剩下的唯一真正的方法。
+
+  - 方法2：`obj.name=undfined;`但其属性还在，只是内容为空
+
+  ```js
+  let obj = {
+    name: "willy",
+    age: "age",
+  }
+  obj.name = undefined;
+  console.log(obj); // { name: undefined, age: 'age' }
+  delete obj.age;
+  console.log(obj)  // { name: undefined }
+  ```
+
+- 在数组中使用`delete`，null会在数组中留下空缺，而且长度不变。
+
+  ```js
+  let array = [1,2,3];
+  delete array[2];
+  ```
+
+
+#### 广义对象
+
+- 狭义对象：` {} `这种字面量形式定义的对象，它是一组属性的无序集合(只包含属性和值)
+- 广义对象：广义对象也是对象，但是它除了一组属性还有别的东西(如函数包含函数体，数组包含一组值)
+  				即只要**能够添加属性**，即是广义对象（万物皆对象）
+- 对象和json的区别：
+  -  json一定是对象 但对象不一定是json
+  -  json的属性名必须要加双引号`""`
+  - 普通对象可以不用加双引号
+
+**规律**
+
+1. 函数直接圆括号调用，函数上下文就是window对象
+2. 函数当做对象的方法被对象打点语法调用时，函数上下文就是该对象
+3. 函数是事件处理函数，函数上下文就是触发这个事件的对象
+4. 定时器调用函数，上下文是window对象
+5. 数组中存放的函数，被数组索引之后加圆括号调用，函数上下文this代表这个数组
+
+```js
+let obj = {
+  age: 1,
+  2021: 2,
+  'true': 3,
+  name: 'willy',
+  sayHello: function () {
+    console.log("我是" + this.name + ",今年" + this.age + "岁");
+  }
+}
+let age = 2020 + 1;
+console.log(obj.age); // 1
+console.log(obj['age']);  // 1
+console.log(obj[age]);  // 2  js能够把变量进行隐式转换成字符串
+
+console.log('····-------分割线--------····');
+let name = 5 > 3;
+console.log(obj.name); // willy
+console.log(obj['name']);  // willy
+console.log(obj[name]);  // 3 js能够把变量进行隐式转换成字符串
+
+console.log('····-------分割线--------····');
+obj.sayHello(); // 函数的上下文(this) 指向 obj 对象
+```
+
+#### 对象三大特征
+
+- 每一个对象（实例）都有与之相关联的三个特性：原型、类和可扩展性。
+
+##### 原型属性
+
+- 每个对象都有一个原型属性`[[prototype]]`，它是一个内部属性，在浏览器实现中表现为_proto_属性。它是一个指针，指向原型对象。
+- 所有字面量创建的对象有一个相同的原型对象`Object.prototype`
+- 使用new关键字创建的对象，原型为构造函数prototype属性的值（比如，数组的原型对象为Array.prototype）同时也继承Object.prototype。
+
+##### 类属性
+
+- 对象的类属性(class)是一个字符串，用以表明该对象为何种类型（该属性为只读属性）
+- 默认的toString方法（继承自Object.prototype），将返回[object class]，即[object 类属性]
+- 如果想获得对象的类，可以调用对象的toString()，然后提取已返回字符串的第8个到倒数第二个位置之间的字符串（[object class]）。不过，由于很多对象的toString()方法重写了，为了调用正确的toString()版本，必须间接调用Function.call()方法。
+- `Object.prototype.toString.call(obj).slice(8, -1)`
+
+##### 可扩展属性
+
+- 对象的可扩展性，用以表示该对象是否可以新添属性。
+- 所有内置对象和自定义对象都是显式可扩展的，宿主对象的可扩展性是由JavaScript引擎定义的。
+- 通过方法object.isExtensible(),来判断对象是否可扩展。（查询）
+- 通过方法object.preventExtensions(),将对象转换为不可扩展的。注意：一旦将对象转换为不可扩展，就无法将转换为可扩展的。（设置）
+- object.seal()和object.preventExtensions()，除了能将对象设置为不可扩展外，还可以将对象的自身属性设置为不可配置的。（设置）
+
+
+
 ### `Object`的扩展方法
 
 #### `defineProperty()`新增或修改原有属性
@@ -3129,6 +3365,43 @@ let copy2 = Object.assign({}, obj2, obj3); // { a: 1 } { a: 1, b: 2 } obj2不会
 #### 对象的拓展运算符 （...）
 
 对象的扩展运算符（`...`）用于取出参数对象的所有可遍历属性，拷贝到当前对象之中。
+
+
+
+### String对象
+
+- `indexOf(子字符串)`： 获取字符串当中，子字符串第一次出现的位置；如果没有则返回 -1 
+- `lastIndex(子字符串)`： 获取字符串当中，子字符串最后一次出现的位置；如果没有则返回-1
+- `substring(start,end) `： 将字符串从start位置开始截取到end位置，但不包括end；end可以省略，表示一直截取到结束
+- `substr(start,length)`：将字符串从star位置开始截取到start位置，截取length个字符
+- `.split(“分隔符”) `：将字符串转成数组，返回为一个新数组
+- `.startsWith(value,start)`：检测字符串中是否以value开头，从start位置开始但不包括start
+- `.endsWith(value,start)`：检测字符串中是否以value结尾，从start位置开始但不包括start
+- `.includes(value,start) `：检测字符串中是否有value，从start位置但是不包括start开始找，返回布尔值
+- .`replace(旧字符串，新字符串)`： 用新字符串替换旧字符串
+  - replce(/旧字符串/ig,新字符串)
+  - i : 不区分大小写
+  - g: 全文搜索
+
+
+
+### String的扩展方法
+
+#### `encodeURIComponent() `
+
+encodeURIComponent() 函数可把字符串作为 URI 组件进行编码。
+
+该方法不会对 ASCII 字母和数字进行编码，也不会对这些 ASCII 标点符号进行编码： - _ . ! ~ * ' ( ) 。
+
+其他字符（比如 ：;/?:@&=+$,# 这些用于分隔 URI 组件的标点符号），都是由一个或多个十六进制的转义序列替换的。
+
+```js
+let url="http://w3cschool.cc/my test.php?name=ståle&car=saab";
+let a = encodeURIComponent(url);
+console.log(a);	// http%3A%2F%2Fw3cschool.cc%2Fmy%20test.php%3Fname%3Dst%C3%A5le%26car%3Dsaab
+```
+
+
 
 ### this
 
@@ -3382,27 +3655,34 @@ function fn(num1,num2){
 
 ### JS中内存的分类
 
-**1、内存存储**
+#### 内存存储
 
 - 当对象被需要的时候就会为其分配内存空间，如声明、定义变量的时候
 - 在对象已经分配了内存的对象的时候再做对内存的读取操作
 - 对象销毁是在这个对象不再被需要的时候，就会释放这个对象的内存，对象就会被销毁
 - 全局变量：浏览器关闭的时候就会被销毁
 
-**2. 数据的存储原理**
+#### 数据的存储原理
 
-基本类型在传递过程中传递的是内容
+- 基础数据类型：number，String，boolean，Symbol，Bigint，unll，undefined
 
-引用类型在传递的时候传递过程中的是地址
+  - 基本类型在传递过程中传递的是内容
 
-注解： -->栈：小而快
+- 引用数据类型：Object(),function(){}
 
-**3. 栈内存和堆内存**
+  - 引用类型在传递的时候传递过程中的是地址
+
+- > 可通过`console.dir(function(){})`去查看函数（函数也是属于基本数据类型）
+
+####  栈内存和堆内存
 
 - 栈内存：用来提供一个供JS代码执行的环境->作用域（全局作用域/私有作用域）
+
 - 堆内存：用来存储引用数据类型的值->对象存储的是属性名和属性值，函数存储的是代码字符串（JS所有的数据都是存放在堆内存中）
 
-**4. 内存泄露（垃圾回收机制BUG）**
+- >栈：小而快
+
+#### 内存泄露（垃圾回收机制BUG）
 
 JS中存在垃圾回收机制，其原理是：使用引用计数法，就是语言引擎有一张“引用表”，保存了内存里面所有的资源的引用次数，如下：
 
@@ -3412,95 +3692,55 @@ JS中存在垃圾回收机制，其原理是：使用引用计数法，就是语
 
 ![image-20200921174421861](image/image-20200921174421861.png)
 
-### 作用域
+#### 垃圾回收算法
 
-#### 有var 和没有 var 的区别
+- 
 
-- 加var为局部变量（在方法内），不加var为全局变量（当方法使用后才能生效）
-- 全局变量可以不用声明var，函数内变量必须声明var；
-- 在定义局部变量时加或不加var关键字没什么影响；但在定义局部变量时如果不加var关键字JS解释程序会将其解释为全局变量。
+- 现在各大浏览器通常用采用的垃圾回收有两种方法：标记清除、引用计数。
 
-```js
-var a = 1;
-function aa(){b=2;};
-console.log(a);	//1
-//console.log(b); //b uis no defind
-aa();
-console.log(b); //2
-```
+##### 引用计数
 
-![image-20200921174900757](image/image-20200921174900757.png)
-
-![image-20200921174923845](image/image-20200921174923845.png)
-
-#### 块级作用域
-
-1. 外部的为全局变量(公有作用域)，内部的为局部变量(私有作用域)
-2. 块作用域由`{}`包括，if语句和for语句里面的`{}`语句块也属于块作用域。
-   - 在`if`执行的`{ }`语句快中，使用`const、let`，他们会有块级作用域
-3. JS中使用var来声明一个变量时，变量的作用域主要是和函数的定义有关
-4. 针对于其他块定义来说是没有作用域的，如:`if、for`等
-
-**注意：只有函数有作用域，if是没有作用域的。**
-
-
-### 闭包
-
-- 闭包指有权访问另一个函数作用域中变量的函数，即一个作用域可以访问另一个函数内部的局部变量。
-
-- 闭包里面函数用自己的作用域，调用外面的变量，在闭包里面执行/改变变量，不会影响外面的变量。
-
-- 闭包主要作用：**延伸了变量的作用范围-->执行完所有调用的函数，才会销毁函数里面的变量**
-
-
-> 闭包作用：可以读取另一个函数内部的变量；保持函数中变量的值始终保持在内存中。
->
-> 闭包缺点：会保持函数中变量的值始终保持在内存中，导致内存泄露；还会在父函数外部改变父函数内部的值；this的指向问题。
->
-> 建议：闭包灵活，但不好用，无奈之下才使用
+现代浏览器基本上已经不再使用了，在这里我们做一下简单的介绍。引用计数的含义是跟踪记录每个值被引用的次数。当声明了一个变量并将一个引用类型赋值给该变量时，则这个值的引用次数就是1。相反，如果包含对这个值引用的变量又取得了另外一个值，则这个值的引用次数就减1。当这个引用次数变成0时，则说明没有办法再访问这个值了，因而就可以将其所占的内存空间给收回来。这样，垃圾收集器下次再运行时，它就会释放那些引用次数为0的值所占的内存。简单来说就是看一个对象是否有指向它的引用。如果没有其他对象指向它了，说明该对象已经不再需要了。
 
 ```js
-function fn() {
-    let num = 10;
-    function fun() {
-        console.log(num);
-    }
-    fun();
+// 创建一个对象person，他有两个指向属性age和name的引用
+var person = {
+  age: 12,
+  name: 'aaaa'
+};
+person.name = null; // 虽然name设置为null，但因为person对象还有指向name的引用，因此name不会回收
+var p = person;
+person = 1;         //原来的person对象被赋值为1，但因为有新引用p指向原person对象，因此它不会被回收
+p = null;           //原person对象已经没有引用，很快会被回收
+
+
+console.log("---------------分割线------------------")
+// objA、objB两个对象是互相引用的，也就是说他们的引用次数永远为2，如果不进行其他操作的话，这样的互相引用如果大量使用的话，就会造成内存泄漏问题。
+function bigBug(){
+  var objA = new Object();
+  var objB = new Object();
+  objA.bug1 = objB;
+  objB.bug2 = objA;
 }
-let f = fn();
-f();   //延伸变量作用范围，当f()执行完，才会销毁num变量；fun函数可以访问fn函数的作用域，所以fun函数是闭包
-//等价： let f = function fun() { console.log(num); }
+objA.bug1 = null;
+objB.bug2 = null;
 ```
 
-```html
-<h1>经典案例：点击li，显示对应的li</h1>
-<ul>
-    <li>消息1</li>
-    <li>消息2</li>
-    <li>消息3</li>
-    <li>消息4</li>
-</ul>
-<script>
-    //利用动态添加属性的方式
-    let lis = document.querySelectorAll('li');
-    /* for(let i=0;i<lis.length;i++) {
-        lis[i].index = i;
-        lis[i].onclick = function() {
-            console.log(this.index);
-        }
-    } */
 
-    //利用闭包获得当前li的索引号
-    for(let i = 0; i < lis.length; i++) {
-        // 利用for循环创建4个立即执行函数，立即执行函数也成为小闭包
-        (function(i) {
-            lis[i].onclick =  function() {
-                console.log(i);
-            }
-        })(i);
-    }
-</script>
-```
+
+##### 标记清除
+
+标记清除算法将“不再使用的对象”定义为“无法到达的对象”。即从根部（在JS中就是全局对象）出发定时扫描内存中的对象，凡是能从根部到达的对象，保留。那些从根部出发无法触及到的对象被标记为不再使用，稍后进行回收。每一个变量都有自己的使用环境，当进入环境以后，垃圾回收机制就会给他打上一个“进入环境”的标签，从逻辑上来将，系统不能清除处于环境中的变量，因为只要是在环境中就有可能会使用到。当其离开环境时，会给其打上“离开环境”标签，这时候便可以进行回收了。
+
+#### 模拟用户使用期间所耗内存
+
+- 打开开发者工具，选择 Memory
+- 在右侧的Select profiling type字段里面勾选 timeline
+- 点击左上角的录制按钮。
+- 在页面上进行各种操作，模拟用户的使用情况。
+- 一段时间后，点击左上角的 stop 按钮，面板上就会显示这段时间的内存占用情况。
+
+
 
 ### 递归遍历多层`json`数据
 
@@ -8749,12 +8989,12 @@ Vuex 并不限制你的代码结构。但是，它规定了一些需要遵守的
 ```js
 axios(config)
 axios.request(config)
-axios.get(url[,config])
-axios.delete(url[,config])
-axios.head(url[,config])
-axios.post(url[,data[,config]])
-axios.put(url[,data[,config]])
-axios.patch(url[,data[,config]])
+axios.get(url[, config])
+axios.delete(url[, config])
+axios.head(url[, config])
+axios.post(url[, data[, config]])
+axios.put(url[, data[, config]])
+axios.patch(url[, data[, config]])
 ```
 
 ```main.js
@@ -9165,6 +9405,124 @@ const VM = new Vue({
 ```
 
 ### 实现文件接收或`base64`后下载/打印pdf功能
+
+**注意：欲使用Blod，需要在请求中增加数据格式`responseTtpe: blod`**
+
+```js
+// post请求
+axios({
+  method: 'post',
+  url: 'api/user/',
+  data: {
+    firstName: 'Fred',
+    lastName: 'Flintstone'
+  },
+  responseType: 'blob'
+}).then(response => {
+  this.download(response)
+}).catch((error) => {
+	this.$message.error(error)
+})
+
+// get 请求
+axios({
+  methods: "get",
+  url: env['qm_assist'] + `q/printPDF?id=${this.id}&sapNum=${this.sapNum}`,
+  responseType: 'blod'
+}).then(res => {
+    let blob = new Blob([res.data], {
+      type: "application/pdf;charset=utf-8",
+    })
+    console.log(blob, res)
+    this.printpdf(blob) 
+  }).catch(err => {
+    this.$message.error(error)
+  })
+
+
+// 下载文件
+download(data) {
+  if (!data) { return; }
+  let url = window.URL.createObjectURL(new Blob([data]))
+  let link = document.createElement('a')
+  link.style.display = 'none'
+  link.href = url
+  link.setAttribute('download', 'excel.xlsx')
+
+  document.body.appendChild(link)
+  link.click()
+}
+```
+
+
+
+#### 下载
+
+**思路：点击下载用了a标签来接收，由于a标签点击自动下载pdf，新创建一个a标签之后，下载完成之后要释放掉URL对象**
+
+1. 先获取后台返回所保存的pdf的路径（pdf存在服务器中的url）
+2. 创建一个a标签，并给该a标签赋予下载
+3. 把该a标签追加到页面的body标签中
+4. 给a标签触发点击事件
+5. 移除该a标签
+
+```js
+//1. 下载功能，dataResult是后台返回的文件流
+let pdfUrl = window.URL.createObjectURL(new Blob([dataResult.data], { type: `application/pdf` }));
+const fileName = item.name; // 下载文件的名字
+const link = document.createElement('a');
+link.href = pdfUrl;
+link.setAttribute('download', '下载的文件名');
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link)
+
+
+//2. 下载功能，dataResult是后台返回的base64
+let blob = this.dataURLtoBlob(dataResult);
+const elink = document.createElement('a')
+const fname = item.name; // 下载文件的名字
+elink.download = fname
+elink.style.display = 'none'
+elink.href = URL.createObjectURL(blob)
+document.body.appendChild(elink)
+elink.click()
+URL.revokeObjectURL(elink.href) // 释放URL 对象
+document.body.removeChild(elink)
+```
+
+#### 打印
+
+**思路：因为我的打印是打印的pdf，并不是当前页面，如果直接使用window.print()，则是打印的当前页面**
+
+**注意：{ type: 'application/pdf' }要加上，否则有可能无法进行打印**
+
+```js
+//1. 打印功能，dataResult是后台返回的base64
+let blob = this.dataURLtoBlob(dataResult);
+var date = (new Date()).getTime()
+var ifr = document.createElement('iframe')
+ifr.style.frameborder = 'no'
+ifr.style.display = 'none'
+ifr.style.pageBreakBefore = 'always'
+ifr.setAttribute('id', 'printPdf' + date)
+ifr.setAttribute('name', 'printPdf' + date)
+ifr.src = window.URL.createObjectURL(blob)
+document.body.appendChild(ifr)
+this.doPrint('printPdf' + date)
+window.URL.revokeObjectURL(ifr.src) // 释放 URL 对象
+
+
+// 2. 打印功能，res.data是后台返回的文件流
+let blob = new Blob([res.data], { type: "application/pdf;charset=utf-8" })
+let reader = new FileReader()
+reader.readAsDataURL(blob)
+reader.addEventListener('loadend', () => {
+  // 通知主进程打印
+  ipcRenderer.send("IPCR_PDF_PRINT", {
+    baseCode: Buffer.from(reader.result.split('base64,')[1], 'base64'),
+  })
+```
 
 
 
