@@ -137,7 +137,7 @@
 
 **计算盒子宽度：calc()函数**
 
-### `input`
+### 输入框`input`
 
 #### 清除输入框历史记录
 
@@ -165,15 +165,45 @@
    <input type="text"  readonly  unselectable="on" >
    ```
 
-### 弹性模型 `display：flex`
+### 转义字符
 
-- 可在不同方向排列元素；重新排列元素的显示顺序；更改元素的对齐方式；动态地将元素装入容器。
+```html
+&nbsp;		空格 （non-breaking spacing，不断打空格）
+&lt;			小于号（less than）
+&gt;			大于号（greater than）
+&amp;			符号&
+&quot;		双引号
+&apos;		单引号
+&copy;		版权©
+&trade;		商标™
+&#32464;	文字绐。#32464是汉字绐的unicode编码
+&sup2;		平方（上标2）
+&sup3;		立方（上标3）
+```
 
-- > 弹性布局默认不改变项目的宽度，但是它默认改变项目的高度。如果项目没有显式指定高度，就将占据容器的所有高度。
+### 超链接`a`
 
-![image-20210525110650024](image/image-20210525110650024.png)
+- **锚链接**：给超链接起一个名字，作用是**在本页面或者其他页面的的不同位置进行跳转**。比如说，在网页底部有一个向上箭头，点击箭头后回到顶部，这个就可以利用锚链接。
 
-![image-20210525110836359](image/image-20210525110836359.png)
+- 首先我们要创建一个**锚点**，也就是说，使用`name`属性或者`id`属性给那个特定的位置起个名字。`<a href="a.html#name1">回到顶部</a>`
+- `href`：目标URL
+- `title`：悬停文本。
+- `name`：主要用于设置一个锚点的名称。
+- `target`：告诉浏览器用什么方式来打开目标页面。
+  - `_self`：在同一个网页中显示（默认值）
+  - `_blank`：**在新的窗口中打开**。
+  - `_parent`：在父窗口中显示
+  - `_top`：在顶级窗口中显示
+
+### script
+
+```html
+<script type="text/javascript" src=""  async></script>
+//async:异步		defer：延时执行
+//注意： 该属性指的是浏览器将外部js文件下载完成后，立马执行。
+```
+
+
 
 ## CSS3
 
@@ -414,6 +444,34 @@ background:transprent url('img.jpg') repeat-y fixed top;	//背景透明，图像
 - border-box:设置的内容宽度=实际的宽度和高度；
 - inherit：此值使元素继承父元素的盒模型模式。
 
+### 鼠标`cursor`
+
+- `auto`：默认值。浏览器根据当前情况自动确定鼠标光标类型。
+- `pointer`：IE6.0，竖起一只手指的手形光标。就像通常用户将光标移到超链接上时那样。
+- `hand`：和`pointer`的作用一样：竖起一只手指的手形光标。就像通常用户将光标移到超链接上时那样。
+
+```css
+- all-scroll      :　 IE6.0  有上下左右四个箭头，中间有一个圆点的光标。用于标示页面可以向上下左右任何方向滚动。
+- col-resize      :　 IE6.0  有左右两个箭头，中间由竖线分隔开的光标。用于标示项目或标题栏可以被水平改变尺寸。
+- crosshair       :　  简单的十字线光标。
+- default         :　  客户端平台的默认光标。通常是一个箭头。
+- hand            :　  竖起一只手指的手形光标。就像通常用户将光标移到超链接上时那样。
+- move            :　  十字箭头光标。用于标示对象可被移动。
+- help            :　  带有问号标记的箭头。用于标示有帮助信息存在。
+- no-drop         :　 IE6.0  带有一个被斜线贯穿的圆圈的手形光标。用于标示被拖起的对象不允许在光标的当前位置被放下。
+- not-allowed     :　 IE6.0  禁止标记(一个被斜线贯穿的圆圈)光标。用于标示请求的操作不允许被执行。
+- progress        :　 IE6.0  带有沙漏标记的箭头光标。用于标示一个进程正在后台运行。
+- row-resize      :　 IE6.0  有上下两个箭头，中间由横线分隔开的光标。用于标示项目或标题栏可以被垂直改变尺寸。
+- text            :　  用于标示可编辑的水平文本的光标。通常是大写字母 I 的形状。
+- vertical-text   :　 IE6.0  用于标示可编辑的垂直文本的光标。通常是大写字母 I 旋转90度的形状。
+- wait            :　  用于标示程序忙用户需要等待的光标。通常是沙漏或手表的形状。
+- *-resize        :　  用于标示对象可被改变尺寸方向的箭头光标。
+- 	 w-resize | s-resize | n-resize | e-resize | ne-resize | sw-resize | se-resize | nw-resize
+- url ( url )     :　 IE6.0  用户自定义光标。使用绝对或相对 url 地址指定光标文件(后缀为 .cur 或者 .ani )。
+```
+
+
+
 ### 浮动float
 
 #### **清除浮动方式**
@@ -459,6 +517,18 @@ overflow:hidden/scroll/auto;
 `display:block/inline/inline-block;`
 
 ![HTML_CSS_display](image/HTML_CSS_display.png)
+
+### 弹性模型 `display：flex`
+
+- flex布局的子元素不会脱离文档流
+
+- 可在不同方向排列元素；重新排列元素的显示顺序；更改元素的对齐方式；动态地将元素装入容器。
+
+- > 弹性布局默认不改变项目的宽度，但是它默认改变项目的高度。如果项目没有显式指定高度，就将占据容器的所有高度。
+
+![image-20210525110650024](image/image-20210525110650024.png)
+
+![image-20210525110836359](image/image-20210525110836359.png)
 
 ### lang属性
 
@@ -696,16 +766,212 @@ vertical-align: baseline(默认值)       top(顶部对齐)      middle(中部�
 3. 最后使用定位
 4. 元素模式转换必须使用display
 
-###  元素的可见性
+###  元素的可见性`overflow`
 
-- 即把元素隐藏起来
+- `visible`：默认值。多余的内容不剪切也不添加滚动条，会全部显示出来。
+- `hidden`：不显示超过对象尺寸的内容。
+- `auto`：如果内容不超出，则不显示滚动条；如果内容超出，则显示滚动条。
+- `scroll`：Windows 平台下，无论内容是否超出，总是显示滚动条。
 
 ```css
+// 把元素隐藏起来
 overflow:hidden;	//将溢出的部分隐藏
 visibility:hidden;	//元素隐藏（隐藏的内容占位置一般用于)
 display:none;		//元素隐藏（隐藏的内容不占位置一般用于导航栏部分内容的隐藏)
 display:block;		//显示元素
 ```
+
+## H5
+
+### 拖拽
+
+- **拖拽元素**：通过为元素增加 `draggable="true"` 来设置此元素是否可以进行拖拽操作，其中图片、链接默认是开启拖拽的。
+
+- **拖拽元素的事件监听**：（应用于拖拽元素）
+  - `ondragstart`当拖拽开始时调用
+  - `ondragleave` 当**鼠标离开拖拽元素时**调用
+  - `ondragend` 当拖拽结束时调用
+  - `ondrag` 整个拖拽过程都会调用
+- **目标元素**:若把元素A拖拽到元素B里，那么元素B就是目标元素。页面中任何一个元素都可以成为目标元素。
+- **目标元素的事件监听**：（应用于目标元素）
+  - `ondragenter` 当拖拽元素进入时调用
+  - `ondragover` 当拖拽元素停留在目标元素上时，就会连续一直触发（不管拖拽元素此时是移动还是不动的状态）
+  - `ondrop` 当在目标元素上松开鼠标时调用
+  - `ondragleave` 当鼠标离开目标元素时调用
+
+### 地理定位
+
+- `navigator.getCurrentPosition(successCallback, errorCallback, options)` 获取当前地理信息
+- `navigator.watchPosition(successCallback, errorCallback, options) `重复获取当前地理信息
+  - 当成功获取地理信息后，会调用succssCallback，并返回一个包含位置信息的对象`position`
+    - `coords`即坐标
+    - `position.coords.latitude`纬度
+    - `position.coords.longitude`经度
+  - 当获取地理信息失败后，会调用errorCallback，并返回错误信息error。
+  - 可选参数 options 对象可以调整位置信息数据收集方式
+
+```js
+/* 兼容处理;如果支持，获取用户地理信息  
+navigator:导航  geolocation:地理定位 */
+if (window.navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    function(eve) {
+      let wd = ev.coords.latitude;
+      let jd = ev.coords.longitude;
+      console.log("纬度：" + wd + '，经度：' + jd);
+    },
+    function(error) {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          console.log( "用户拒绝共享地理位置信息");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          console.log("无法获取当前位置");
+          break;
+        case error.TIMEOUT:
+          console.log("操作超时");
+          break;
+        case error.UNKNOWN_ERROR:
+          console.log("其他错误");
+          break;
+      }
+    });
+} else {
+  console.log('sorry,你的浏览器不支持地理定位');
+}
+```
+
+### 全屏
+
+- HTML5规范允许用户自定义网页上任意元素全屏显示
+- 开启全屏显示：`requestFullscreen()`
+- 关闭全屏显示：`cancleFullscreen()`
+- 检测当前是否处于全屏状态：`document.fullScreen`
+
+```js
+// 1. 开启全屏显示
+requestFullscreen()
+webkitRequestFullScreen
+webkitCancleFullScreen
+
+// 2. 关闭全屏下显示
+cancleFullscreen()
+mozRequestFullScreen
+mozCancleFullScreen
+
+// 3. 检测当前是否处于全屏状态
+document.fullScreen
+document.webkitIsFullScreen
+document.mozFullScreen
+
+// 4. 全屏的伪类
+:full-screen {}
+:-webkit-full-screen {}
+:moz-full-screen {}
+```
+
+```js
+document.querySelector('.box').onclick = function () {
+  // 开启全屏显示的兼容写法
+  if (box.requestFullscreen) {  //如果支持全屏，那就让元素全屏
+    box.requestFullscreen();
+  } else if (box.webkitRequestFullScreen) {
+    box.webkitRequestFullScreen();
+  } else if (box.mozRequestFullScreen) {
+    box.mozRequestFullScreen();
+  }
+}
+
+<style>
+.box {
+  width: 250px;
+  height: 250px;
+  background-color: green;
+  margin: 100px auto;
+  border-radius: 50%;
+}
+/*全屏伪类：当元素处于全屏时，改变元素的背景色*/
+.box:-webkit-full-screen {
+  background-color: red;
+}
+</style>
+```
+
+### Web存储
+
+- **本地存储**
+  - 本地存储`window.localStorage`：保存在浏览器内存或硬盘中
+  - 永久生效，除非手动删除
+  - 可以多窗口共享数据
+
+- **会话存储**
+  - 会话存储`window.sessionStorage`：保存在内存中
+  - 当窗口关闭时销毁数据
+  - 在同一个窗口下可共享数据
+- Web存储特性
+  - 设置、读取方便。
+  - 容量较大，sessionStorage 约5M、localStorage 约20M（`document.cookie`只有4k）
+  - 只能存储字符串，可以将对象 JSON.stringify() 编码后存储。
+
+1. 设置存储内容(若存在该则替换内容)：`setItem(key, value);`
+2. 读取存储内容：`getItem(key);`
+3. 根据键，删除存储内容：`removeItem(key);`
+4. 清空所有存储内容：`clear();`
+5. 根据索引值来获取存储内容：`key(n);`
+
+### 网络状态
+
+- `window.onLine` ：检测用户当前的网络状况，返回一个布尔值
+- `window.online`：用户网络连接时被调用。
+- `window.offline`：用户网络断开时被调用（拔掉网线或者禁用以太网）。
+
+```js
+window.addEventListener('online', function () {
+  alert('网络连接建立！');
+});
+window.addEventListener('offline', function () {
+  alert('网络连接断开！');
+})
+```
+
+### 应用缓存
+
+- 构建一个离线（无网络状态）应用，需要创建 `cache manifest` 缓存清单文件
+  缓存清单文件中列出了浏览器应缓存，以供离线访问的资源。
+  推荐使用 `.appcache`作为后缀名，另外还要添加MIME类型。
+- 应用缓存的优势
+  - 可配置需要缓存的资源；
+  - 网络无连接应用仍可用；
+  - 本地读取缓存资源，提升访问速度，增强用户体验；
+  - 减少请求，缓解服务器负担。
+
+- **应用缓存清单内容**
+  1. 顶行写CACHE MANIFEST。
+  2. CACHE: 指定需要缓存的静态资源，如.css、image、js等。
+  3. NETWORK: 指定需要在线访问的资源，可使用通配符（不需缓存、必须在网络下才能访问的资源）。
+  4. FALLBACK: 当被缓存的文件找不到时的备用资源（当访问不到某个资源时，自动由另外一个资源替换）。
+
+```appcache
+CACHE MANIFEST
+
+#要缓存的文件
+CACHE:
+    images/img1.jpg
+    images/img2.jpg
+
+#指定必须联网才能访问的文件
+NETWORK:
+     images/img3.jpg
+     images/img4.jpg
+
+#当前页面无法访问是回退的页面
+FALLBACK:
+    404.html
+```
+
+
+
+
 
 ## 不常见
 
@@ -1335,17 +1601,13 @@ ActiveX控件支持	   NO		 			YES	   		YES
 
 #### js组成
 
-- ECMAScript(js语法规范)、Web API（BOM页面文档对象模型、DOM浏览器对象模型）。
-- BOM:onload页面加载事件、window顶级对象；定时器；location、history
-- DOM:获取页面元素、注册事件；属性、样式操作；节点属性、节点层级；动态创建元素
+1. ECMAScript(js语法规范)，包括变量、表达式、运算符、函数、if语句、for语句等。
+2. BOM:文档对象模型(Document object Model)，onload页面加载事件、window顶级对象；定时器；location、history
+3. DOM:浏览器对象模型(Browser Object Model)，获取页面元素、注册事件；属性、样式操作；节点属性、节点层级；动态创建元素
 
-#### js引入方式
+**js引入方式**：行内式、内嵌式、外部引入式。
 
-行内式、内嵌式、外部引入式。
-
-#### js输出方式
-
-alert（浏览器警示框）、console.log（控制台打印）、prompt（浏览器输入框）
+**js输出方式**：alert（浏览器警示框）、console.log（控制台打印）、prompt（浏览器输入框）
 
 #### JS特点：
 
@@ -1455,50 +1717,49 @@ https://blog.csdn.net/Fundebug/article/details/86487117
 
 
 
-
-
 ## DOM
 
-### script属性
+- DOM概念
+  - DOM 为文档提供了结构化表示，并定义了如何通过脚本来访问文档结构。目的其实就是为了能让js操作html元素而制定的一个规范。
+  - **DOM就是由节点组成的；所有的节点都是Object**
+- DOM作用
+  - 找对象（元素节点）
+  - 设置元素的属性值
+  - 设置元素的样式
+  - 动态创建和删除元素
+  - 事件的触发响应：事件源、事件、事件的驱动程序
 
-```js
-<script type="text/javascript" src=""  async></script>
-//async:异步		defer：延时执行
-//注意： 该属性指的是浏览器将外部js文件下载完成后，立马执行。
-```
+- **节点元素：**父（parent）、子（child）和同胞（sibling）
 
-**1、节点元素：**父（parent）、子（child）和同胞（sibling）
-
-**2、元素的属性**（包括对应标签的属性）
-
-- 非表单元素的属性：id、src、title、href、alt
-- 表单元素的属性：name、value、type、disabled、checked、selected
-- 超链接-->取消默认行为的执行 ：return false;
+- **元素的属性**（包括对应标签的属性）
+  - 非表单元素的属性：id、src、title、href、alt
+  - 表单元素的属性：name、value、type、disabled、checked、selected
+  - 超链接-->取消默认行为的执行 ：return false;
 
 ### DOM节点属性
 
-**nodeName**	--> nodeName 属性规定节点的名称，仅只读
+- **nodeName**	--> nodeName 属性规定节点的名称，仅只读
+  - 文档节点（文档）：整个 HTML 文档就是一个文档节点；nodeName 始终是 #document
+  - 元素节点（标签）：HTML标签；nodeName 与标签名相同
+  - 属性节点（属性）：元素的属性；nodeName 与属性名相同
+  - 文本节点（文本）：HTML标签中的文本内容(包括标签之间的空格、换行)；nodeName始终是 #text
+- **nodeValue** 	-->  nodeValue 属性规定节点的值
 
-- 元素节点的 nodeName 与标签名相同
-- 属性节点的 nodeName 与属性名相同
-- 文本节点的 nodeName 始终是 #text
-- 文档节点的 nodeName 始终是 #document
+  - 元素节点的 nodeValue 是 undefined 或 null
+  - 文本节点的 nodeValue 是文本本身
+  - 属性节点的 nodeValue 是属性值
+- NodeType
+  - 元素：1
+  - 属性：2
+  - 文本：3
+  - 注释：8
+  - 文档：9
 
-**nodeType** 	-->  nodeType 属性返回节点的类型。仅只读
 
-| 元素类型 | NodeType |
-| -------- | -------- |
-| 元素     | 1        |
-| 属性     | 2        |
-| 文本     | 3        |
-| 注释     | 8        |
-| 文档     | 9        |
 
-**nodeValue** 	-->  nodeValue 属性规定节点的值
+![JS_DOM节点关系表](image/JS_DOM%E8%8A%82%E7%82%B9%E5%85%B3%E7%B3%BB%E8%A1%A8.png)
 
-- 元素节点的 nodeValue 是 undefined 或 null
-- 文本节点的 nodeValue 是文本本身
-- 属性节点的 nodeValue 是属性值
+
 
 ### DOM方法
 
@@ -1508,6 +1769,7 @@ get(获取)、set(设置)、remove(移除)、create(创建)、insert(插入)、r
 - appendChild(node) - 插入新的子节点（元素）
 - removeChild(node) - 删除子节点（元素）
 - createAttribute() - 创建属性节点
+- 要复制的节点.cloneNode(true)--复制节点
 
 ### DOM属性
 
@@ -1524,51 +1786,64 @@ get(获取)、set(设置)、remove(移除)、create(创建)、insert(插入)、r
 
 ### DOM访问
 
-- 获取id标签：document.getElementById
-- 获取类标签：document.getElementByClassName
-- 获取标签：document.getElementsByTagName
-- 获取name标签：document.getElementsByName
+- 通过Id获取**单个**标签：document.getElementById
+- 通过类名获取标签**数组**：document.getElementByClassName
+- 通过标签名获取标签**数组**：document.getElementsByTagName
+- H5中query查询Selector选择器：querySelctor()
+- 查询所有选择器：querySelctorAll(标签名/类名/id名等等)
 
-因为id是单数，所以不用s，name等可以多个，为复数，所以需要s
+> 注意：因为id是单数，所以不用s，name等可以多个，为复数，所以需要s
 
-H5中query查询Selector选择器：querySelctor()
+```js
+// 元素的节点访问
+节点.parentNode：					获取父元素
 
-querySelctorAll(标签名/类名/id名等等)
+节点.previousSibling：			上一个兄弟节点		
+节点.nextSibling：					下一个兄弟节点
+节点.previousElementSibling：上一个兄弟元素（处理兼容： 节点.previousElementSibling || 节点）
+节点.nextElementSibling：	下一个兄弟元素（处理兼容问题： 节点.nextElementSibling || 节点）
+
+节点.firstChild：					获取第一个子节点		
+节点.lastChild：						最后的子节点
+节点.firstElementChild：		获取第一个子元素（处理兼容问题：节点.firstElementChild || 节点）
+节点.lastElementChild：		最后的子元素		（处理兼容问题：节点.lastElementChild || 节点）
+
+节点自己.parentNode.children[index]： 获取随意的兄弟节点
+节点.childNodes：					获取所有子节点
+节点.children：						获取所有子元素
+```
 
 ### DOM修改（操作样式）
 
 **操作样式：**设置类样式class 、设置行内样式style
 
 ```js
-document.getElementById('ul').style.color = "lightgray";
+let list = document.getElementsByTagName('li')[0];
+list.style.color = "lightgray";
+list.className = 'list';
+console.log(list['src'], list['className'])
 ```
 
 **动态创建元素**（innerHTML、document.write、inerText）:动态创建元素优点-->提高网页性能，降低流量使用
 
 **注意：通过`attribute`和设置`style`只能通过获取id标签来更改**
 
-**innerHTML 和 innerText 区别**
+- **innerHTML 和 innerText 区别**
+  - innerHTML 返回的是标签内的html内容，包含里层的html标签
+  - inerText 返回的是标签的文本值，不包含html标签
+  - innerHTML 和 innerText，如果两个都写，下面的内容会把上面的内容覆盖
 
-- innerHTML 返回的是标签内的html内容，包含里层的html标签
-- inerText 返回的是标签的文本值，不包含html标签
-- innerHTML 和 innerText，如果两个都写，下面的内容会把上面的内容覆盖
+- **document.write()**      //比如弹出新框的在线客服
+  - 当页面加载时，会产生输出流，这个输出流在页面加载完毕时关闭
+  - 如果输出流关闭后执行document.write()，它会开启一个新的输出流，页面会被覆盖
+  - 使用建议：使用document.write只可以在页面加载中，可以使用在弹出新窗口时
 
-**document.write()**      //比如弹出新框的在线客服
+- **innerHTML**
+  - 在设置时会覆盖原来的内容，但是可以通过+=去解决
 
-当页面加载时，会产生输出流，这个输出流在页面加载完毕时关闭
-
-如果输出流关闭后执行document.write()，它会开启一个新的输出流，页面会被覆盖
-
-使用建议：使用document.write只可以在页面加载中，可以使用在弹出新窗口时
-
-**innerHTML**
-
-在设置时会覆盖原来的内容，但是可以通过+=去解决
-
-**inerHTML 和 document.write 区别**
-
-- innerHTML 是将内容写入某个DOM节点，不会导致页面全部重绘
-- document.write 是直接将内容写入页面的内容流，会导致页面全部重绘
+- **inerHTML 和 document.write 区别**
+  - innerHTML 是将内容写入某个DOM节点，不会导致页面全部重绘
+  - document.write 是直接将内容写入页面的内容流，会导致页面全部重绘
 
 ### DOM事件
 
@@ -1582,20 +1857,7 @@ onload用户进入页面			onunload用户离开页面
 
 **事件三要素：**
 
-事件源(触发的事件的元素 btn)-->事件名称(click )-->  事件处理程序(function)
-
-![JS_DOM节点关系表](image/JS_DOM%E8%8A%82%E7%82%B9%E5%85%B3%E7%B3%BB%E8%A1%A8.png)
-
-```js
-var li = document.getElementById('ul');
-li. firstChild;			//获取第一个子节点	li.lastChild;			//最后的子节点
-li.firstElementChild;	//获取第一个子元素	li.lastElementChild;	//最后的子元素
-li.children;			//获取所有子元素	li.parentNode;			//获取父元素
-li.childNodes；			//获取所有子节点
-li.nextSibling;			//下一个兄弟节点		li.nextElementSibling;	//下一个兄弟元素（有兼容问题）
-li.previousSibling;		//下一个兄弟节点		li.previousElementSibling;//下一个兄弟元素（有兼容问题）
-
-```
+事件源(触发的事件的元素标签)-->事件名称(click )-->  事件处理程序(对样式和Html的操作  function)
 
 ### DOM实例
 
@@ -1624,11 +1886,16 @@ var oEvent=ev||event;   //此为兼容各个浏览器，在需要获取和事件
 
 ## BOM
 
-使用 window 下的成员  window 可以省略
+### window
 
-window.document
+- 使用 window 下的成员  window 可以省略
 
-对话框：window.alert();   window.prompt();  window.confirm();
+
+### 对话框
+
+- window.alert();  
+- window.prompt(); 
+- window.confirm();
 
 ```js
 //  window 对象本身具有name和top两个属性 其中top属性是只读的
@@ -1991,16 +2258,67 @@ x.toString()
 
 
 
+### 计算
 
-
-### 计算精度问题
+#### 计算精度问题
 
 - 浮点数精度问题：浮点数值最高精度是17位小数，但进行算数计算时其精确度远不如整数。
+- 所以可通过截取小数点前面的位数来当做真正的数字
 
 ```js
 const result = 0.1 + 0.2；	//结果为0.30000000000000004
 const mul = 0.07*100;		//结果为7.000000000000001
 ```
+
+#### 取整
+
+- **对一个数字`num | 0`可以取整，负数同样使用**
+
+```js
+console.log(1.3 | 0);  // 1
+console.log(-1.9 | 0);  // -1
+```
+
+#### 判断奇/偶数
+
+- 0是一个特殊的偶数。它既是正偶数与负偶数的分界线，又是正奇数与负奇数的分水岭。
+- **对一个数字`num & 1`可以判断奇偶数，负数同样使用**
+
+```js
+console.log(3 & 1);  // 1
+console.log(4 & 1);  // 0
+```
+
+#### 不同进制表示法
+
+```js
+29  // 10进制
+035  // 8进制29      原来的方式
+0o35  // 8进制29      ES6的方式
+0x1d  // 16进制29
+0b11101  // 2进制29
+```
+
+#### 精确到指定位数的小数
+
+```js
+const round = (n, decimals = 0) => Number(`${Math.round(`${n}e${decimals}`)}e-${decimals}`)
+round(1.345, 2)  // 1.35
+round(1.345, 1)  // 1.3
+
+1.345.toFixed(2) // 1.35
+1.345.toFixed(1) // 1.3
+```
+
+#### 数字补零
+
+```js
+
+```
+
+
+
+
 
 ### 数组
 
@@ -2093,42 +2411,79 @@ Math.max()	//最大值	Math.min()	//最小值
 
 - Date对象是构造函数，需实例化后才能使用，Date实例用来处理日期和时间。
 
-## 页面宽高
 
-### `offset、scroll、client`
 
-- 网页可见区域高：document.body.clientHeight
-- 网页正文全文高：document.body.scrollHeight
+## `offset、scroll、client`
 
-- 网页可见区域高（包括边线的高）：document.body.offsetHeight
+### 垂直计算
 
-- 网页被卷去的高：document.body.scrollTop
-- 屏幕分辨率高：window.sreen.height
+- 常见高
+  - 网页可见区域高：document.body.clientHeight
 
-clientHeight 和 offsetHeight 属性和元素的滚动、位置没有关系它代表元素的高度
+  - 网页正文全文高：document.body.scrollHeight
 
-**clientHeight/clientWidth**：**包括padding但不包括border、水平滚动条、margin的元素的高度**。对于inline的元素这个属性一直是0，单位px，只读元素。
+  - 网页可见区域高（包括边线的高）：document.body.offsetHeight
 
-**offsetHeight/offsetWidth**：**内容+padding+border**.包括padding、border、水平滚动条，但不包括margin的元素的高度。对于inline的元素这个属性一直是0，单位px，只读元素。
+  - 网页被卷去的高：document.body.scrollTop
+
+  - 屏幕分辨率高：window.sreen.height
+
+  - > 注意：clientHeight 和 offsetHeight 属性和元素的滚动、位置无关；
+    >
+    > 它代表元素的高度，对于inline的元素这个属性一直是0，单位px，只读元素
+
+- **clientHeight/clientWidth = 内容宽高+padding**。包括padding，但不包括border、水平滚动条、margin的高度。
+
+- **offsetHeight/offsetWidth = 内容宽高+padding+border**。包括padding、border、水平滚动条，但不包括margin的高度。
+
+- **滚动条情况：**当本元素的子元素比本元素高且overflow=scroll时，本元素会scroll。
+
+- **scrollHeight/scrollWidth = 内容宽高** 
+  - scrollHeight代表包括当前不可见部分的元素的高度，而可见部分的高度是clientHeight，所以**scrollHeight>=clientHeight**，
+  - 当没有滚动条时scrollHeight==clientHeight恒成立。单位px，只读元素。
 
 ![image-20200920125228504](image/image-20200920125228504.png)![image-20200920125235120](image/image-20200920125235120.png)
 
-**滚动条情况**
+### 水平计算
 
-当本元素的子元素比本元素高且overflow=scroll时，本元素会scroll。
+- **scrollTop/scrollLeft:** 
 
-**scrollHeight/scrollWidth:** 因为子元素比父元素高，父元素不想被子元素撑的一样高就显示出了滚动条，在滚动的过程中本元素
+  - 获取垂直/水平滚动条滚动的距离
 
-有部分被隐藏了，scrollHeight代表包括当前不可见部分的元素的高度。而可见部分的高度其实就是clientHeight，即scrollHeight>=clientHeight恒成立。在有滚动条时讨论scrollHeight才有意义，在没有滚动条时scrollHeight==clientHeight恒成立。单位px，只读元素。
+  - 代表在有滚动条时，滚动条向下滚动的距离也就是元素顶部被遮住部分的高度。
 
-**scrollTop/scrollLeft:** 代表在有滚动条时，滚动条向下滚动的距离也就是元素顶部被遮住部分的高度。在没有滚动条时scrollTop==0恒成立。单位px，可读可设置。
+  - 在没有滚动条时scrollTop==0恒成立。单位px，可读可设置。
 
-![image-20200920125155892](image/image-20200920125155892.png)
- **offsetTop/offsetLeft:** 当前元素顶部距离最近父元素(offsetParent)顶部的距离,和有没有滚动条没有关系。单位px，只读元素。(获取的相对于offsetParent的距离)
+  - > 当 scrollHeight - scrollTop == clientHeight 时，垂直滚动条抵达底部
+    >
+    > 当 scrollWidth - scrollLeft == clientWidth 时，水平滚动条抵达底部
 
-![image-20200920125120950](image/image-20200920125120950.png)
+-  **offsetTop/offsetLeft:** 
 
-**offsetParent/parentNode**:最近的脱离文档流的父元素，如果没有脱离文档流的父元素 就是body
+  - 当前元素相对于其**定位父元素**的垂直/水平偏移量(获取的相对于offsetParent的距离)
+
+  - 当前元素顶部距离最近父元素(offsetParent)顶部/左边的距离，和滚动条无关。单位px，只读元素。
+
+  - > 从父元素的padding开始计算，父元素的border不算在内
+    >
+    > 注意：当父元素存在定位时，offsetLeft == style.left  (抛除去px的值)
+
+- **offsetParent/parentNode**:离所定义节点最近脱离文档流的父元素(position定义为absolute、relative、fixed)，如果没有脱离文档流的父元素，则offsetParent获取的是body
+
+![image-20210916173138280](image/image-20210916173138280.png)
+
+- offsetTop/offsetLeft：
+  - 调用者：任意元素。(盒子为主)
+  - 作用：距离父系盒子中带有定位的距离。
+
+- scrollTop/scrollLeft：
+  - 调用者：document.body.scrollTop（window调用）(盒子也可以调用，但必须有滚动条)
+  - 作用：浏览器无法显示的部分（被卷去的部分）。
+- clientY/clientX：
+  - 调用者：event
+  - 作用：鼠标距离浏览器可视区域的距离（左、上）。
+
+
 
 ## 语法运用
 
@@ -2898,6 +3253,47 @@ const p = new Proxy(person, {
 - Array.prototype不是指单个数组，而是指Array()对象本身。
 - prototype是一个全局对象构造函数，可用于所有JavaScript对象。
 
+##### **构造函数方法**
+
+**Array.from()**-->将类数组或可遍历对象转化为真正的数组
+
+```js
+const array1 = {
+    "0": "1",
+    "1": "2",
+    "2": "4",
+    "length": 3
+}
+let array11 = Array.from(array1);
+let array12 = Array.from(array1, item => item * 2)	//方法还可以接收第二个参数，作用类似于数组的map方法，用来对每个元素进行处理，将处理后的值放入返回的数组
+console.log(array11, array12) // [ '1', '2', '4' ] [ 2, 4, 8 ]
+```
+
+##### **实例方法**
+
+- **find()**：用于找出第一个符合条件的数组成员，如果没有找到返回undefined
+- **findIndex()**：用于找出第一个符合条件的数组成员的位置，如果没什么找到返回-1
+- **includes()**：表示某个数组是否包含给定的值，返回布尔值
+
+```js
+const aryString1 = [{
+    id: 1,
+    name: '张三'
+}, {
+    id: 2,
+    name: '李四'
+}];
+let target = aryString1.find((item,index) => { return item.id == 1 });
+console.log(target)   //{id: 1,name: '张三'}
+
+let aryNumber1 = [10, 20, 50];
+let index = aryNumber1.findIndex((item,inedx) => {return item > 15});
+let result = aryNumber1.includes(10)
+console.log(index,result)  // 1 true
+```
+
+
+
 #### 字符串与数组转换
 
 - `split()`方法是将一个字符串按照某一分隔符进行拆分为数组，而`join()`则正好相反。
@@ -2915,8 +3311,6 @@ let strAdd = srt.concat("-123","-456");
 
 
 ### `Array`的扩展方法
-
-
 
 #### 迭代遍历
 
@@ -2941,8 +3335,12 @@ let strAdd = srt.concat("-123","-456");
 - **`some()、every()`方法->检测数组：查找数组中是否有满足条件的元素**
 
   - `array.some(function(currentValue, index, arr))`
+  
   - some()方法，遍历数组的每一项，若其中一项为 true，则返回true；
+  
   - every()方法，遍历数组每一项，若全部为true，则返回true.
+  
+  - >`some()、every()`方法返回的都是一个布尔值。
 
 ```js
 let arr = [12, 1, 30, 22];
@@ -3033,6 +3431,26 @@ this.werkOption.filter(first => {
 })
 ```
 
+#### `reduce`方法同时实现map和filter
+
+- 假设有一个数列，希望更新它的每一项(map的功能)，然后筛选出一部分(filter的功能)。
+  如果先使用map然后使用filter的话，则需遍历这个数组两遍。
+
+```js
+// 1. 对原数组加倍，并选出大于50的数
+let arr = [110, 130, 20, 60, 20, 40, 70, 90];
+let result = arr.reduce((item, next) => {
+  next *= 2;
+  if(next > 50) {
+    item.push(next)
+  }
+  return item
+}, [])
+console.log(result);  // [ 220, 260, 120, 80, 140, 180 ]
+```
+
+
+
 
 
 ####  `new Array().fill()`创建数组并赋值
@@ -3055,27 +3473,7 @@ arr.copyWithin(0,3,10);
 console.log(arr)    // [ 3, 4, 5, 6, 7, 8, 9, 7, 8, 9 ]
 ```
 
-#### 过滤数组中重复的值
-
-```js
-var arr = [1,2,3,4,5];
-var resultArr = [];//去重后的数组
-var flag;
-for (var i in arr){
-  flag = true;
-  for (var j in resultArr) {
-    if (resultArr[j].id == arr[i].id) {
-      flag = false;
-      break;
-    }
-  }
-  if (flag) {
-    resultArr.push(arr[i]);
-  }
-}
-```
-
-#### 对数组对象排序sort()
+#### 组对象排序sort()
 
 ```js
 // 1. 数组排序
@@ -3100,7 +3498,7 @@ arr2.sort(function(x, y){ // 从小到大按属性b排序
 
 // 3. 数组对象根据多个属性排序
 // 需求是：先按b属性从小到大排序，如果最小中有重复则再按a属性排序
-// 解决理念：在排序时先按b属性排序，如果x.b的大于y.b则将x移到y的右边，如果x.b等于y.b则再通过x.a和y.a进行比较
+// 解决理念：在排序时先按b属性排序，如果x.b的大于y.b则将x移到y的右边，如果x.b等于y.b则再通过x.a和y.a进行比较（return 1则调换位置，return -1或0则不变）
 arr2.sort(function (x, y) {
   if (x.b > y.b) {
     return 1;
@@ -3112,7 +3510,9 @@ arr2.sort(function (x, y) {
 })
 ```
 
-####  `Cannot read property 'push' of undefined`原因
+#### push问题
+
+#####  `Cannot read property 'push' of undefined`原因
 
 - 问题代码：`this.listData[current].push(...data); //定义为一个对象`
 - 问题原因：当listData为空对象，`{}`由于内部为空而非空数组，导致无法push（**即需要给赋值的变量定义为数组类型**）
@@ -3366,26 +3766,56 @@ let copy2 = Object.assign({}, obj2, obj3); // { a: 1 } { a: 1, b: 2 } obj2不会
 
 对象的扩展运算符（`...`）用于取出参数对象的所有可遍历属性，拷贝到当前对象之中。
 
+#### `freeze()`冻结对象
+
+`Object.freeze('被冻结的对象') `方法可以冻结一个对象，即该对象不可修改/添加属性，该对象的原型也不能被修改。
+
+
+
 
 
 ### String对象
 
-- `indexOf(子字符串)`： 获取字符串当中，子字符串第一次出现的位置；如果没有则返回 -1 
-- `lastIndex(子字符串)`： 获取字符串当中，子字符串最后一次出现的位置；如果没有则返回-1
-- `substring(start,end) `： 将字符串从start位置开始截取到end位置，但不包括end；end可以省略，表示一直截取到结束
-- `substr(start,length)`：将字符串从star位置开始截取到start位置，截取length个字符
-- `.split(“分隔符”) `：将字符串转成数组，返回为一个新数组
-- `.startsWith(value,start)`：检测字符串中是否以value开头，从start位置开始但不包括start
-- `.endsWith(value,start)`：检测字符串中是否以value结尾，从start位置开始但不包括start
-- `.includes(value,start) `：检测字符串中是否有value，从start位置但是不包括start开始找，返回布尔值
-- .`replace(旧字符串，新字符串)`： 用新字符串替换旧字符串
-  - replce(/旧字符串/ig,新字符串)
-  - i : 不区分大小写
-  - g: 全文搜索
+- 截取字符串
+  - `substring(start,end) `： 将字符串从start位置开始截取到end位置，但不包括end；end可以省略，表示一直截取到结束
+  - `substr(start,length)`：将字符串从star位置开始截取到start位置，截取length个字符
+  - `.split(“分隔符”) `：将字符串转成数组，返回为一个新数组
+  - .`replace(旧字符串，新字符串)`： 用新字符串替换旧字符串
+    - replce(/旧字符串/ig,新字符串)
+    - i : 不区分大小写
+    - g: 全文搜索
 
+- 查找字符串
 
+  - `startsWith(value,start)`：检测字符串中是否以value开头，从start位置开始但不包括start，返回布尔值
+  - `.endsWith(value,start)`：检测字符串中是否以value结尾，从start位置开始但不包括start，返回布尔值
+  - `includes(value,start) `：检测字符串中是否有value，从start位置但是不包括start开始找，返回布尔值
+
+- 处理字符串
+
+  - `repeat(n)`：表示将原字符串重复n次，返回一个新的字符串
+  - `raw()`：返回一个斜杠都被转义（即斜杠前面再加一个斜杠）的字符串，往往用于模板字符串的处理方法。
+  - 字符串补全长度：`String.padStart(n, str)`用于头部补全；`String.padEnd(n, str)`用于尾部补全（第一个参数是字符串补全生效的最大长度，第二个参数是用来补全的字符串）。
+
+- 检索字符串
+
+  - `indexOf(子字符串)`：返回某个指定的字符串值在字符串中首次出现的位置。如果检索的字符串值不存在则该方法返回 -1。
+  - `lastIndex(子字符串)`： 获取字符串当中，子字符串最后一次出现的位置；如果没有则返回-1
+  - `search() `：用于检索字符串中指定的子字符串，或检索与正则表达式相匹配的子字符串。如果没有找到任何匹配的子串，则返回 -1。
+  - `match() `：可在字符串内检索指定的值，或找到一个或多个正则表达式的匹配。
+  - `matchAll()`：返回一个正则表达式在当前字符串的所有匹配
+
+- 消除字符串空格
+
+  - `trim()`：两侧去空格;`let str = '  an dy   ';console.log(str.trim());	//an dy`
+
+  - `trimStart()`消除字符串头部的空格;`trimEnd()`消除尾部的空格（注意：返回的都是新字符串，不会修改原始字符串）。
+
+    >除了空格键，这三个方法对字符串头部（或尾部）的 tab 键、换行符等不可见的空白符号也有效。
 
 ### String的扩展方法
+
+
 
 #### `encodeURIComponent() `
 
@@ -3786,11 +4216,11 @@ getID(data, 112);
 
 ### 深拷贝与浅拷贝
 
-- 深拷贝和浅拷贝是只针对`Object`和`Array`这样的引用数据类型的。
+- 深拷贝和浅拷贝是**只针对`Object`和`Array`这样的引用数据类型**
 
 - **浅拷贝：**浅拷贝只是拷贝一层，更深层次对象级别的只拷贝引用。（只复制指向某个对象的指针，而不是复制本身，新旧对象还是共享同一块内存）
 - **深拷贝：**深拷贝拷贝多层，每一级别的数据都会拷贝。（会另外创造一个一模一样的对象，新对象跟原对象不共享内存，修改新对象不会改变原来对象的值）
-- es6新增方法浅拷贝：`Object.assign(targe, ...sources)`
+- es6新增方法浅拷贝：`Object.assign(目标对象, 源对象1, 源对象2...)`
 
 ```js
 let obj = {
@@ -3824,11 +4254,11 @@ Object.assign()方法可以把任意多个的原对象自身的可枚举属性�
 ```js
 let obj = {a: {a: 'willy', b: 22}};
 let initalObj = Object.assign({}, obj);
-initalObj.a.a = 'ice';
-console.log(obj.a.a);	//ice
+initalObj.a.a = 'aice';
+console.log(obj.a.a);	// aice
 ```
 
-注意：当object只有一层时为深拷贝。
+**注意**：当拷贝对象只有一层时为浅拷贝，当拷贝对象为多层时是深拷贝。
 
 ```
 let obj = {a: 'willy'};
@@ -3917,7 +4347,9 @@ let obj2 = _.cloneDeep(obj1);
 console.log(obj1.b.f === obj2.b.f);
 ```
 
-### `let`、`var`、`const`
+### ES6新增语法
+
+#### `let`、`var`、`const`
 
 - 尽量少写`var`，写变量时用`let`，写常量时用`const`
 - const：
@@ -3928,7 +4360,7 @@ console.log(obj1.b.f === obj2.b.f);
   - let：其作用域为该语句所在的代码块内，不存在变量提升。
   - const：声明的是常量，声明后值不可变。
 
-#### `let`、`var`、`const`叙述
+**`let`、`var`、`const`叙述**
 
 1. var声明的变量会挂载在window上，而let和const声明的变量不会
 
@@ -3980,7 +4412,7 @@ if(1){
 }
 ````
 
-### ES6新增语法
+
 
 #### **函数和属性增项写法**
 
@@ -4024,6 +4456,43 @@ console.log(a, d);  // 1 undefined
 let person = {name: 'willy', age: 20};
 let {name: myName, age: myAge} = person;    //赋别名
 ```
+
+##### 使用解构删除不必要属性
+
+- 通过定义新的变量来接收那些不必要的属性，则可以使得不必要的属性不存在于剩余参数中（即所想要的值都在剩余参数中）
+
+```js
+// 通过定义 _internal, tooBig 接收此两个属性的值，这样使得剩余参数中不存在此两个属性 
+let { _internal, tooBig, ...cleanObject } = {
+  el1: '1',
+  _internal: "secret",
+  tooBig: {},
+  el2: '2',
+  el3: '3'
+};
+console.log(cleanObject);  // {el1: '1', el2: '2', el3: '3'}
+```
+
+##### 函数参数中解构嵌套对象
+
+```js
+var car = {
+  model: 'bmw 2018',
+  engine: {
+    v6: true,
+    vin: 12345
+  }
+}
+// 通过结构只获取 car 中 model 属性和 engine 的 vin 属性
+const modelAndVIN = ({ model, engine: { vin } }) => {
+  console.log(`model: ${model} vin: ${vin}`);
+}
+modelAndVIN(car);  // => model: bmw 2018  vin: 12345
+```
+
+
+
+
 
 #### 剩余(`rest`)参数
 
@@ -4112,76 +4581,9 @@ console.log(a, '=>', ...a);
 
 >**注意：如果将扩展运算符用于数组赋值，只能放在参数的最后一位，否则会报错**
 
-#### Array的扩展方法
 
-##### **构造函数方法**
 
-**Array.from()**-->将类数组或可遍历对象转化为真正的数组
-
-```js
-const array1 = {
-    "0": "1",
-    "1": "2",
-    "2": "4",
-    "length": 3
-}
-let array11 = Array.from(array1);
-let array12 = Array.from(array1, item => item * 2)	//方法还可以接收第二个参数，作用类似于数组的map方法，用来对每个元素进行处理，将处理后的值放入返回的数组
-console.log(array11, array12) // [ '1', '2', '4' ] [ 2, 4, 8 ]
-```
-
-##### **实例方法**
-
-- **find()**：用于找出第一个符合条件的数组成员，如果没有找到返回undefined
-- **findIndex()**：用于找出第一个符合条件的数组成员的位置，如果没什么找到返回-1
-- **includes()**：表示某个数组是否包含给定的值，返回布尔值
-
-```js
-const aryString1 = [{
-    id: 1,
-    name: '张三'
-}, {
-    id: 2,
-    name: '李四'
-}];
-let target = aryString1.find((item,index) => { return item.id == 1 });
-console.log(target)   //{id: 1,name: '张三'}
-
-let aryNumber1 = [10, 20, 50];
-let index = aryNumber1.findIndex((item,inedx) => {return item > 15});
-let result = aryNumber1.includes(10)
-console.log(index,result)  // 1 true
-```
-
-#### String的扩展方法
-
-- 查找字符串
-  - `starsWith()`：表示参数字符串是否在原字符串的头部，返回布尔值
-  - `endsWith()`：表示参数字符串是否在原字符串的尾部，返回布尔值
-  - `includes()`：返回布尔值，表示是否找到了参数字符串。
-
-- 处理字符串
-
-  - `repeat(n)`：表示将原字符串重复n次，返回一个新的字符串
-  - `raw()`：返回一个斜杠都被转义（即斜杠前面再加一个斜杠）的字符串，往往用于模板字符串的处理方法。
-  - 字符串补全长度：`String.padStart(n, str)`用于头部补全；`String.padEnd(n, str)`用于尾部补全（第一个参数是字符串补全生效的最大长度，第二个参数是用来补全的字符串）。
-
-- 检索字符串
-
-  - `indexOf()`：返回某个指定的字符串值在字符串中首次出现的位置。如果要检索的字符串值没有出现，则该方法返回 -1。
-  - `search() `：用于检索字符串中指定的子字符串，或检索与正则表达式相匹配的子字符串。如果没有找到任何匹配的子串，则返回 -1。
-  - `match() `：可在字符串内检索指定的值，或找到一个或多个正则表达式的匹配。
-  - `matchAll()`：返回一个正则表达式在当前字符串的所有匹配
-
-- 消除字符串空格
-
-  - `trim()`：两侧去空格;`let str = '  an dy   ';console.log(str.trim());	//an dy`
-
-  - `trimStart()`消除字符串头部的空格;`trimEnd()`消除尾部的空格（注意：返回的都是新字符串，不会修改原始字符串）。
-
-    >除了空格键，这三个方法对字符串头部（或尾部）的 tab 键、换行符等不可见的空白符号也有效。
-
-### 模板字符串
+#### 模板字符串
 
 ```js
 //模板字符串解析变量
@@ -4200,6 +4602,41 @@ let end = str.endsWith('willy');	//尾部是否为willy
 let strCpoy = str.repeat(1);	//重复一次
 console.log(start, end, strCpoy);    //true true
 ```
+
+#### 代码复用`Object[key]`
+
+把`Object.key`写成`Object[key]`，这种做法构成了编写可重用代码的基础，如element UI的表单验证。
+
+当有很多表单，则需要应用验证，此时会有不同的字段和规则。如果可以构建一个在运行时配置的通用验证函数，会是一个好选择。
+
+```js
+// object validation rules
+const schema = {
+  first: {
+    required: true
+  },
+  last: {
+    required: true
+  }
+};
+// universal validation function
+const validate = (schema, values) => {
+  for (field in schema) {
+    if (schema[field].required) {
+      if (!values[field]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+console.log(validate(schema, { first: 'Bruce' }));  // false
+console.log(validate(schema, { first: 'Bruce', last: 'Wayne' }));  // true
+```
+
+
+
+
 
 ### 数据结构
 
@@ -4618,18 +5055,131 @@ for..of循环迭代：c,cilly
 
 - 正则表达式通常被用来检索、替换符合某个模式（规则）的文本，还常用于过滤页面内容中的一些敏感词（替换），或从字符串中获取特定部分（提取）等。
 
-- 创建正则表达式：
 
-  - 通过调用`RegExp`对象的构造函数创建：`let 变量名=new RegExp(/表达式/);`
-  - 通过字面量创建：`let 变量名=/表达式/;`
+**创建正则表达式**
 
-- 测试正则表达式：`test()`正则对象方法，用于检测字符串是否符合该规则，为boolean型。`regxObj.test(str要测试的文本)`
+- 通过调用`RegExp`对象的构造函数创建：
+  - `let 变量 = new RegExp(/正则表达式/);`
+  - `var 变量 = new RegExp("正则表达式", "匹配模式");`
+- 通过字面量创建
+  - `let 变量 = /表达式/;`
+  - `let 变量 = /正则表达式/匹配模式;`
 
-- 替换正则表达式：`replace()`用于替换正则表达式的内容。
+**匹配模式**
 
-  `replace(正则表达式/被替换字符串, 替换的字符串);`
+- `i` ： i 指 ignore，忽略大小写
+- `g`： g 指 global， 全局匹配模式
+  - 全局匹配模式`g`一般用于 `exec()`、`match()`、`replace()`等方法。
+  - 全局匹配模式`g`如果用于test()方法会有问题。因为g模式会生成一个`lastindex`参数来存储匹配最后一次的位置。
 
-  > `replace()`方法只执行一次，所以在正则表达式后面加上`/g`来执行多次。
+**测试正则表达式**
+
+- `regxObj.test(str要测试的文本)`
+- 对于非全局匹配的正则表达式，`test()`只会检测***是否存在某个目标字符串**(只要存在就为 true)，多次检测的结果都相同。
+
+- **注意：全局匹配 g 慎用test()方法**
+
+```js
+const reg = /test/g;
+const str = '_test_test';
+
+console.log(reg.test(str)); // true
+console.log(reg.lastIndex); // 5
+
+console.log(reg.test(str)); // true
+console.log(reg.lastIndex); // 10
+
+console.log(reg.test(str)); // false
+console.log(reg.lastIndex); // 0
+```
+
+**替换正则表达式``replace()``**
+
+- `replace()`：将字符串中的指定内容，替换为新的内容并返回。不会修改原字符串。
+
+- `新的字符串 = str.replace(被替换的内容，新的内容);`
+
+- > `replace()`方法只执行一次，所以在正则表达式后面加上`/g`来执行多次
+
+```js
+var str2 = "Today is fine day,today is fine day !!!"
+console.log(str2.replace("today", "tomorrow"));  //只能替换第一个today
+console.log(str2.replace(/today/gi, "tomorrow")); //这里用到了正则，且为“全局匹配”模式，才能替换所有的today
+```
+
+
+
+**搜索正则表达式`search()`**
+
+- `search()`：搜索字符串中是否含有指定内容。如果搜索到指定内容，则会返回第一次出现的索引；否则返回-1。（注意：search只会查找一个，即使设置全局匹配也无效）
+
+```js
+var str = "hello abc hello aec afc";
+// 搜索字符串中是否含有abc 或 aec 或 afc
+result = str.search(/a[bef]c/);
+console.log(result); // 打印结果：6
+```
+
+
+
+**提取正则表达式`match()`**
+
+- `match()`：根据正则表达式从一个字符串中将符合条件的内容提取出来，封装到一个数组中返回（即使只查询到一个结果）
+- **注意**：默认情况下，`match()`方法只会找到**第一个**符合要求的内容，找到以后就停止检索。
+- 我们可以设置正则表达式为**全局匹配**模式，这样就会匹配到所有的内容，并以**数组**的形式返回。
+
+```js
+var str = "1a2a3a4a5e6f7A8B9C";
+var result1 = str.match(/[a-z]/);   // 找到符合要求的第一个内容，然后返回
+var result2 = str.match(/[a-z]/g);  // 设置为“全局匹配”模式，匹配字符串中 所有的小写字母
+var result3 = str.match(/[a-z]/gi); // 设置多个匹配模式，匹配字符串中 所有的字母（忽略大小写）
+console.log(result1); // 打印结果：["a"]
+console.log(result2); // 打印结果：["a", "a", "a", "a", "e", "f"]
+console.log(result3); // 打印结果：["a", "a", "a", "a", "e", "f", "A", "B", "C"]
+```
+
+
+
+**拆分正则表达式`split()`**
+
+- `split()`：将一个字符串拆分成一个数组。可以接受一个正则表达式作为参数。
+- 根据所定义的正则表达式来区分在哪里拆分
+
+```js
+var str = "11a22b33c44d55e66f77g";
+var result = str.split(/[A-z]/); // 参数是一个正则表达式：表示所有字母
+console.log(result);  // [ '11', '22', '33', '44', '55', '66', '77', '' ]
+```
+
+#### [] 或
+
+一些规则：
+
+- `/[ab]/` 等价于 `/a|b/`：检查一个字符串中是否包含 **a或b**
+- `/[a-z]/`：检查一个字符串那种是否包含**任意小写字母**
+- `/[A-Z]/`：任意大写字母
+- `/[A-z]/`：任意字母
+- `/[0-9]/`：任意数字
+- `/a[bde]c/`：检查一个字符串中是否包含 abc 或 adc 或 aec
+
+#### [^ ]  除外
+
+```javascript
+ // 举例1：
+var reg = /[^ab]/; // 规则：字符串中，除了a、b之外，还有没有其他的字符内容？
+var str = "acb";
+console.log(reg.test(str)); // 打印结果：true
+
+// 举例2：（可以用来验证某字符串是否为 纯数字）
+var reg = /[^0-9]/;  // 规则：字符串中，除了数字之外，还有没有其他的内容？
+var str1 = "1991";
+var str2 = "199a1";
+
+console.log(reg.test(str1)); // 打印结果：false （如果字符串是 纯数字，则返回 false）
+console.log(reg.test(str2)); // 打印结果：true
+```
+
+
 
 ### Promise对象
 
@@ -4874,6 +5424,13 @@ async && await: 1910.646ms
 ### 数字位数不够，前面位数补零
 
 ```js
+const addZero1 = (num, len = 2) => (`0${num}`).slice(-len);
+const addZero2 = (num, len = 2) => (`${num}`).padStart(len, '0');
+addZero1(3);  // 03
+addZero2(32, 4);  // 0032
+```
+
+```js
 function formatZero(num, len) {
   if(String(num).length > len) return num;
   return (Array(len).join(0) + num).slice(-len);
@@ -4917,6 +5474,42 @@ for( var i = 0; i < 10; i++ ){
     console.log( g.next().value )
 }
 ```
+
+### 过滤数组中重复的值
+
+```js
+var arr = [1,2,3,4,5];
+var resultArr = [];//去重后的数组
+var flag;
+for (var i in arr){
+  flag = true;
+  for (var j in resultArr) {
+    if (resultArr[j].id == arr[i].id) {
+      flag = false;
+      break;
+    }
+  }
+  if (flag) {
+    resultArr.push(arr[i]);
+  }
+}
+```
+
+####  统计相同项的个数
+
+```js
+// 统计相同项的个数
+let cars = ['BMW','Benz',  'Benz',  'Tesla',  'BMW',  'Toyota'];
+let carsObjNum = cars.reduce((objNum, name) => {
+  objNum[name] = objNum[name] ? ++objNum[name] : 1
+  return objNum
+}, {})
+console.log(carsObjNum);  // { BMW: 2, Benz: 2, Tesla: 1, Toyota: 1 }
+```
+
+
+
+
 
 ### 函数防抖
 
@@ -4999,11 +5592,7 @@ getParentNode(arr, '44444');	// 要查找的子节点id
 
 
 
-
-
 ### 数组转树形结构
-
-
 
 ```js
 const json = require("./json")
