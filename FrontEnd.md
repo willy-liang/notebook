@@ -1615,11 +1615,26 @@ ActiveX控件支持	   NO		 			YES	   		YES
 - 跨平台性：只跟浏览器有关
 - 安全性：不允许访问硬盘，不能对网络文件进行修改和删除
 
-#### Document 和 body 之间的区别
 
-整体和部分的关系，body只包含网页的局部
 
-### 事件循环`Event Loop`与JS循环机制
+### 单线程与异步
+
+**同步任务**
+
+- 在主线程上排队执行的任务。必须等待前面的任务完成，才能继续后面的任务
+
+**异步任务**
+
+- 不进入主线程、而是进入**任务队列**（Event Queue）的任务。只有"任务队列"通知主线程，某个异步任务可以执行了，该任务才会进入主线程执行(不受当前任务的影响)
+- **使用异步场景**
+  1. 定时器：setTimeout（定时炸弹）、setInterval（循环执行）
+  2. 事件绑定(事件可触发，但不定会触发，为了防止内容没有渲染所以用异步)
+  3. 网络请求（含接口请求）：ajax 请求、网络图片加载
+  4. ES6的Promise
+- **多次异步调用的顺序**
+  - 多次异步调用的结果，顺序可能不同步。
+  - 异步调用的结果如果**存在依赖**，则需要通过回调函数进行嵌套
+- **伪代码**：`sleep(5000); //表示很耗时的同步任务`
 
 #### 浏览器事件循环
 
@@ -1682,6 +1697,8 @@ setTimeout */
 #### 浏览器与Node的事件循环(Event Loop)的区别
 
 https://blog.csdn.net/Fundebug/article/details/86487117
+
+
 
 ### 抽象语法树`AST`
 
@@ -1845,6 +1862,14 @@ console.log(list['src'], list['className'])
 - **inerHTML 和 document.write 区别**
   - innerHTML 是将内容写入某个DOM节点，不会导致页面全部重绘
   - document.write 是直接将内容写入页面的内容流，会导致页面全部重绘
+- `document.createElement()`
+- 动态操作表格
+  - rows (只读，table和textarea能用)
+  - insertRow(index) (只有table能调用)
+  - deleteRow(index) (只有table能调用)
+  - cells (只读，table和textarea能用)
+  - insertCell(index) (只有tr能调用)
+  - deleteCell(index) (只有tr能调用)
 
 ### DOM事件
 
@@ -2171,7 +2196,7 @@ navigator.javaEnabled() 	//指定是否在浏览器中启用Java
 navigator.taintEnabled() 	//规定浏览器是否启用数据污点(data tainting) 
 ```
 
-## 方法
+## 方法/类型
 
 - toSource()返回该对象的源代码。 
 - toString()把逻辑值转换为字符串，并返回结果。 
@@ -2192,7 +2217,7 @@ isNaN() 来判断一个值是否是数字。原因是 NaN 与所有值都不相�
 prompt("请输入您的姓名"); //接受用户输入的信息
 ```
 
-**3、confirm()方法（确认框）-->可以通过这个来判断用户是否确定输入数据**
+**3、confirm()方法（确认框）-->可以通过这个来判断用户是否确定输入数据（点击确认则返回true，点击取消则返回false）**
 
 ```js
 //函数返回值是布尔型的，点击确定，返回值为true，点击取消返回值为false
@@ -2301,8 +2326,6 @@ function create() {
 ```
 
 
-
-## 数据类型
 
 ### 运算规则
 
@@ -2492,11 +2515,7 @@ sum(1,2,3,4,5,6,7,8,9,0);
 
 - JSON指的是JavaScript对象表示法（javascript object notation）
 
-- JSON是轻量级的文本数据交互格式，并不是编程语言
-
-- JSON独立于语言存在
-
-- JSON具有自我描述性，更容易理解
+- JSON是轻量级的文本数据交互格式，并不是编程语言，独立于语言存在；具有自我描述性
 
 - JSON可以将JavaScript对象中表示的一组数据转换为字符串，然后就可以在函数之间轻松地传递这个字符串，或者在异步应用程序中将字符串从Web客户机传递给服务器端程序。
 
@@ -2511,7 +2530,7 @@ Json简单说就是JavaScript中的对象和数组
 
 **JSON与对象的区别**
 
-JSON 是 JavaScript 对象的字符串表示法，它使用文本表示一个 JS 对象的信息，本质是一个字符串。
+JSON 使用文本表示一个 JS 对象的信息，本质是一个字符串；但JSON的key值必须用引号，对象的key值可不用引号
 
 ```
 var obj = {a: 'Hello', b: 'World'}; //是一个对象，注意键名也可以用引号包裹
@@ -2520,19 +2539,18 @@ var json = '{"a": "Hello", "b": "World"}'; //是一个 JSON 字符串，本质�
 
 **JSON 和 JavaScript 对象互转**
 
-从JSON字符串转换为JavaScript 对象，使用 `JSON.parse() `方法：
+- 从JSON字符串转换为JavaScript 对象，使用 `JSON.parse() `方法
+- 从JavaScript 对象转换为JSON字符串，使用` JSON.stringify() `方法
 
 ```
 var obj = JSON.parse('{"a": "Hello", "b": "World"}');
 //结果是 {a: 'Hello', b: 'World'}
-```
 
-从JavaScript 对象转换为JSON字符串，使用` JSON.stringify() `方法：
-
-```
 var json = JSON.stringify({a: 'Hello', b: 'World'});
 //结果是 '{"a": "Hello", "b": "World"}'
 ```
+
+
 
 ### `Math`对象
 
@@ -2796,7 +2814,128 @@ $("div.class1 :only-child") //改变所有class属性值为class1的div元素的
 
 
 
-# 网络请求
+## 网络请求
+
+### AJAX
+
+**一个完整的HTTP请求**
+
+- 请求的网址、请求方法 get/post。
+- 提交请求的内容数据、请求主体等。
+- 接收响应回来的内容
+
+#### 发送AJAX请求的步骤
+
+1. 创建异步对象，即 `XMLHttpRequest` 对象。
+2. 使用 open 方法设置请求参数。`open(method, url, async)`。
+3. method：请求的类型；GET 或 POST
+4. url：文件在服务器上的位置
+5. async：true(异步)或 false(同步)，不写默认为true
+6. 发送请求：`send()`（注意：send()仅用于 POST 请求）
+7. 注册事件：注册 onreadystatechange 事件，状态改变时就会调用。如果要在数据完整请求回来的时候才调用，则要手动写一些判断的逻辑。
+8. 服务端响应，获取返回的数据。
+
+**onreadystatechange 事件**
+
+- 注册 onreadystatechange 事件后，每当 readyState 属性改变时，就会调用 onreadystatechange 函数
+- readyState：（存有 XMLHttpRequest 的状态）
+  - 0: 请求未初始化
+  - 1: 服务器连接已建立
+  - 2: 请求已接收
+  - 3: 请求处理中
+  - 4: 请求已完成，且响应已就绪
+- status：
+  - 200: "OK"
+  - 404: 未找到页面
+- 在 onreadystatechange 事件中，**当 readyState 等于 4，且状态码为 200 时，表示响应已就绪**
+
+**服务器响应的内容**
+
+- responseText：获得字符串形式的响应数据
+- responseXML：获得 XML 形式的响应数据
+
+#### 完整的AJAX请求
+
+```js
+//【发送get请求】
+var xmlhttp1 = new XMLHttpRequest();
+xmlhttp1.open('get', '02-ajax.php');
+xmlhttp1.send();
+xmlhttp1.onreadystatechange = function () {
+  if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
+    console.log('数据返回成功：' + JSON.stringify(xmlhttp1.responseText));
+  }
+};
+
+
+// 异步对象【发送post 请求】
+var xmlhttp2 = new XMLHttpRequest();
+xmlhttp2.open('post', '02.post.php');
+xmlhttp2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');  // 如果想要使用post提交数据,必须添加此行
+xmlhttp2.send('name=fox&age=18');
+xmlhttp2.onreadystatechange = function () {
+  if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
+    console.log(xmlhttp2.responseText);
+  }
+};
+```
+
+#### 封装AJAX
+
+```js
+// 封装 Ajax为公共函数：传入回调函数 success 和 fail
+function myAjax(url, success, fail) {
+  let xmlhttp;
+  if (window.XMLHttpRequest) {
+    xmlhttp = new XMLHttpRequest();
+  } else {
+    xmlhttp = new ActiveXObject('Microsoft.XMLHTTP'); // 兼容IE5、IE6浏览器
+  }
+  xmlhttp.open('GET', url, true);
+  xmlhttp.send();
+  // 服务端响应
+  xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+      console.log('数据返回成功：' + JSON.parse(xmlhttp.responseText));
+      success && success(xmlhttp.responseText);
+    } else {
+      // && 符号表示如果传了 fail 参数，就调用后面的 fail()；如果没传 fail 参数，就不调用后面的内容。因为 fail 参数不一定会传
+      fail && fail(new Error('接口请求失败'));
+    }
+  };
+}
+
+// 单次调用 ajax
+myAjax('a.json', (res) => {
+  console.log(res);
+});
+
+// 多次调用 ajax。接口请求顺序：a --> b --> c
+myAjax('a.json', (res) => {
+  console.log(res);
+  myAjax('b.json', (res) => {
+    console.log(res);
+    myAjax('c.json', (res) => {
+      console.log(res);
+    });
+  });
+});
+```
+
+
+
+### XML语法
+
+- **XML 声明：**
+  - `<?xml version="1.0" encoding="UTF-8"?>`
+  - （第一行的声明，指定了 XML 版本(1.0)以及使用的编码）
+- **自定义标签：**
+  - XML 中没有默认的标签，所有的标签都是我们自己已定义的（XML只有双标签）
+  - XML 中必须要有一个根节点，所有的子节点都放置在根节点下
+- **XML 解析**
+  - 因为 XML 就是标签，所以我们可以直接用**解析 Dom 元素**的方法解析 XML
+
+
 
 ### HTTP状态码
 
@@ -2941,47 +3080,58 @@ Socket.close() // 关闭连接
   - 语义化的`HTML`代码
   - 生成针对搜索引擎友好的网站地图（包含了所有网站链接的文件，这些链接是这个网站中重要的页面，作用是让更多页面能最大化被搜索蜘蛛发现并收录）
 
-### 解决跨域
+### 跨域
+
+- 同源：同源策略是浏览器的一种安全策略，同源是指，域名，协议，端口完全相同
+- 跨域：从我自己的网站访问别人网站的内容，就叫跨域
+  - 出于安全性考虑，浏览器不允许ajax跨域获取数据
+  - iframe：处于安全性考虑，浏览器的开发厂商已经禁止了这种方式。
+  - JSONP：script 标签的 src 属性传递数据
+
+![image-20210917092605140](image/image-20210917092605140.png)
 
 #### 封装jsonp函数
 
+- 带补丁的 json，本质是利用了 `<script src=""></script>`标签具有可跨域的特性，由服务端返回一个预先定义好的JS函数的调用，并且将服务器数据以该函数参数的形式传递过来。此方法需要前后端配合完成
+- jsonp 就是 利用 src，实现的跨域 用的是 script标签
+
 ```js
 function handleParam(data) {
-    let url = '';
-    for (let key in data) {
-        let value = data[key] !== undefined ? data[key] : '1'
-        url += `&${key}=${encodeURLComponent(value)}`
-    }
+  let url = '';
+  for (let key in data) {
+    let value = data[key] !== undefined ? data[key] : '1'
+    url += `&${key}=${encodeURLComponent(value)}`
+  }
 }
 
 export default function originPJSONP(option) {
-    let count = 1;
+  let count = 1;
 
-    //1、从传入的option中提取URL
-    const url = option.url;
+  //1、从传入的option中提取URL
+  const url = option.url;
 
-    //2、在body中添加script标签
-    const body = document.getElementsByTagName('body')[0];
-    const script = document.createElement('script');
+  //2、在body中添加script标签
+  const body = document.getElementsByTagName('body')[0];
+  const script = document.createElement('script');
 
-    //3、内部产生一个不重复的callback
-    const callback = 'jsonp' + count++;
+  //3、内部产生一个不重复的callback
+  const callback = 'jsonp' + count++;
 
-    //4、监听window上的jsonp的调用
-    return new Promise((resolve, reject) => {
-        try {
-            window[callbak] = function (result) {
-                body.removeChild(script);
-                resolve(result)
-            }
-            const params = handleParam(option, data);
-            script.src = url + '?callback=' + callback + params;
-            body.appendChild(script)
-        } catch (e) {
-            body.removeChild(script);
-            reject(e)
-        }
-    })
+  //4、监听window上的jsonp的调用
+  return new Promise((resolve, reject) => {
+    try {
+      window[callbak] = function (result) {
+        body.removeChild(script);
+        resolve(result)
+      }
+      const params = handleParam(option, data);
+      script.src = url + '?callback=' + callback + params;
+      body.appendChild(script)
+    } catch (e) {
+      body.removeChild(script);
+      reject(e)
+    }
+  })
 }
 ```
 
@@ -3144,6 +3294,17 @@ function F1() {
 F1()
 ```
 
+#### 执行上下文
+
+**1.  全局执行上下文**
+
+- 在执行全局代码前将window确定为全局执行上下文。
+- 对全局数据进行预处理（并没有赋值）
+  - var定义的全局变量==>undefined, 添加为window的属性
+  - function声明的全局函数==>赋值(fun), 添加为window的方法
+  - this==>赋值(window)
+- 开始执行全局代码
+
 
 
 #### 作用域与执行上下文
@@ -3168,7 +3329,7 @@ F1()
 
 
 
-### 闭包
+#### 闭包
 
 - 闭包指有权访问另一个函数作用域中变量的函数，即一个作用域可以访问另一个函数内部的局部变量。
 
@@ -5361,9 +5522,9 @@ console.log(reg.test(str2)); // 打印结果：true
 
 
 
-### Promise对象
+### Promise(承诺)对象
 
-- `Promise`是异步编程的一种解决方案。
+- `Promise`是异步编程的一种解决方案，表示【承诺】无法改变
 - 处理异步事件：（如常见的应用场景：网络请求）
   - 封装一个网络请求函数，因不能立即拿到结果，所以往往会传入另一个函数，在数据请求成功时，将数据通过传入的函数回调出去（网络请求复杂，会耗时过长）。
 - 什么情况下会用到`Promise`？==》一般情况下进行异步操作时，使用`Promise`对这个异步操作进行封装。
@@ -5371,108 +5532,144 @@ console.log(reg.test(str2)); // 打印结果：true
 
 #### Promise对象的特点
 
-1、对象的状态不受外界影响。Promise 对象代表一个异步操作，有三种状态：
+**1、对象的状态不受外界影响。**
+
+Promise 对象代表一个异步操作，有三种状态：
 
 - pending: 等待状态，不是成功或失败状态。
-- fulfilled: 满足状态，当我们主动回调resolve时，处于该状态，并且会回调`.then()`
-- rejected: 拒绝状态，当我们主动回调了reject时，处于该状态，并且会回调`.catch()`
+- fulfilled: 满足状态，当我们主动回调resolve时处于该状态，并且会回调`.then()`
+- rejected: 拒绝状态，当我们主动回调了reject时处于该状态，并且会回调`.catch()`
 
-只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态。这也是 Promise 这个名字的由来，它的英语意思就是「承诺」，表示其他手段无法改变。
+只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态
 
-2、一旦状态改变，就不会再变，任何时候都可以得到这个结果。Promise 对象的状态改变，只有两种可能：从 Pending 变为 Resolved 和从 Pending 变为 Rejected。只要这两种情况发生，状态就凝固了，不会再变了，会一直保持这个结果。就算改变已经发生了，你再对 Promise 对象添加回调函数，也会立即得到这个结果。这与事件（Event）完全不同，事件的特点是，如果你错过了它，再去监听，是得不到结果的。
+**2、一旦状态改变，就不会再变，任何时候都可以得到这个结果(不可逆)**
+
+Promise 对象的状态改变，只有两种可能：从 Pending 变为 Resolved 和从 Pending 变为 Rejected。只要这两种情况发生，状态就凝固了，不会再变了，会一直保持这个结果。就算改变已经发生了，再对 Promise 对象添加回调函数，也会立即得到这个结果。这与事件（Event）完全不同，事件的特点是，如果你错过了它，再去监听，是得不到结果的。
 
 #### Promise 优缺点
 
-有了 Promise 对象，就可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。此外，Promise 对象提供统一的接口，使得控制异步操作更加容易。
+ 优点：
 
-Promise 也有一些缺点。首先，无法取消 Promise，一旦新建它就会立即执行，无法中途取消。其次，如果不设置回调函数，Promise 内部抛出的错误，不会反应到外部。第三，当处于 Pending 状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）。
+- Promise 对象可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数(解决了回调地狱问题)
+- Promise 对象提供统一的接口，使得控制异步操作更加容易。
+
+缺点：
+
+- 无法取消 Promise，一旦新建它就会立即执行，无法中途取消
+- 如果不设置回调函数，Promise 内部抛出的错误，不会反应到外部
+- 当处于 Pending 状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）
 
 #### Promise创建
 
-Promise 构造函数包含一个参数和一个带有 resolve（解析）和 reject（拒绝）两个参数的回调。在回调中执行一些操作（例如异步），如果一切都正常，则调用 resolve，否则调用 reject。
+- 当 new Promise()执行之后，promise 对象的状态会被初始化为`pending`，这个状态是初始化状态。`new Promise()`这行代码，括号里的内容是同步执行的。括号里可以再定义一个 异步任务的 function
+
+- Promise 构造函数包含一个参数和一个带有 resolve（解析）和 reject（拒绝）两个参数的回调。
+  在回调中执行一些操作（如异步），如果一切都正常，则调用 resolve，否则调用 reject。
+- 
+
+
 
 ```js
 new Promise((resolve, reject) => {
-    //在执行传入的回调函数时，会传入两个参数resolve, reject，本身又是函数
-    setTimeout((data) => {
-        resolve(data)
-    },1000)
-}).then((data) => {	//即回调
-    //执行成功后处理的代码 resolve处理
+  //在执行传入的回调函数时，会传入两个参数resolve, reject，本身又是函数
+  setTimeout((data) => {
+    resolve(data)
+  }, 1000)
+}).then((data) => {	// 立即回调
+  //执行成功后处理的代码 resolve处理
+  console.log(data);
 }).catch(err => {
-    //捕获抛出异常 reject处理
-})
-```
-
-```js
-new Promise((resolve, reject) => {
-    setTimeout(() => {
-        // resolve("Nice to meet you!");
-        reject("goodbye~");
-    },1000)
-}).then((data) => {
-    console.log(data);
-},(err) => {
-    console.log(err)
+  //捕获抛出异常 reject处理
+  console.log(err)
 })
 ```
 
 #### `Promise.prototype.then`方法：链式操作
 
 ```js
-/*
-a 第一次执行处理代码
+/* a 第一次执行处理代码
 a111 第二此执行处理代码
-a111222 第三次执行处理代码
-*/
+a111222 第三次执行处理代码 */
+
 new Promise((resolve, reject) => {
-    setTimeout(() => {
-        resolve('a')
-    },1000)
+  setTimeout(() => {
+    resolve('a')
+  }, 1000)
 }).then(res => {
-    console.log(res, "第一次执行处理代码")
-    return Promise.resolve(res + '111')
-    // return Promise.reject('error message（返回异常）');
-    // throw "error message（抛出异常）";
+  console.log(res, "第一次执行处理代码")
+  return Promise.resolve(res + '111')
+  // return Promise.reject('error message（返回异常）');
+  // throw "error message（抛出异常）";
 }).then(res => {
-    console.log(res, "第二此执行处理代码")
-    return Promise.resolve(res + '222')
+  console.log(res, "第二此执行处理代码")
+  return Promise.resolve(res + '222')
 }).then(res => {
-    console.log(res, "第三次执行处理代码")
+  console.log(res, "第三次执行处理代码")
 }).catch(err => {
-    console.log(err)
+  console.log(err)
 })
 ```
 
 ![image-20210504005059567](image/image-20210504005059567.png)
 
-#### Promise Ajax
+#### Promise封装Ajax
 
 ```js
 function ajax(URL) {
-    return new Promise(function (resolve, reject) {
-        var req = new XMLHttpRequest(); 
-        req.open('GET', URL, true);
-        req.onload = function () {
-        if (req.status === 200) { 
-                resolve(req.responseText);
-            } else {
-                reject(new Error(req.statusText));
-            } 
-        };
-        req.onerror = function () {
-            reject(new Error(req.statusText));
-        };
-        req.send(); 
-    });
+  return new Promise(function (resolve, reject) {
+    var req = new XMLHttpRequest();
+    req.open('GET', URL, true);
+    req.onload = function () {
+      if (req.status === 200) {
+        resolve(req.responseText);
+      } else {
+        reject(new Error(req.statusText));
+      }
+    };
+    req.onerror = function () {
+      reject(new Error(req.statusText));
+    };
+    req.send();
+  });
 }
-var URL = "/try/ajax/testpromise.php"; 
-ajax(URL).then(function onFulfilled(value){
-    document.write('内容是：' + value); 
-}).catch(function onRejected(error){
-    document.write('错误：' + error); 
-});
+
+// 返回的还是一个 Promise对象，所以需要用then/catch
+ajax("./test.php")
+  .then(function onFulfilled(value) {
+    document.write('内容是：' + value);
+  }).catch(function onRejected(error) {
+    document.write('错误：' + error);
+  });
 ```
+
+```js
+// 封装 ajax 请求：传入回调函数 success 和 fail
+function ajax(url, success, fail) {
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.open('GET', url);
+  xmlhttp.send();
+  xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+      success && success(xmlhttp.responseText);
+    } else {
+      fail && fail(new Error('接口请求失败'));
+    }
+  };
+}
+
+// 执行 ajax 请求
+ajax(
+  '/a.json',
+  (res) => {
+    console.log('接口请求成功:' + JSON.stringify(res));
+  },
+  (err) => {
+    console.log('接口请求失败:' + JSON.stringify(err));
+  } 
+);
+```
+
+
 
 #### `Promise.all`方法，`Promise.race`方法
 
@@ -5497,7 +5694,87 @@ Promise.all([
 })
 ````
 
-### `async、await`异步函数（阻塞）
+#### 回调的缺点
+
+回调的写法比较直观，不需要 return，层层嵌套即可。但也存在两个问题：
+
+- 1、如果嵌套过深，则会出现**回调地狱**问题。
+- 2、不同的函数，回调的参数，在写法上可能不一致，导致不规范、且需要**单独记忆**。
+
+**1、回调地狱的问题**：
+
+如果多个异步函数存在依赖关系（需要等前一个异步函数执行完成后，才能执行下一个异步函数），就需要多个异步函数进⾏层层嵌套，⾮常不利于后续的维护，而且会导致**回调地狱**的问题。
+
+定时器的回调地狱
+
+```javascript
+setTimeout(function () {
+    console.log('qiangu1');
+    setTimeout(function () {
+        console.log('qiangu2');
+        setTimeout(function () {
+            console.log('qiangu3');
+        }, 3000);
+    }, 2000);
+}, 1000);
+```
+
+ajax 请求的回调地狱
+
+```javascript
+// 伪代码
+ajax('a.json', (res1) => {
+    console.log(res1);
+    ajax('b.json', (res2) => {
+        console.log(res2);
+        ajax('c.json', (res3) => {
+            console.log(res3);
+        });
+    });
+});
+```
+
+**2、回调的写法不一致问题**：
+
+```javascript
+// Node.js 读取文件时，成功回调和失败回调，是通过 error参数来区分
+readFile('d:\\readme.text', function (error, data) {
+    if (error) {
+        console.log('文件读取失败');
+    } else {
+        console.log('文件读取成功');
+    }
+});
+
+// jQuery的 ajax 写法中，成功回调和失败回调，是通过两个回调函数来区分
+$.ajax({
+    url: '/ajax.json',
+    success: function (response) {
+        console.log('文件读取成功');
+    },
+    error: function (err) {
+        console.log('文件读取失败');
+    },
+});
+```
+
+#### `try/catch`捕获异常
+
+- try-catch 主要用于捕获异常(只能**捕获同步**的异常)
+
+- > 注意：try/catch捕获异常方式是无法捕获异步的异常的
+
+- 如果 try 里面的异步方法出现了异常，此时 catch 是无法捕获到异常的
+
+  - 原因是当异步函数抛出异常时，对于宏任务而言，执行函数时已经将该函数推入栈，此时并不在 try-catch 所在的栈，所以 try-catch 并不能捕获到错误。对于微任务而言（比如 promise）promise 的构造函数的异常只能被自带的 reject 也就是.catch 函数捕获到
+
+- `promiseA().then().catch()`和`promiseA().catch().then()`区别
+
+  - 前者可以捕获到 `then` 里面的异常，后者不可以
+
+
+
+### `async/await`异步函数（阻塞）
 
 - `async`用于申明一个`function`是异步的，而`await`用于等待一个异步方法执行完成（`await`只出现在`async`函数中）
 
@@ -7307,6 +7584,95 @@ var vm = new Vue({
 .a[data-v-f3f3eg9] .b { /* css样式 */ }
 ```
 
+### 动画
+
+动画进入：
+
+- v-enter：动画进入之前的**初始**状态，动画还没开始（是时间点）
+- v-enter-to：动画进入之后的**结束**状态，此时动画已经结束（时间点）
+- v-enter-active：动画进入的时间段
+
+动画离开：
+
+- v-leave：动画离开之前的**初始**状态（时间点）
+- v-leave-to：动画离开之后的**结束**状态（时间点）
+- v-leave-active：动画离开的时间段
+
+
+
+![image-20210917102119532](image/image-20210917102119532.png)
+
+```css
+<style>
+  .v-enter,
+  .v-leave-to {
+    opacity: 0;
+    transform: translateX(80px);
+    /* smyhvae提示：v-enter表示，一开始让DOM元素处于靠右80px的位置 */
+  }
+  .v-enter-active,
+  .v-leave-active {
+    transition: all 1s ease;
+    /*期间，设置过渡的属性：all表示所有的属性、时间为1秒、过渡的状态*/
+  }
+</style>
+```
+
+#### 自定义动画
+
+- 通过修改过渡类名的前缀来把两个DOM元素的动画进行分开定义
+- 注意：`enter-active-class`和`leave-active-class`这两个类名是Vue动画里的关键词
+- 给出/入场动画设置持续的时间，可以使用`:duration`
+- 注意：在实现列表过渡的时候，如果需要过渡的元素，是通过 v-for 循环渲染出来的，不能使用 transition 包裹，需要使用 transitionGroup
+  - 给 transition-group 添加 appear 属性，实现页面刚展示出来时候，入场时候的效果
+  - 通过 为 transition-group 元素，设置 tag 属性，指定 transition-group 渲染为指定的元素，如果不指定 tag 属性，默认，渲染为 span 标签
+
+```vue
+// html
+<transition name="my" enter-active-class="animated bounceIn" leave-active-class="animated bounceOut" :duration="{ enter: 1000, leave: 300 }">
+  <h6 v-if="flag2">这是一个H6</h6>
+</transition>
+
+// css
+.my-enter,
+.my-leave-to {
+  opacity: 0;
+  transform: translateY(70px);
+}
+```
+
+**动画的生命周期函数**
+
+```html
+<transition
+  v-on:before-enter="beforeEnter"
+  v-on:enter="enter"
+  v-on:after-enter="afterEnter"
+  v-on:enter-cancelled="enterCancelled"
+
+  v-on:before-leave="beforeLeave"
+  v-on:leave="leave"
+  v-on:after-leave="afterLeave"
+  v-on:leave-cancelled="leaveCancelled"
+>
+  <!-- DOM元素 -->
+</transition>
+```
+
+**transition-grop**
+
+```html
+<transition-group appear  tag="ul">
+  <li v-for="(item, i) in list" :key="item.id" @click="del(i)">
+    {{item.id}} --- {{item.name}}
+  </li>
+</transition-group>
+```
+
+
+
+
+
 ## 过滤器
 
 过滤器可用两个地方：mustache插值和v-bind表达式，过滤器应添加在JS表达式的尾部，有“管道”符表示。
@@ -7606,15 +7972,26 @@ export default {
 
 ### **父子组件的通信**
 
-- 父传子：`props`		通过`props`向子组件传递数据
+#### 父传子`props`		
 
-  - 在子组件中使用`props`属性来接收父组件传来的数据（如果定义类型，就会对传来的数据做过滤）
+- 通过`props`向子组件传递数据
 
-  - 在子组件中`$attrs`会保存父组件传来的数据中props不接收的数据（捡漏）
+- 父组件在引用子组件时，父组件通过事件绑定机制，将父组件的方法/值传递给子组件
+
+- 在子组件中使用`props`属性来接收父组件传来的数据（如果定义类型，就会对传来的数据做过滤）
+
+- 在子组件中`$attrs`会保存父组件传来的数据中props不接收的数据（捡漏）
 
   - > `$attrs`中接收的数据不会存在类型过滤（所以父组件传什么数据就会接收什么）
 
-- 子传父：`$emit`        通过事件(`events`)向父组件发送消息
+- **子组件中，data中的数据和props中的数据的区别**：
+
+  - 子组件中的 data 数据，并不是通过 父组件传递过来的，而是子组件自身私有的，比如： 子组件通过 Ajax ，请求回来的数据，都可以放到 data 身上。props 中的数据，都是通过 父组件 传递给子组件的。
+  - data中的数据是可读可写的；props中的属性只是可读的，无法重新赋值，重新赋值会报错（也就是说，子组件不要直接去修改父组件中的数据）
+
+#### 子传父`$emit` 
+
+**子传父：`$emit`        通过事件(`events`)向父组件发送消息**
 
 **父传子**
 
@@ -14387,6 +14764,150 @@ ul>li.item$@-3*5
 
 # PHP
 
+- PHP代码执行方式：需要浏览器通过 http请求，才能够执行php页面
+- 变量
+  - 变量以`$`符号开头，其后是变量的名称。大小写敏感。
+  - 变量名称必须以字母或下划线开头。
+- 数据类型
+  - 字符串
+  - 整数
+  - 浮点数
+  - 布尔
+  - 数组
+  - 对象
+  - NULLL
+  - 定义字符串时需要注意：
+    - 单引号`` ：内部的内容只是作为字符串。
+    - 双引号"" ：如果内部是PHP的变量,那么会将该变量的值解析。如果内部是html代码，也会解析成html。
+
+```php
+// 解析标签
+echo "<input type=`button` value=`smyhvae`>";
+
+// 字符串
+$str = '123';
+
+// 字符串拼接
+$str2 = '123'.'哈哈哈';
+
+// 整数
+$numA = 1; //正数
+$numB = -2;//负数
+
+// 浮点数
+$x = 1.1;
+
+// 布尔
+$a = true;
+$b = false;
+
+// 普通数组：数组中可以放 数字、字符串、布尔值等，不限制类型。
+$arr1 = array('123', 123);
+echo $arr1[0];
+
+// 关系型数组：类似于json格式
+$arr2 = $array(`name`=> `smyhvae`, `age`=> `26`);
+echo $arr2[`name`];  //获取时，通过  key 来获取
+```
+
+### 类和对象
+
+**基础类**
+
+```php
+class Fox {
+
+  public $name = 'itcast';
+  public $age = 10;
+}
+
+$fox = new $fox;
+// 对象属性取值
+$name = $fox -> name;
+// 对象属性赋值
+$fox -> name = '小狐狸';
+```
+
+**带构造函数的类**
+
+```php
+// 私有属性,外部无法访问
+var $name = '小狐狸';
+// 定义方法 用来获取属性
+function Name() {
+  return $this -> name;
+}
+// 构造函数,可以传入参数
+function fox($name) {
+  $this -> name = $name
+}
+}
+
+// 定义了构造函数 需要使用构造函数初始化对象
+$fox = new fox('小狐狸');
+// 调用对象方法,获取对象名
+$foxName = $fox -> Name();
+```
+
+### 内容输出
+
+- `echo`：输出字符串。
+- `print_r()`：输出复杂数据类型。比如数组、对象。
+- `var_dump()`：输出详细信息。
+
+### 循环
+
+```php
+for ($x = 0; $x <= 10; $x++) {
+  echo "数字是：$x <br>";
+}
+
+$colors = array("red", "green", "blue", "yellow");
+foreach($colors as $value) {
+  echo "$value <br>";
+}
+```
+
+### header()函数
+
+- 浏览器访问http服务器，接收到响应时，会根据响应**报文头**的内容进行一些具体的操作。在php中，我们可以根据 **header** 来设置这些内容。
+- **header()函数的作用**：用来向客户端(浏览器)发送报头。直接写在php代码的第一行就行。
+
+- 设置编码格式：`header('content-type:text/html; charset= utf-8');`
+- 设置页面跳转：`header('location:http://www.baidu.com');`
+- 设置页面刷新的间隔：`header('refresh:3; url=http://www.xiaomi.com');`
+
+### json 字符串 <--> js 对象
+
+- **json_decode()**方法：将`json`字符串转化为变量。
+-   **json_encode()**方法：将变量转化为`json`字符串。
+
+```php
+<? php
+  header("Content-Type:text/html;charset=utf-8");
+  // json字符串
+  $jsonStr = '{"name":"itcast","age":54,"skill":"歌神"}';
+  
+  // 字符串转化为 php对象
+  print_r(json_decode($jsonStr));
+  echo "<br>";
+  // php数组
+  $arrayName = array('name' => 'littleFox', 'age' => 13);
+  
+  // php对象 转化为 json字符串
+  print_r(json_encode($arrayName));
+?>
+  
+/* stdClass Object([name] => itcast[age] => 54[skill] => 歌神)
+{ "name": "littleFox", "age": 13 } */
+```
+
+
+
+
+
+
+
 ### 让文字不乱码
 
 ```php
@@ -14399,3 +14920,157 @@ header("Content-Type:text/html;charset=utf-8");
 echo "<img src='".$row['url']."' />";
 ```
 
+### GET/POST请求
+
+- `$_POST`是关系型数组，可以通过 **$_POST[`key`]**获取值。这里的 key 是 form 标签中表单元素的 name 属性的值。
+
+### 文件上传`$_FILES`
+
+- 需要在html`form`表单中，设置`enctype="multipart/form-data"`。该值是必须的。且只能用 post 方式获取。
+
+- ### 文件保存
+
+  我们尝试一下，把上面的例子中的`临时目录`下面的文件保存起来。这里需要用到 php 里的 `move_uploaded_file()`函数。[#](http://www.w3school.com.cn/php/func_filesystem_move_uploaded_file.asp)
+
+  格式如下：
+
+  
+
+  ```php
+  	move_uploaded_file($_FILES['photo']['tmp_name'], './images/test.jpg');
+  ```
+
+  参数解释：参数一：移动的文件。参数二：目标路径。
+
+  （1）index.html：（这部分的代码保持不变）
+
+  
+
+  ```php
+  	<form action="03.fileUpdate.php" method="post" enctype="multipart/form-data">
+        <label for="">照片:
+            <input type="file" name = "picture" multiple=""></label>
+        <br/>
+        <input type="submit" name="">
+    	</form>
+  ```
+
+打开 WampServer的文件`php.ini`：修改`php.ini`中的如下内容：
+
+设置文件最大上传限制：（值的大小可以根据需求修改）
+
+
+
+```php
+	file_uploads = On;         是否允许上传文件 On/Off 默认是On
+	upload_max_filesize = 32M; 设置 上传文件的最大限制
+	post_max_size = 32M;       设置 通过Post提交的最多数据
+```
+
+考虑网络传输快慢：这里修改一些参数：
+
+
+
+```php
+	max_execution_time = 30000      ; 脚本最长的执行时间 单位为秒
+	max_input_time = 600            ; 接收提交的数据的时间限制 单位为秒
+	memory_limit = 1024M            ; 最大的内存消耗
+```
+
+
+
+### 请求头
+
+```bash
+User-Agent：浏览器的具体类型　　如：User-Agent：Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0
+
+Accept：浏览器支持哪些数据类型　　如：Accept: text/html,application/xhtml+xml,application/xml;q=0.9;
+
+Accept-Charset：浏览器采用的是哪种编码　　如：Accept-Charset: ISO-8859-1
+
+Accept-Encoding：浏览器支持解码的数据压缩格式　　如：Accept-Encoding: gzip, deflate
+
+Accept-Language：浏览器的语言环境　　如：Accept-Language zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3
+
+Host：请求的主机名，允许多个域名同处一个IP地址，即虚拟主机。Host:www.baidu.com
+
+Connection：表示是否需要持久连接。
+属性值可以是Keep-Alive/close，HTTP1.1默认是持久连接，它可以利用持久连接的优点，当页面包含多个元素时（例如Applet，图片），显著地减少下载所需要的时间。
+要实现这一点，Servlet需要在应答中发送一个Content-Length头，最简单的实现方法是：先把内容写入ByteArrayOutputStream，然后在正式写出内容之前计算它的大小。如：Connection: Keep-Alive
+
+Content-Length：表示请求消息正文的长度。对于POST请求来说Content-Length必须出现。
+
+Content-Type：WEB服务器告诉浏览器自己响应的对象的类型和字符集。例如：Content-Type: text/html; charset='gb2312'
+
+Content-Encoding：WEB服务器表明自己使用了什么压缩方法（gzip，deflate）压缩响应中的对象。例如：Content-Encoding：gzip
+
+Content-Language：WEB服务器告诉浏览器自己响应的对象的语言。
+
+Cookie：最常用的请求头，浏览器每次都会将cookie发送到服务器上，允许服务器在客户端存储少量数据。
+
+Referer：包含一个URL，用户从该URL代表的页面出发访问当前请求的页面。服务器能知道你是从哪个页面过来的。Referer: http://www.baidu.com/
+```
+
+**3、请求体：**
+
+指的是提交给服务器的数据。
+
+需要注意的是，如果是往服务器提交数据，需要在请求头中设置`Content-Type: application/x-www-form-urlencoded`(在ajax中需要手动设置)。
+
+
+
+### 响应
+
+响应报文是服务器返回给客户端的。组成部分有响应行、响应头、响应主体。
+
+![img](image/20180228_1510.jpg)
+
+**1、状态行：**
+
+HTTP响应行：主要是设置响应状态等信息。
+
+**2、响应头：**
+
+Cookie、缓存等信息就是在响应头的属性中设置的。
+
+常见的响应头如下：
+
+
+
+```bash
+Cache-Control
+
+响应输出到客户端后，服务端通过该报文头属告诉客户端如何控制响应内容的缓存。
+
+下面，的设置让客户端对响应内容缓存3600秒，也即在3600秒内，如果客户再次访问该资源，直接从客户端的缓存中返回内容给客户，不要再从服务端获取（当然，这个功能是靠客户端实现的，服务端只是通过这个属性提示客户端“应该这么做”，做不做，还是决定于客户端，如果是自己宣称支持HTTP的客户端，则就应该这样实现）。
+
+Cache-Control: max-age=3600
+
+ETag
+
+一个代表响应服务端资源（如页面）版本的报文头属性，如果某个服务端资源发生变化了，这个ETag就会相应发生变化。它是Cache-Control的有益补充，可以让客户端“更智能”地处理什么时候要从服务端取资源，什么时候可以直接从缓存中返回响应。
+
+ETag: "737060cd8c284d8af7ad3082f209582d"
+
+Location
+
+我们在Asp.net中让页面Redirect到一个某个A页面中，其实是让客户端再发一个请求到A页面，这个需要Redirect到的A页面的URL，其实就是通过响应报文头的Location属性告知客户端的，如下的报文头属性，将使客户端redirect到iteye的首页中：
+
+Location: http://www.google.com.hk
+
+Set-Cookie
+
+服务端可以设置客户端的Cookie，其原理就是通过这个响应报文头属性实现的。
+
+Set-Cookie: UserID=JohnDoe; Max-Age=3600; Version=1
+```
+
+**3、HTTP响应体：**
+
+如果请求的是HTML页面，那么返回的就是HTML代码。如果是JS就是JS代码。
+
+
+
+### 抓包工具
+
+常见的抓包工具有：Fiddler、Charles。
