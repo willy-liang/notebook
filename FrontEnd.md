@@ -4362,8 +4362,8 @@ let copy2 = Object.assign({}, obj2, obj3); // { a: 1 } { a: 1, b: 2 } obj2不会
 - 截取字符串
   - `substring(start,end) `： 将字符串从start位置开始截取到end位置，但不包括end；end可以省略，表示一直截取到结束
   - `substr(start,length)`：将字符串从star位置开始截取到start位置，截取length个字符
-  - `.split(“分隔符”) `：将字符串转成数组，返回为一个新数组
-  - .`replace(旧字符串，新字符串)`： 用新字符串替换旧字符串
+  - `split(“分隔符”) `：将字符串转成数组，返回为一个新数组
+  - `replace(旧字符串，新字符串)`： 用新字符串替换旧字符串
     - replce(/旧字符串/ig,新字符串)
     - i : 不区分大小写
     - g: 全文搜索
@@ -4371,7 +4371,7 @@ let copy2 = Object.assign({}, obj2, obj3); // { a: 1 } { a: 1, b: 2 } obj2不会
 - 查找字符串
 
   - `startsWith(value,start)`：检测字符串中是否以value开头，从start位置开始但不包括start，返回布尔值
-  - `.endsWith(value,start)`：检测字符串中是否以value结尾，从start位置开始但不包括start，返回布尔值
+  - `endsWith(value,start)`：检测字符串中是否以value结尾，从start位置开始但不包括start，返回布尔值
   - `includes(value,start) `：检测字符串中是否有value，从start位置但是不包括start开始找，返回布尔值
 
 - 处理字符串
@@ -5527,6 +5527,98 @@ const obj = {
 }
 obj.a();
 ```
+
+#### 函数柯里化
+
+- 函数柯里化(currying)：把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术
+
+```js
+// 普通的add函数
+function add(x, y) {
+  return x + y
+}
+
+// Currying后
+function curryingAdd(x) {
+  return function (y) {
+    return x + y
+  }
+}
+
+add(1, 2)           // 3
+curryingAdd(1)(2)   // 3
+```
+
+**函数复用**
+
+```js
+// 函数封装后
+function check(reg, txt) {
+  return reg.test(txt)
+}
+check(/\d+/g, 'test')       //false
+check(/[a-z]+/g, 'test')    //true
+
+// Currying后
+function curryingCheck(reg) {
+  return function (txt) {
+    return reg.test(txt)
+  }
+}
+var hasNumber = curryingCheck(/\d+/g)
+var hasLetter = curryingCheck(/[a-z]+/g)
+hasNumber('test1')      // true
+hasNumber('testtest')   // false
+hasLetter('21212')      // false
+```
+
+**提前确认触发哪种方法**
+
+```js
+var on = function (element, event, handler) {
+  if (document.addEventListener) {
+    if (element && event && handler) {
+      element.addEventListener(event, handler, false);
+    }
+  } else {
+    if (element && event && handler) {
+      element.attachEvent('on' + event, handler);
+    }
+  }
+}
+
+var on = (function () {
+  if (document.addEventListener) {
+    return function (element, event, handler) {
+      if (element && event && handler) {
+        element.addEventListener(event, handler, false);
+      }
+    };
+  } else {
+    return function (element, event, handler) {
+      if (element && event && handler) {
+        element.attachEvent('on' + event, handler);
+      }
+    };
+  }
+})();
+
+//换一种写法可能比较好理解一点，上面就是把isSupport这个参数给先确定下来了
+var on = function (isSupport, element, event, handler) {
+  isSupport = isSupport || document.addEventListener;
+  if (isSupport) {
+    return element.addEventListener(event, handler, false);
+  } else {
+    return element.attachEvent('on' + event, handler);
+  }
+}
+```
+
+**延迟运行**
+
+
+
+
 
 #### `generator`生成器
 
