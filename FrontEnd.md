@@ -2975,6 +2975,51 @@ $("div.class1 :only-child") //改变所有class属性值为class1的div元素的
 
 
 
+### Fetch
+
+- [fetch](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch)
+- 通过网络获取一个 JSON 文件并将其打印到控制台。最简单的用法是只提供一个参数用来指明想 `fetch()` 到的资源路径，然后返回一个包含响应结果的promise对象。
+- 注意：返回的数据它只是一个 HTTP 响应，而不是真的JSON。为了获取JSON的内容，一般使用`json()`方法。
+
+```js
+fetch('http://example.com/movies.json')
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    console.log(myJson);
+  });
+
+
+// Example POST method implementation:
+postData('http://example.com/answer', {answer: 42})
+  .then(data => console.log(data)) // JSON from `response.json()` call
+  .catch(error => console.error(error))
+
+function postData(url, data) {
+  // Default options are marked with *
+  return fetch(url, {
+    body: JSON.stringify(data), // must match 'Content-Type' header
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, same-origin, *omit
+    headers: {
+      'user-agent': 'Mozilla/4.0 MDN Example',
+      'content-type': 'application/json'
+    },
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, cors, *same-origin
+    redirect: 'follow', // manual, *follow, error
+    referrer: 'no-referrer', // *client, no-referrer
+  })
+  .then(response => response.json()) // parses response to JSON
+}
+
+```
+
+
+
+
+
 ### AJAX
 
 **一个完整的HTTP请求**
@@ -3596,6 +3641,9 @@ F1()
   - 将函数作为实参传递给另一个函数调用
 - 闭包的优化
   - 尽量减少闭包使用，及时释放(将所引用闭包设定为null)
+- 闭包的生命周期
+  - 产生：在嵌套内部函数定义执行完时就产生(此时不是指调用)
+  - 死亡：在嵌套的内部函数成为垃圾时(即没有函数/变量指向它时，通常置为`null`)
 
 ```js
 function fn() {
@@ -3645,7 +3693,7 @@ f();   //延伸变量作用范围，当f()执行完，才会销毁num变量；fu
 #### 原型对象`prototype`
 
 - 作用：共享方法；解决构造函数多命名，防止冲突问题。
-- 原型对象中有个属性：`constructor`为了让对象/实例获取到创建该对象的构造函数。
+- 原型对象的constructor`属性：为了让对象/实例找到创建该对象的构造函数(指回构造函数本身)
 
 - `方法名.prototype.对象名=值/function(){}`
 - 原型对象中`this`指向的是实例对象。
@@ -3666,17 +3714,14 @@ Star.prototype.sing = function(){
     console.log(this.name+ 'sing');
 }
 Star.prototype = {
-    //如果我们修改了原来的原型对象，给原型对象赋值的是一个对象，则必须手动利用construtor指回原来的构造函数
+    //如果修改了原来的原型对象，给原型对象赋值的是一个对象，则必须手动利用construtor指回原来的构造函数
     constructor: Star,
     song: function() { console.log('song') },
-    movie: function() { console.log('movie') }
 }
 let ldh = new Star('willy', 22);
-console.log(ldh.sing);
+console.log(ldh.sing);	// undefined (被覆盖了)
 console.log(ldh.__proto__ === Star.prototype);  //true
-
-console.log(Star.prototype);    //{constructor: [Function: Star], song: [Function: song], movie: [Function: movie]}
-console.log(ldh.__proto__);
+console.log(Star.prototype, ldh.__proto__);    //{constructor: [Function: Star], song: [Function: song]}
 
 console.log(Star.prototype.constructor);    //[Function: Star]
 console.log(ldh.__proto__.constructor);
@@ -3716,8 +3761,6 @@ console.log(Object.prototype.__proto__) //null
 
 
 
-
-
 #### 扩展内置对象
 
 - 可以通过原型对象，给原来的内置对象进行扩展自定义的方法。如给数组增加自定义求和的功能。
@@ -3742,6 +3785,57 @@ console.log(arr.sum());
 let arr1 = new Array[11, 22, 33];
 console.log(arr1.sum());	//66
 ```
+
+### 继承模式
+
+#### 原型链实现继承
+
+  - 套路
+       1. 定义父类型构造函数
+       2. 给父类型的原型添加方法
+       3. 定义子类型的构造函数
+       4. 创建父类型的对象赋值给子类型的原型
+       5. 将子类型原型的构造属性设置为子类型
+       6. 给子类型原型添加方法
+       7. 创建子类型的对象: 可以调用父类型的方法
+  - 关键：子类型的原型必须为父类型的一个实例对象
+
+```js
+//父类型
+function Supper() {
+  this.supProp = '父亲的原型链'
+}
+Supper.prototype.showSupperProp = function () {
+  console.log(this.supProp)
+}
+
+//子类型
+function Sub() {
+  this.subProp = '儿子的原型链'
+}
+Sub.prototype = new Supper()
+Sub.prototype.showSubProp = function () {
+  console.log(this.subProp)
+}
+
+// 如果不加子类型的原型的constructor指向子类型,其构造函数找的[`new Supper()`]时从顶层Object继承来的构造函数,指向[`Supper()`]
+Sub.prototype.constructor = Sub
+
+let sub = new Sub()
+sub.showSupperProp() //父亲的原型链
+sub.showSubProp() //儿子的原型链
+console.log(sub)
+```
+
+#### 借用构造函数实现继承
+
+>
+
+
+
+
+
+
 
 ### `proxy`代理对象
 
@@ -9885,6 +9979,26 @@ resolve: {
 import TabBar from "@/components/tab-bar/TabBar"
 ```
 
+### 静态文件引用
+
+#### assets文件夹与static文件夹的区别
+
+1. assets文件是src下的，所以最后运行时需要进行打包，而static文件不需要打包就直接放在最终的文件中
+2. assets中的文件在vue中的template/style下用../这种相对路径的形式进行引用，在script下必须用@import的方式引入，而static下的文件在**.vue中的任何地方都只要使用../这种相对路径的方式引入**
+3. assets用来放置样式、静态图片，只要src下面的组件中用到的资源就放在assets中；static用来放没有npm包的第三方插件，字体文件
+
+**注意：静态文件(如excel、world文档等)的引入一般放入static中**；如果放在src下，项目打包后会找不到该文件的路径而出错
+
+#### vue如何引入其他静态文件
+
+1. src目录下的资源只能import或require方式引入
+2. 想静态引入需建立一个与src同级的目录(如static)，然后把静态资源放入该文件夹下
+   **注意：一定要放在static文件夹下，否则会报错**
+
+
+
+
+
 ### 账号登录缓存
 
 - 通过`cookie`在客户端记录状态
@@ -14894,7 +15008,7 @@ git config --global alias.unstage 'reset HEAD'
 ### 使用SourceTree
 
 - 官网：[https://www.sourcetreeapp.com](https://www.sourcetreeapp.com/)
-- Git有很多图形界面工具，这里我们推荐[SourceTree](https://www.sourcetreeapp.com/)，它是由[Atlassian](https://www.atlassian.com/)开发的免费Git图形界面工具，可以操作任何Git库。
+- Git图形界面工具推荐[SourceTree](https://www.sourcetreeapp.com/)，它是由[Atlassian](https://www.atlassian.com/)开发的免费Git图形界面工具，可以操作任何Git库。
 - 使用SourceTree可以以图形界面操作Git，省去了敲命令的过程，对于常用的提交、分支、推送等操作来说非常方便。
 - SourceTree使用Git命令执行操作，出错时，仍然需要阅读Git命令返回的错误信息。
 
@@ -14907,39 +15021,6 @@ git config --global alias.unstage 'reset HEAD'
    3. 下次再操作pull/push时就不需要输入用户名密码了
 
 # 记注
-
-### 链接
-
-```bash
-# 计算机网络
-https://github.com/semlinker/awesome-http
-
-# 面试题知识点
-https://github.com/gnipbao/Front-end-Interview-questions
-
-
-# 算法
-- 快速排序：
-https://segmentfault.com/a/1190000009426421>
-
-- 选择排序：
-https://segmentfault.com/a/1190000009366805
-
-- 希尔排序：
-https://segmentfault.com/a/1190000009461832
-
-- 堆栈
-https://juejin.im/entry/58759e79128fe1006b48cdfd
-
-- [数组、队列、链表]
-http://huang303513.github.io/2016/12/08/Javascript%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95(%E4%B8%80).html
-
-- [排序]
-http://huang303513.github.io/2016/12/19/Javascript%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95(%E5%9B%9B).html
-
-- 波兰式和逆波兰式：
-http://www.cnblogs.com/chenying99/p/3675876.html
-```
 
 ### 经验
 
@@ -15015,111 +15096,47 @@ http://www.cnblogs.com/chenying99/p/3675876.html
 
 ### 网站
 
-#### 开源插图
+```bash
+# 1. 渐变色背景代码 「UIgradients」
+https://uigradients.com/
 
-> 您可以想象和创建的任何想法**的开源插图**。
->
-> 一个**不断更新的设计项目，**带有精美的SVG图像，您可以完全免费使用，而无需注明出处。
->
-> 链接: [unDraw开源插图](https://undraw.co/illustrations)
+# 2. 开源插图（SVG图像，免费，无版权）
+https://undraw.co/illustrations
 
+# 3. ColorHunt 颜色搭配（）
+ColorHunt 网站是一个致力于帮助产品设计师们更好的选择颜色搭配组合的站点，从互联网中收集了海量的完美色彩组合，你可以把这些颜色组合运用到任何产品设计项目，方便设计师们找到最佳的色系搭配组合。
+色彩对视觉有刺激作用，在视觉传达设计中常常具有先声夺人的力量，这就是人们常说的设计的视觉冲击力的主要体现吧。“远看色彩近看花”、“七分颜色三分花”正说明色彩极易引起人的情感反应与变化。人的视觉对于色彩的特殊敏感性，决定了色彩设计在包装视觉传达中的重要价值
+https://colorhunt.co/
 
+# 4. 字体库
+https://fonts.google.com/
 
-#### 获取渐变色代码
+# 5. StockSnap 免费精美图片分享站
+https://stocksnap.io/
 
-> 「UIgradients」是一个提供免费渐变色效果的站点，以分享美丽渐变色彩为主，里面接近上百种渐变配色方案，设计师可根据自己风格来选择搭配，还能直接获得对应渐变配色的CSS代码使用起来相当方便。
->
-> 链接:[渐变色背景](https://uigradients.com/)
+# 6. BootCDN 前端开源项目 CDN 加速服务
+https://www.bootcdn.cn/
 
+# 7. 迅捷在线画图 （在线创作思维导图,提供思维导图文件一键导出与云储服务）
+https://www.liuchengtu.com/
 
+# 8. Can I use
+是一个针对Web网站开发人员定制的一个查询CSS在个中流行浏览器中的特性和兼容性列表的网站，怎样可以很好地保证网页的浏览器兼容性?是网站开发者一直在讨论的问题，有了这个工具你就可以快速的了解到代码在各浏览器中的效果
+https://caniuse.com/
 
-#### 字体库
-
-> 各种字体库,不是图标
->
-> 链接[字体库](https://fonts.google.com/)
-
-
-
-#### ColorHunt 颜色搭配
-
-> ColorHunt 网站是一个致力于帮助产品设计师们更好的选择颜色搭配组合的站点，从互联网中收集了海量的完美色彩组合，你可以把这些颜色组合运用到任何产品设计项目，方便设计师们找到最佳的色系搭配组合。
->   色彩对视觉有刺激作用，在视觉传达设计中常常具有先声夺人的力量，这就是人们常说的设计的视觉冲击力的主要体现吧。“远看色彩近看花”、“七分颜色三分花”正说明色彩极易引起人的情感反应与变化。人的视觉对于色彩的特殊敏感性，决定了色彩设计在包装视觉传达中的重要价值。
->
-> 链接: [ColorHunt](https://colorhunt.co/)
-
+# 9. 印记中文
+深入挖掘国外[前端](http://www.fly63.com/)新领域，为中国 Web 开发人员提供优质文档！这个整合前端大部分官方文档的中文文档
+(https://docschina.org/
 
 
-#### StockSnap
+# 10. fly63前端网
+web前端开发网_专业IT前端知识平台,分享前端工具手册资源网站。前端技术教程包括html5+css3及JavaScript、前端框架、js插件库等前端博客网站
+http://www.fly63.com/
 
-> 号称第一的免费精美图片分享站，可商用，完全免费
->   StockSnap:免费图片素材高清资源库是一个提供可自由下载使用的高清晰摄影图片作品的素材库，所提供的资源相当实用，该网站由多位摄影师组成，提供丰富的免费照片，随意使用无需经过授权。
->   StockSnap 网站的设计其实非常简单，其宗旨就是希望能为寻找美丽图片的使用者提供一个完整且丰富的图片素材资源库，网站每天都会有摄影师上传发布作品，找出高品质、高清晰度的照片并更新到该网站上来，让更多的人去免费使用。
->   该网站所有的图片都是采用CC0（Creative Commons授权，这也标识你可以将图片做任何用途，包括自由修改、复制、二次发布等，甚至可以用于商业用途，而无需原作者许可。
->
-> 链接: [StockSnap](https://stocksnap.io/)
-
-
-
-#### BootCDN
-
-> 稳定、快速、免费的前端开源项目 CDN 加速服务
->
-> 链接: [BootCDN](https://www.bootcdn.cn/)
-
-
-
-#### 迅捷在线画图
-
-> 支持在线创作思维导图,提供思维导图文件一键导出与云储服务,
->
-> 无论何时何地，只需一个浏览器就能够有序的构建知识与想法,跨端同步更新,不受设备拘束,随时随地发挥创意,捕捉灵感。
->
-> 链接:[迅捷在线思维导图](https://www.liuchengtu.com/)
-
-
-
-#### 力扣网
-
-> 算法、面试题
->
-> 链接:[力扣](https://leetcode-cn.com/)
-
-
-
-#### Can I use
-
-> 我可以用(Can I Use)是一个针对Web网站开发人员定制的一个查询CSS在个中流行浏览器中的特性和兼容性列表的网站，怎样可以很好地保证网页的浏览器兼容性?是网站开发者一直在讨论的问题，有了这个工具你就可以快速的了解到代码在各浏览器中的效果了。
->
-> 链接:[Can I Use](https://caniuse.com/)
-
-
-
-#### 印记中文
-
-> 官方介绍:深入挖掘国外[前端](http://www.fly63.com/)新领域，为中国 Web [前端](http://www.fly63.com/)开发人员提供优质文档！
->
-> 这个整合前端大部分`官方文档的中文文档,`对于英语不好的同学非常友好
->
-> 链接:[印记中文](https://docschina.org/)
-
-
-
-#### fly63前端网
-
-> web前端开发网_专业IT前端知识平台,分享前端工具手册资源网站。前端技术教程包括html5+css3及JavaScript、前端框架、js插件库等前端博客网站
->
-> 链接:[fly63前端网](http://www.fly63.com/)
-
-
-
-#### ProcessOn
-
-> ProcessOn是一个在线作图工具的聚合平台， 它可以在线画流程图、思维导图、UI原型图、UML、网络拓扑图、组织结构图等等， 您无需担心下载和更新的问题，不管Mac还是Windows，一个浏览器就可以随时随地的发挥创意，规划工作,也是本人最常用来画思维导图的
->
-> 链接:[ProcessOn](https://www.processon.com/)
-
-
+# 11. ProcessOn
+ProcessOn是一个在线作图工具的聚合平台， 它可以在线画流程图、思维导图、UI原型图、UML、网络拓扑图、组织结构图等等， 您无需担心下载和更新的问题，不管Mac还是Windows，一个浏览器就可以随时随地的发挥创意，规划工作,也是本人最常用来画思维导图的
+https://www.processon.com/
+```
 
 ### 互联网公司的岗位英文简写
 
