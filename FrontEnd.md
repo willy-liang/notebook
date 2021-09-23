@@ -1949,6 +1949,50 @@ console.log(list['src'], list['className'])
   - insertCell(index) (只有tr能调用)
   - deleteCell(index) (只有tr能调用)
 
+#### 提取非行间样式
+
+```js
+window.onload = function () {
+  let div = document.getElementsByTagName("div")[0];
+  let style = getAttr(div, 'width')
+  console.log(style)
+}
+
+// 获取class或id 标签的指定样式
+function getAttr(obj, attr) {
+  let style;
+  if (obj.currentStyle) {   //当有这个属性的时候currentStyle(即在IE中时)
+    style = obj.currentStyle[attr]; //兼容IE
+  }
+  else {
+    style = getComputedStyle(obj, false)[attr]; //主流浏览器
+  }
+  return style;
+}
+```
+
+#### 替换内容问题
+
+变量名.replace(“被替换内容”,“替换内容”);
+
+替换类名：变量名.className = 变量名.className.replace(“被替者”,“替换者”);
+
+//只是替换了replace的内容，class中定义的其他类名还是存在的，
+
+比如class="aa bb cc"，当你relpace("aa","dd")，其他两个bb,cc的类名仍然存在
+
+#### 定义选择到框内的状态
+
+形如：input[type=text] 选择input标签中的文本类型的
+
+Checkbox的checked 为选中状态
+
+取反则是为非：!   形如：获取的变量.checked=!获取的变量.checked
+
+
+
+
+
 ### DOM事件
 
 - **鼠标拖拽事件**
@@ -2083,20 +2127,31 @@ let event = event || window.event;   //此为兼容各个浏览器，在需要�
     }
     ```
 
-- **阻止事件冒泡**
 
-  - ```js
-    box3.onclick = function (event) {
-      event = event || window.event;
-      if (event && event.stopPropagation) {
-        event.stopPropagation();
-      } else {
-        event.cancelBubble = true;
-      }
-    }
-    ```
+### 阻止事件冒泡
 
-  - 
+1、阻止事件的冒泡方法：event.stopPropagation() 和 event.cancelBubble=true;
+在事件结尾处添加该方法，此方法阻止事件向documen上蔓延（否则点击按钮后，会冒泡到最后一层上即document）
+注意：当调用这个方法时，默认事件任然会执行；如点击一个连接，这个链接仍然会被打开
+
+```js
+box3.onclick = function (event) {
+  event = event || window.event;
+  if (event && event.stopPropagation) {
+    event.stopPropagation();
+  } else {
+    event.cancelBubble = true;
+  }
+}
+```
+
+2、阻止默认事件的方法：event.preventDefault()方法
+调用此方法链接不会被打开，但是会发生冒泡，冒泡会传递到上一层的父元素；
+
+3、阻止浏览器默认事件：`return false;`
+在函数结尾处增加语句：` return false;`。这个方法比较暴力，他会同时阻止事件冒泡和阻止默认事件；写上此代码，连接不会被打开，事件也不会传递到上一层的父元素；可以理解为return false就等于同时调用了event.stopPropagation()和event.preventDefault()
+
+
 
 ### 事件委托
 
@@ -2718,9 +2773,19 @@ Math.max()	//最大值	Math.min()	//最小值
 
 - Date对象是构造函数，需实例化后才能使用，Date实例用来处理日期和时间。
 
+#### 获取随机值
+
+```js
+function getRandomIntInclusive(min,max){
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max -min + 1)) + min;
+}
+```
 
 
-## `offset、scroll、client`
+
+## offset、scroll、client
 
 ### 垂直计算
 
@@ -2790,79 +2855,154 @@ Math.max()	//最大值	Math.min()	//最小值
   - 调用者：event
   - 作用：鼠标距离浏览器可视区域的距离（左、上）。
 
-
-
-## 语法运用
-
-### 获取随机索引值
-
-```js
-function getRandomIntInclusive(min,max){
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max -min + 1)) + min;
-}
-```
-
-### 提取非行间样式
-
-- currentStyle 适用于火狐浏览器
-- getComputedStyle 适用于IE浏览器
-
 ### 自制滚动条
 
-先把系统滚动条隐藏
+1. 先把系统滚动条隐藏
 
-根据内容大小设置滚动条高度（设置的滚动条内容高度越高，滚动条越小）
+2. 根据内容大小设置滚动条高度（设置的滚动条内容高度越高，滚动条越小）
 
-当拖动滚动条时候，移动内容（滚动条跟着鼠标走）
+3. 当拖动滚动条时候，移动内容（滚动条跟着鼠标走）
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>自定义滚轮事件</title>
+  <style type="text/css">
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    #wrap {
+      height: 500px;
+      width: 300px;
+      position: relative;
+      /*超出隐藏*/
+      overflow: hidden;
+      margin: 100px auto 0;
+      border: 3px solid black;
+    }
+
+    #content {
+      width: 300px;
+      /*不需要设置高度，可被图片撑开*/
+      position: absolute;
+      left: 0;
+      top: 0;
+      border: 1px solid red;
+    }
+    #content>div {
+      width: 294px;
+      /*去除图片间的间隙*/
+      vertical-align: top;
+      height: 500px;
+      border: 1px solid red;
+      text-align: center;
+      font-size: 100px;
+      line-height: 500px;
+    }
+    #sliderWrap {
+      height: 100%;
+      width: 16px;
+      background-color: greenyellow;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    #slider {
+      width: 10px;
+      height: 50px;
+      background-color: blue;
+      position: absolute;
+      left: 3px;
+      top: 0px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <div id="content">
+      <div>1 </div>
+      <div>2</div>
+      <div>3</div>
+      <div>4</div>
+      <div>5</div>
+    </div>
+    <!--右侧滚动条部分-->
+    <div id="sliderWrap">
+      <div id="slider"></div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript">
+  var wrapDiv = document.getElementById("wrap");
+  var contentDiv = document.getElementById("content");
+  var sliderWrap = document.getElementById("sliderWrap");
+  var slider = document.getElementById("slider");
+  //设置比例 
+  //clientHeight - 不包括border 
+  var scale = wrapDiv.clientHeight / contentDiv.clientHeight;
+  //设置滑块的高度 
+  var h1 = sliderWrap.clientHeight * scale;
+  //为了合理设置高度，设置滑块的最小高度 
+  if (h1 < 50) {
+    h1 = 50;
+  } else if (scale >= 1) {
+    //说明当前内容能过完全显示在可视区域内，不需要滚动条 
+    sliderWrap.style.display = "none";
+  }
+  //设置滑块的高度 
+  slider.style.height = h1 + "px";
+  //设置y轴的增量 
+  var y = 0;
+  //为wrap添加滚轮事件 
+  wrapDiv.onmousewheel = function (e) {
+    console.log(h1)
+    var event1 = event || e
+    if (event.wheelDelta < 0) {
+      //滑动条向下滚动 
+      y += 10;
+    } else if (event.wheelDelta > 0) {
+      //滑动条向上滚动 
+      y -= 10;
+    }
+    //y变化时说明在滚动，此时使滚动条发生滚动，以及设置content内容部分滚动 
+    //判断极端情况，滑块不能划出屏幕 
+    if (y <= 0) {
+      //滑块最多滑到顶部 
+      y = 0;
+    }
+    if (y >= sliderWrap.clientHeight - slider.clientHeight) {
+      //滑块最多滑到最底部 
+      y = sliderWrap.clientHeight - slider.clientHeight;
+    }
+    //更新滑块的位置 
+    slider.style.top = y + "px";
+    scale = wrapDiv.clientHeight / contentDiv.clientHeight;
+    contentDiv.style.top = - y / scale + "px";
+  }
+</script>
+</html>
+```
 
 ### 局部放大
 
-### 遮罩层
 
-### 定义选择到框内的状态
 
-形如：input[type=text] 选择input标签中的文本类型的
+## 语法
 
-Checkbox的checked 为选中状态
+### 预加载与懒加载
 
-取反则是为非：!   形如：获取的变量.checked=!获取的变量.checked
+**1.  预加载**
 
-### 替换内容问题
+- 预加载增强用户的体验，但会加重服务器的负担，一般使用CSS(background)、JS(image)、HTML(img标签)
+- 
 
-变量名.replace(“被替换内容”,“替换内容”);
 
-替换类名：变量名.className = 变量名.className.replace(“被替者”,“替换者”);
 
-//只是替换了replace的内容，class中定义的其他类名还是存在的，
 
-比如class="aa bb cc"，当你relpace("aa","dd")，其他两个bb,cc的类名仍然存在
-
-### 阻止事件冒泡
-
-1、阻止事件冒泡在事件结尾处添加cancelBubble=true;
-oEvent.cancelBubble = true; //取消事件冒泡（否则点击按钮后，会冒泡到最后一层上即document）
-
-```html
-<div id='div' onclick='alert("div");'>
-	<ul onclick='alert("ul");'>
-		<li onclick='alert("li");'>test</li>
-	</ul>
-</div>
-```
-
-当我点击test的时候，先会弹出 li ->ul ->div。从下往上冒泡。就比如小鱼儿在海底冒泡，小泡泡从海底往海面冒泡，越来越大。html文档中最后的一个泡 document
-
-2、event.stopPropagation()方法
-这是阻止事件的冒泡方法，不让事件向documen上蔓延，但是默认事件任然会执行，当你掉用这个方法的时候，如果点击一个连接，这个连接仍然会被打开，
-
-3、event.preventDefault()方法
-这是阻止默认事件的方法，调用此方法是，连接不会被打开，但是会发生冒泡，冒泡会传递到上一层的父元素；
-
-4、return false;
-阻止浏览器默认事件à在函数结尾处 return false;
-这个方法比较暴力，他会同事阻止事件冒泡也会阻止默认事件；写上此代码，连接不会被打开，事件也不会传递到上一层的父元素；可以理解为return false就等于同时调用了event.stopPropagation()和event.preventDefault()
 
 ## JQ
 
@@ -15137,6 +15277,8 @@ http://www.fly63.com/
 ProcessOn是一个在线作图工具的聚合平台， 它可以在线画流程图、思维导图、UI原型图、UML、网络拓扑图、组织结构图等等， 您无需担心下载和更新的问题，不管Mac还是Windows，一个浏览器就可以随时随地的发挥创意，规划工作,也是本人最常用来画思维导图的
 https://www.processon.com/
 ```
+
+
 
 ### 互联网公司的岗位英文简写
 
