@@ -18,12 +18,12 @@
 >
 > ```js
 > var twoSum = function(nums, target) {
->   for(let i = 0; i < nums.length; i++) {
->     for(let j = i+1; j < nums.length; j++) {
->       if(nums[i] + nums[j] == target)
->         return [i, j]
+>     for(let i = 0; i < nums.length; i++) {
+>       for(let j = i+1; j < nums.length; j++) {
+>         if(nums[i] + nums[j] == target)
+>           return [i, j]
+>       }
 >     }
->   }
 > };
 > ```
 
@@ -47,18 +47,18 @@
 >
 > ```js
 > var addTwoNumbers = function (l1, l2) {
->   let len = l1.length > l2.length ? l1.length : l2.length,
->     storage = 0,
->     arr = new Array(len).fill(0)
->   for (let i = 0; i < len; i++) {
->     let arri = (l1[i] || 0) + (l2[i] || 0) + storage
->     storage = Math.floor(arri / 10)
->     arr[i] = arri % 10
->     if (i == len - 1 && storage == 1) {
->       arr.push(1)
+>     let len = l1.length > l2.length ? l1.length : l2.length,
+>         storage = 0,
+>         arr = new Array(len).fill(0)
+>     for (let i = 0; i < len; i++) {
+>       let arri = (l1[i] || 0) + (l2[i] || 0) + storage
+>       storage = Math.floor(arri / 10)
+>       arr[i] = arri % 10
+>       if (i == len - 1 && storage == 1) {
+>         arr.push(1)
+>       }
 >     }
->   }
->   return arr
+>     return arr
 > };
 > console.log(addTwoNumbers([2, 4, 3], [5, 6, 4]))
 > console.log(addTwoNumbers([9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9]))
