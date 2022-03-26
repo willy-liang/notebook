@@ -1,9 +1,9 @@
 # react
 
-### 需要使用
+## 学习准备
 
 > ```js
-> js
+> js基础
 > class类的概念
 > class的继承（实现类组件的继承）
 > this的改变（通过call/bind/apply改变函数组件的this）
@@ -16,6 +16,24 @@
 > 函数柯里化（使用函数柯里化调用event和传入函数参数，用来表单信息数据的更新；因为函数柯里化可以通过返回函数并调用的方式来执行，所以可以在最底层的返回函数中携带event作为参数使用），因为一般的函数无法在携带参数的情况下使用event参数，而函数柯里化可以
 > 对象应用（使用对象来响应式更新变量，因为对象的属性名其实是字符串的，所以可以通过`[属性名]:值`的方式来使用；注意：`属性名:值`与其不同）
 > 
+> 组件模块化、样式模块化（在CLI中拆分组件，拆分css样式）
+> 
+> 
+> ```
+>
+> ```js
+> 1. 你是怎么学习新知识的？
+> 如果有人已经在我们前面走过弯路摸索过，而我们就应该沿着他们摸索出来的道路上前行，而不是多花许多无谓的时间琢磨。
+> 直到前面无人探索时或自己有了一定的基础知识后，自己摸索就会相对比较好。
+> 这也是我为什么喜欢先看视频学习，因为别人会总结出一些学习的经验，会让我们更容易理解以及避免这些错误。
+> 然后可以再看看官网，因为官网是叙述了此框架的知识，是总结，我们可以在其中发现我们在视频中遗漏的知识点。
+> 
+> 
+> 2. 如果在开发过程中遇到问题，你应该怎么解决？
+> 可以通过百度去解决问题，先设想能否绕开这个难题，行不通则可引进新技术，行不通则花时间琢磨解决，再行不通就跟别人讨论、研究、请教问题解决方案
+>   首先我们先看看这个问题我们能否解决，如果条件允许，我们可以规避、绕开这些问题
+>   或者引进新的技术来解决问题
+>   如果实在不行，可以跟别人探讨问题的解决方案
 > 
 > ```
 >
@@ -500,7 +518,9 @@
 > ![image-20210912212430578](image/image-20210912212430578.png)
 >
 > ```txt
->1. 初始化阶段: 由ReactDOM.render()触发---初次渲染
+>所有旧生命周期上带上Will的钩子函数都需要加上UNSAFE_前缀
+> 
+> 1. 初始化阶段: 由ReactDOM.render()触发---初次渲染
 > 				1.	constructor()
 > 				2.	getDerivedStateFromProps 
 > 				3.	render()
@@ -513,16 +533,16 @@
 >               此定义的props是：state的值任何时候都取决于 props
 >               return props
 > 						
-> 				2.	shouldComponentUpdate()
-> 				3.	render()
-> 				4.	getSnapshotBeforeUpdate()
-> 				5.	componentDidUpdate()
+> 				2.	控制组件更新的“阀门”：shouldComponentUpdate()
+> 				3.	组件渲染：render()
+> 				4.	组件更新前：getSnapshotBeforeUpdate(preProps, preState) 
+> 				5.	组件更新完毕：componentDidUpdate()
 > 				
 > 3. 卸载组件: 由ReactDOM.unmountComponentAtNode()触发
 > 				1.	componentWillUnmount()  =====> 常用
 > 							一般在这个钩子中做一些收尾的事，例如：关闭定时器、取消订阅消息
 > ```
-> 
+>
 
 
 
@@ -537,9 +557,9 @@
 > 2). 为什么遍历列表时，key最好不要用index?
 > 
 > 1. 虚拟DOM中key的作用：
-> 		1). 简单的说: key是虚拟DOM对象的标识, 在更新显示时key起着极其重要的作用。
-> 		2). 详细的说: 当状态中的数据发生变化时，react会根据【新数据】生成【新的虚拟DOM】, 
-> 									随后React进行【新虚拟DOM】与【旧虚拟DOM】的diff比较，比较规则如下：
+> 		key是虚拟DOM对象的标识, 当状态中的数据发生变化时，
+> 		react会根据【新数据】生成【新的虚拟DOM】, 
+> 		随后React进行【新虚拟DOM】与【旧虚拟DOM】的diff比较，比较规则如下：
 > 						a. 旧虚拟DOM中找到了与新虚拟DOM相同的key：
 > 									(1).若虚拟DOM中内容没变, 直接使用之前的真实DOM
 > 									(2).若虚拟DOM中内容变了, 则生成新的真实DOM，随后替换掉页面中之前的真实DOM
@@ -551,6 +571,7 @@
 > 									会产生没有必要的真实DOM更新 ==> 界面效果没问题, 但效率低。
 > 					2. 如果结构中还包含输入类的DOM：
 > 									会产生错误DOM更新 ==> 界面有问题。
+> 									比如用key为index在渲染li列表时，里面都存在一个input标签，则input里面的内容可能或错乱，会渲染到其他内容里面
 > 					3. 注意！如果不存在对数据的逆序添加、逆序删除等破坏顺序操作，
 > 						仅用于渲染列表用于展示，使用index作为key是没有问题的。
 > 		
@@ -559,22 +580,74 @@
 > 					2.如果确定只是简单的展示数据，用index也是可以的。
 > ```
 >
-
-
-
-
-
-
+> ```jsx
+> /* 用key为index在渲染li列表时，里面都存在一个input标签，则input里面的内容可能或错乱，会渲染到其他内容里面 */
+> class Person extends React.Component{
+> 	state = {
+> 		persons:[
+> 			{id:1,name:'小张',age:18},
+> 			{id:2,name:'小李',age:19},
+> 		]
+> 	}
+> 
+> 	add = ()=>{
+> 		const {persons} = this.state
+> 		const p = {id:persons.length+1,name:'小王',age:20}
+> 		this.setState({persons:[p,...persons]})
+> 	}
+> 
+> 	render(){
+> 		return (
+> 			<div>
+> 				<h2>展示人员信息</h2>
+> 				<button onClick={this.add}>添加一个小王</button>
+> 				<h3>使用index（索引值）作为key</h3>
+> 				<ul>
+> 					{
+> 						this.state.persons.map((personObj,index)=>{
+> 							return <li key={index}>{personObj.name}---{personObj.age}<input type="text"/></li>
+> 						})
+> 					}
+> 				</ul>
+> 				<h3>使用id（数据的唯一标识）作为key</h3>
+> 				<ul>
+> 					{
+> 						this.state.persons.map((personObj)=>{
+> 							return <li key={personObj.id}>{personObj.name}---{personObj.age}<input type="text"/></li>
+> 						})
+> 					}
+> 				</ul>
+> 			</div>
+> 		)
+> 	}
+> }
+> ReactDOM.render(<Person/>,document.getElementById('test'))
+> ```
 
 ## react CLI
 
 **创建项目**
 
-1. 全局安装：`npm i -g create-react-app`
-2. 创建项目文件夹：`create-react-app 项目名`
-3. 启动项目：`npm start`
+> 1. 全局安装：`npm i -g create-react-app`
+> 2. 创建项目文件夹：`create-react-app 项目名`
+> 3. 启动项目：`npm start`
+> 4. 使用脚手架开发项目特点：模块化、组件化、工程化
+> 5. 项目整体技术架构为：`react + webpack + es6 eslint`
+> 6. 清空命令行`cls`
+> 7. 在vscode中下载jsx插件，会有react语法提示
+> 8. 在vscode安装插件`ES7+ React/Redux/React-Native snippets`，输入`rcc`或`rfc`会快捷生成初始内容
+> 9. 生成唯一id标识符的库：`nanoid`和`uuid`库
 
+**脚手架项目结构**
 
+> ```js
+> public ---静态资源文件夹
+> 	- mainfest.json		---应用加壳的配置文件
+> 	- robots.txt			---爬虫协议文件
+> src		---源码文件夹
+> 	- reportWebVitals.js	---页面性能分析文件（需要web-vitals库的支持）
+> 	- setupTests.js				---
+> ```
 
 
 
@@ -582,4 +655,142 @@
 
 
 
-## fetch
+
+
+## TS
+
+> #### 基本数据类型`basic`
+>
+> ```ts
+> // string 
+> let s:string = 'aaa'
+> 
+> // number
+> let num:number = 1
+> 
+> // 不声明具体数据类型，由代码推断出数据类型
+> let a = 'aa'
+> let num1 = 1
+> 
+> // 布尔
+> let b:boolean = true
+> 
+> // 数组
+> let arr1:string[] = ['a', 'b', 'c']
+> let arr2:number[] = [1, 2, 3]
+> 
+> // void
+> function funcA (): void {
+>   console.log("void的返回值可以省略不写")
+> }
+> funcA()
+> 
+> // 函数返回类型
+> function funcB(): number {
+>   console.log("返回number数据类型")
+>   return 1
+> }
+> funcB()
+> 
+> // null
+> 
+> // undefined
+> ```
+>
+> #### 接口`interface`
+>
+> ```ts
+> // 接口的声明
+> interface Lee {
+>   ages: number // 接口必选的成员变量
+>   names?: string // 接口可选的成员变量
+> }
+> 
+> // 接口复杂使用
+> interface Lee1 {
+>   name: string
+>   age: number
+>   say: () => void
+>   userList: string[]
+> }
+> 
+> // 接口继承
+> // 注意接口继承的父接口中不能出现重复的变量
+> interface Lee2 extends Lee1, Lee {
+>   
+> }
+> ```
+>
+> #### 泛型
+>
+> 泛型的作用是只需关注所需要的数据，而不需关注具体的数据格式
+>
+> ```ts
+>  // 普通数据类型
+> class Lee1 {
+>   name: string
+>   age: number
+> 
+>   /* constructor(name:string, age:number) {
+>     this.name = name
+>     this.age = age
+>   } */
+> 
+>   say(): void {
+>     console.log(this.age + " " + this.name)
+>   }
+> }
+> 
+> // let lee1 = new Lee('willy', 24)
+> let lee1 = new Lee1()
+> lee1.name = "willys"
+> lee1.age = 25
+> lee1.say()
+> 
+> 
+> // 使用泛型的类
+> class Lee2<IProps = {}> {
+>   user: IProps
+> 
+>   say():string {
+>     console.log(this.user)
+>     return `this.age + " " + this.name`
+>   }
+> }
+> interface User {
+>   name: string
+>   age: number
+>   say:() => string
+> }
+> let lee2 = new Lee2<User>()
+> lee2.user = { name: 'willy', age: 24 }
+> lee2.say()
+> ```
+>
+> #### 枚举
+>
+> ```ts
+> enum Direction {
+>   UP = "UP",
+>   DOWN = "DOWN",
+>   LEFT = "LEFT",
+>   RIGHT = "RIGHT"
+> }
+> let up = "UP"
+> console.log(Direction.UP === up)  // ture
+> ```
+>
+> #### TS初始化项目
+>
+> - yarn方式：`yarn create react-app react-ts --template=typescript`
+> - npx方式：`npx crate-react-app react-ts --template=typescript`
+
+## HOOK
+
+> state的更新是异步的，所以this.setState是异步的，所以不要放在for循环里面
+
+## 权限判定
+
+> 1. 可在getDruvedStateFromProps里面做判定，如果返回null则不更新任何内容
+> 2. 可在shouldComponentUpdate里面做判定，如果返回false则不更新内容
+
