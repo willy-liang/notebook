@@ -1,4 +1,4 @@
-# react
+## react
 
 ## 学习准备
 
@@ -17,8 +17,8 @@
 > 对象应用（使用对象来响应式更新变量，因为对象的属性名其实是字符串的，所以可以通过`[属性名]:值`的方式来使用；注意：`属性名:值`与其不同）
 > 
 > 组件模块化、样式模块化（在CLI中拆分组件，拆分css样式）
-> 
-> 
+> 同步、异步的区别（因为state的更新是异步的，所以需要使用函数来进行数据的更新来防止数据出错）
+> 连续解构赋值+重命名：let obj={a:{b:{c:1}}}; const {a: {b:{c:value}}} = obj;=>c重命名为value
 > ```
 >
 > ```js
@@ -518,7 +518,7 @@
 > ![image-20210912212430578](image/image-20210912212430578.png)
 >
 > ```txt
->所有旧生命周期上带上Will的钩子函数都需要加上UNSAFE_前缀
+> 所有旧生命周期上带上Will的钩子函数都需要加上UNSAFE_前缀
 > 
 > 1. 初始化阶段: 由ReactDOM.render()触发---初次渲染
 > 				1.	constructor()
@@ -543,6 +543,7 @@
 > 							一般在这个钩子中做一些收尾的事，例如：关闭定时器、取消订阅消息
 > ```
 >
+> ![image-20220330214941496](image/image-20220330214941496.png)
 
 
 
@@ -649,11 +650,166 @@
 > 	- setupTests.js				---
 > ```
 
+### Json Server(模拟接口数据)
 
+> - JsonServer主要作用是搭建本地的数据接口，创建json文件，便于调试调用
+> - 如果只是get数据，需借助`jsonplaceholder`，如果是post请求数据，则可使用json server对数据进行增删改查
+> - 全局安装：`npm install -g json-server`
+> - 创建文件夹(不能用json-server作为文件夹名，否则会报错)，初始化一个package.json文件`npm init -yes`
+> - 安装json-server：`npm i json-server --save`
+> - 运行：`npm run json:server`
+> - 不需要package.json就能运行：`json-server --watch 文件名.json`
 
-## 消息订阅-发布机制
+### setupProxy.js
 
+> 在react CLI项目的src文件夹下创建`setupProxy.js`文件进行跨域访问端口设置
+>
+> 其内部会把这个文件加到webpack配置下，webpack里边用的都是node语法，所以这个文件里要写commonjs语法
+>
+> node用的是commonjs语法规范，浏览器用 browserify语法规范
+>
+> 在其文件内可以设置多个代理对象
+>
+> ```js
+> const proxy = require('http-proxy-middleware')	// 请求http代理中间件
+> 
+> module.exports = function(app) {
+>   app.use(
+>   	proxy('/api1', {	// 遇见 /api1 前缀的请求，就会触发该代理配置
+>       target: "http://localhost:3000",	// 从原求地址转发到该地址
+>       changeOrigin: true,	// 控制服务器收到的响应头中Host字段的值（host的字段标识请求是从哪发出的）
+>       pathRewrite: { '^api1': "" },	// 重写地址
+>     }),
+>     proxy('/api1', {
+>       target: "http://localhost:3001",
+>       changeOrigin: true,
+>       pathRewrite: { '^api1': "" },
+>     })
+>   )
+> }
+> ```
+>
+> 还可在package.json文件中增加`proxy: "http://localhost:3000"`的字段进行跨域
 
+### 消息订阅-发布机制
+
+> - 发布订阅者模式是一对多模式，一个发布者多个订阅者可接收。
+> - publish发布消息，subscribe订阅消息，需要依赖`pubsub-js`模块，通过`cnpm install pubsub-js --save`，然后通过`import PubSub from 'pubsub-js'`引入模块再进行使用
+> - `PubSub.publish(发送消息的名称, 消息的内容)`发布消息
+> - `PubSub.subscribe(接收的消息名称eventName, callback(消息名称, 消息内容){})`：订阅消息
+> - `PubSub.unsubcribe(eventName, callback)`：解除自定义事件
+> - `PubSub.subscribeOne(eventName, callback)`：发布一个只触发一次的自定义事件
+> - `PubSub.notify(eventName, callback)`：触发已经发布的自定义事件
+>
+> ```js
+> // 导入模块
+> import PubSub from 'pubsub-js'
+> // const PubSub  = require('pubsub-js')	// CommonJS
+> 
+> // 发布消息
+> PubSub.publish("emits", { name: "willy", age: 24 })
+> 
+> // 订阅消息
+> PubSub.subscribe("emits", (_, context) => {
+>   console.log(_, context)	// emits, {name:"willy",age:24}
+> })
+> ```
+
+### fetch发送请求（关注分离的设计思想）
+
+> - fetch API是基于promise设计的，因为XMLHttpRequest是一个设计粗糙的API，不符合关注分离的原则，配置和调用方式非常混乱，而且基于事件的异步模型写起来也没现代的`promise、generator/yield、async/await`友好，Fetch的出现就是为了解决XHR的问题
+> - Fetch的优点
+>   - 语法简洁更加语义化，关注分离的设计思想
+>   - 基于Promise实现，支持async/await；
+>   - 同构方便，使用`isomorphic-fetch`
+> - Fetch的缺点
+>   - Fetch请求默认是不带cookie，需要设置`fetch(url, { credentials: "include" })`
+>   - 服务器返回400、500错误码并不会reject，只有网络错误这些导致请求不能完成时，fetch才会被reject
+> - 
+>
+> ```js
+> // XHR 进行请求
+> var xhr = new XMLHttpRequest();
+> xhr.open('GET', url);
+> xhr.responseType = 'json';
+> xhr.onload = function() {
+>   console.log(xhr.response);
+> };
+> xhr.onerror = function() {
+>   console.log("Oops, error");
+> };
+> xhr.send();
+> 
+> 
+> // Fetch 进行请求
+> fetch(url).then(function(response) {
+>   return response.json();
+> }).then(function(data) {
+>   console.log(data);
+> }).catch(function(e) {
+>   console.log("Oops, error");
+> });
+> 
+> 
+> // Fetch+ES6箭头函数 进行请求
+> fetch(url).then(response => response.json())
+>   .then(data => console.log(data))
+>   .catch(e => console.log("Oops, error", e))
+> 
+> 
+> // async/await函数+Fetch 进行请求
+> async function reqs() {
+>   try {
+>     let response = await fetch(url);
+>     let data = response.json();
+>     console.log(data);
+>   } catch(e) {
+>     console.log("Oops, error", e);
+>   }
+> }
+> reqs();
+> ```
+
+### react路由
+
+> - SPA单页面：整个应用只有一个完整的页面，点击页面中的链接不会刷新页面，只会做页面的局部刷新，数据都需要通过ajax请求获取，并在前端异步展现
+> - 路由：一个路由就是一个映射关系(key:value)，key为路径，value可能是function或component
+>   - 后端路由：value是function，用来处理客户端提交的请求
+>     - 注册路由`router.get(path, function(req, res))`
+>     - 工作过程：当node接收到一个请求时，根据请求路径找到匹配的路由，调用路由中的函数来处理请求，返回响应数据
+>   - 前端路由：浏览器路由，value是component，用于展示页面内容
+>     - 注册路由：`<Route path="/test" component={Test}>`
+>     - 工作过程：当浏览器的path变为`/test`时，当前路由组件就会变为Test组件
+> - 安装路由：`npm i react-router-dom@5`，在2021-11月已经升级为6版本 
+> - 注意：为了保证项目的页面的路由跳转复用，把BrowserRouter或HashRouter放在`index.js`中，包住`<App/>`标签
+>
+> **路由的跳转与改变**
+>
+> ````js
+> // 创建历史记录对象
+> let history = History.createBrowserHistory()	// 使用H5推出的history API
+> // let history = History.createHashHistory()	// 使用hash值，锚点，兼容性好，但相对不安全
+> 
+> // 页面跳转
+> - history.push(path)
+> - history.replace(path)
+> - history.goBack()
+> - history.goForward()
+> ````
+>
+> **react-router-dom内置API**
+>
+> ```js
+> BrowserRouter	// history模式路由跳转，一般包裹App标签
+> HashRouter // hash模式路由跳转，一般包裹App标签
+> Route	// 标签包裹的是所跳转的页面内容，path属性代表与Link标签的to的路径进行匹配，component代表所跳转的组件页面/内容
+> Redirect	// 重定向
+> Link	// 等同a标签，to属性所代表的是跳转的路由地址
+> NavLink
+> Switch
+> ```
+>
+> 
 
 
 
@@ -787,7 +943,23 @@
 
 ## HOOK
 
-> state的更新是异步的，所以this.setState是异步的，所以不要放在for循环里面
+> state的更新是异步的，即this.setState是异步的，所以不要放在for循环里面同步更新，可把`this.setState`当做函数来进行数据更新
+>
+> ```jsx
+> for(let i = 0; i < 100; i++) {
+>   console.log(this.state.counter)
+>   /* // 错误写法
+>   this.setState({
+>     counter: this.state.counter + 1
+>   }) */
+>   // state的更新是异步的，所以把更新放入函数中，这样才不会出错
+>   this.setState((state, props) => ({
+>     counter: state.counter + 1
+>   }))
+> }
+> ```
+>
+> 
 
 ## 权限判定
 
