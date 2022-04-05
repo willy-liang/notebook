@@ -37,6 +37,37 @@
 > 
 > ```
 >
+> ```js
+> 1. websocket
+> 2. 响应式布局
+> 3. rem与em与px
+> 4. TS interface与type区别
+> 5. vue项目做了什么优化
+> 6. 首页白屏优化
+> 7. 页面中大量图片优化
+> 8. 虚拟列表
+> 9. Vue2与Vue3区别
+> 10. Promise与Async
+> 11. 怎么同时执行多个Async
+> 12. 深拷贝实现方式
+> 13. Object.assign与对象扩展符
+> 14. ES6模块化与Commonjs区别
+> 15. Vue.mixins是什么，缺点是？
+> 16. Vue组件怎么传递信息
+> 17. props与provide inject传递信息的区别
+> 18. Vuex mutations与actions区别
+> 19. 数组去重
+> 20. Set与Map区别
+> 21. Vue生命周期意义与用途
+> 22. Vue组件如何插入高度自定义信息
+> 23. 怎么判断数据类型
+> 24. instanceof缺陷
+> 25. JSON.stringify缺陷
+> 26. 项目难点
+> 27. git master分支
+> 28. 怎么与后端联调
+> ```
+>
 > 
 
 ## 面向组件编程
@@ -799,14 +830,67 @@
 >
 > **react-router-dom内置API**
 >
-> ```js
-> BrowserRouter	// history模式路由跳转，一般包裹App标签
-> HashRouter // hash模式路由跳转，一般包裹App标签
-> Route	// 标签包裹的是所跳转的页面内容，path属性代表与Link标签的to的路径进行匹配，component代表所跳转的组件页面/内容
-> Redirect	// 重定向
-> Link	// 等同a标签，to属性所代表的是跳转的路由地址
-> NavLink
-> Switch
+> 1. BrowserRouter：history模式路由跳转，一般包裹App标签
+> 2. HashRouter：hash模式路由跳转，一般包裹App标签
+> 3. Route：标签包裹的是所跳转的页面内容(即所展示页面的位置)
+>    1. path属性代表与Link标签的to的路径进行匹配
+>    2. component属性代表所跳转的组件页面/内容，引入组件
+>    3. exact属性会开启严格匹配，即是路由输入的路径必须包含匹配路径且要等于匹配的路径(注意：有时开启严格匹配会导致无法继续匹配二级路由，不常用)
+> 4. Redirect：重定向
+> 5. Link：等同a标签，to属性所代表的是跳转的路由地址
+> 6. NavLink：相对于link标签，其具有高亮效果（其是内置一个active的class属性,点击那个路由链接，则颜色内容那些改变，显得你触发点击了该路由）
+>    - 其内置有activeClassName属性，该路由处于活动状态时调用的class属性样式设定（若用了bootstrap，则需要给每个样式增加`important!`后缀增加权重，否则会出现样式闪现效果）
+> 7. Switch：匹配路由，使得在多个`Route`标签中匹配路由选择跳转时提高效率，所以一般里面是包裹Route标签
+>
+> **解决多级路径刷新页面导致样式丢失问题**
+>
+> 1. `public/index.html`中引入样式时不用`./`为前缀，改用`/`或`%PUBLIC_URL%`作为前缀
+> 2. 使用HashRouter
+
+### 路由传参
+
+> **向路由组件传递params参数**
+>
+> - 路由链接(携带参数)：`<Link to="/demo/test/willy/24">详情</Link>`
+> - 注册路由(声明接收)：`<Route path="/demo/test/:name/:age" component={Test}/>`
+> - 接收参数：`const {name,age}=this.props.match.params`
+>
+> ```jsx
+> {/* 路由链接，向路由组件传递params参数 */}
+> <Link to={`/home/message/detail/${msgObj.id}/${msgObj.title}`}>{msgObj.title}</Link>
+> 
+> {/* 注册路由，声明接收params参数 */}
+> <Route path="/home/message/detail/:id/:title" component={Detail} />
+> 
+> {/* 组件中接收params参数 */}
+> export default class Detail extends Component {
+>   render() {
+>     const { id, title } = this.props.match.params
+>     return (
+>       <p>{ id } { title }</p>
+>     )
+>   }
+> }
+> ```
+>
+> **向路由组件传递search参数**
+>
+> ```jsx
+> {/* 路由链接，向路由组件传递search参数 */}
+> <Link to={`/home/message/detail?id=${msgObj.id}&title=${msgObj.title}`}>{msgObj.title}</Link>
+> 
+> {/* 注册路由，search参数无需声明接收 */}
+> <Route path="/home/message/detail" component={Detail} />
+> 
+> {/* 组件中接收search参数 */}
+> export default class Detail extends Component {
+>   render() {
+>     const { id, title } = this.props.location.search	
+>     return (
+>       <p>{ id } { title }</p>
+>     )
+>   }
+> }
 > ```
 >
 > 

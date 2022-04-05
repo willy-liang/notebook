@@ -1,0 +1,21 @@
+{
+  "name": "note",
+  "version": "1.0.0",
+  "description": "---\r home: true\r heroImage: \r actionText: 快速上手 →\r actionLink: /前端\r features:\r - title: 简洁至上\r   details: 以 Markdown 为中心的项目结构，以最少的配置帮助你专注于写作。\r - title: Vue驱动\r   details: 享受 Vue + webpack 的开发体验，在 Markdown 中使用 Vue 组件，同时可以使用 Vue 来开发自定义主题。\r - title: 高性能\r   details: VuePress 为每个页面预渲染生成静态的 HTML，同时在页面被加载的时候，将作为 SPA 运行。\r footer: MIT Licensed | Copyright © 2018-present Evan You\r ---\r # Hello VuePress!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vuepress dev .",
+    "build": "vuepress build ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:liangwilly/willys.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vuepress": "^1.9.7"
+  }
+}

@@ -4,7 +4,7 @@
 
 ### HTML的优先级别
 
-优先级由高到低：`!important > 行内样式 > ID选择器 > 类选择器 > 标签选择器 > 继承样式`
+> 优先级由高到低：`!important > 行内样式 > ID选择器 > 类选择器 > 标签选择器 > 继承样式`
 
 ### 通用类名
 
@@ -4011,343 +4011,417 @@ $("div.class1 :only-child") //改变所有class属性值为class1的div元素的
 
 ## 网络请求
 
-### Fetch
-
-- https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch
-- 通过网络获取一个 JSON 文件并将其打印到控制台。最简单的用法是只提供一个参数用来指明想 `fetch()` 到的资源路径，然后返回一个包含响应结果的promise对象。
-- 注意：返回的数据它只是一个 HTTP 响应，而不是真的JSON。为了获取JSON的内容，一般使用`json()`方法。
-
-```js
-fetch('http://example.com/movies.json')
-  .then(function(response) {
-    return response.json();
-  })
-  .then(function(myJson) {
-    console.log(myJson);
-  });
-
-
-// Example POST method implementation:
-postData('http://example.com/answer', {answer: 42})
-  .then(data => console.log(data)) // JSON from `response.json()` call
-  .catch(error => console.error(error))
-
-function postData(url, data) {
-  // Default options are marked with *
-  return fetch(url, {
-    body: JSON.stringify(data), // must match 'Content-Type' header
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, same-origin, *omit
-    headers: {
-      'user-agent': 'Mozilla/4.0 MDN Example',
-      'content-type': 'application/json'
-    },
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, cors, *same-origin
-    redirect: 'follow', // manual, *follow, error
-    referrer: 'no-referrer', // *client, no-referrer
-  })
-  .then(response => response.json()) // parses response to JSON
-}
-
-```
-
-
-
-### AJAX
-
-**一个完整的HTTP请求**：请求头、请求体、响应头、响应体
-
-#### 发送AJAX请求的步骤
-
-1. 创建异步对象，即 `XMLHttpRequest` 对象。
-2. 使用 open 方法设置请求参数。`open(method, url, async)`。
-3. method：请求的类型；GET 或 POST
-4. url：文件在服务器上的位置
-5. async：true(异步)或 false(同步)，不写默认为true
-6. 发送请求：`send()`（注意：send()仅用于 POST 请求）
-7. 注册事件：注册 onreadystatechange 事件，状态改变时就会调用。如果要在数据完整请求回来的时候才调用，则要手动写一些判断的逻辑。
-8. 服务端响应，获取返回的数据。
-
-**onreadystatechange 事件**
-
-- 注册 onreadystatechange 事件后，每当 readyState 属性改变时，就会调用 onreadystatechange 函数
-- readyState：（存有 XMLHttpRequest 的状态）
-  - 0: 请求未初始化
-  - 1: 服务器连接已建立
-  - 2: 请求已接收
-  - 3: 请求处理中
-  - 4: 请求已完成，且响应已就绪
-- status：
-  - 200: "OK"
-  - 404: 未找到页面
-- 在 onreadystatechange 事件中，**当 readyState 等于 4，且状态码为 200 时，表示响应已就绪**
-
-**服务器响应的内容**
-
-- responseText：获得字符串形式的响应数据
-- responseXML：获得 XML 形式的响应数据
-
-**Ajax与Flash的优劣**
-
-- AJAX优势：可搜索性、开放性、费用、易用性、易于开发
-- flash优势：多媒体处理、兼容性、矢量图、客户端资源调度
-- AJAX劣势：可能破坏浏览器的后退功能、使用动态页面更新使得用户难以将某个特定的状态保存到收藏夹中
-- flash劣势：二进制格式、格式私有、flash文件经常很大，用户第一次使用时需要忍耐较长的等待时间、性能问题
-
-#### 完整的AJAX请求
-
-```js
-//【发送get请求】
-var xmlhttp1 = new XMLHttpRequest();
-xmlhttp1.open('get', '02-ajax.php');
-xmlhttp1.send();
-xmlhttp1.onreadystatechange = function () {
-  if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
-    console.log('数据返回成功：' + JSON.stringify(xmlhttp1.responseText));
-  }
-};
-
-
-// 异步对象【发送post 请求】
-var xmlhttp2 = new XMLHttpRequest();
-xmlhttp2.open('post', '02.post.php');
-xmlhttp2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');  // 如果想要使用post提交数据,必须添加此行
-xmlhttp2.send('name=fox&age=18');
-xmlhttp2.onreadystatechange = function () {
-  if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
-    console.log(xmlhttp2.responseText);
-  }
-};
-```
-
-#### 封装AJAX
-
-```js
-// 封装 Ajax为公共函数：传入回调函数 success 和 fail
-function myAjax(url, success, fail) {
-  let xmlhttp;
-  if (window.XMLHttpRequest) {
-    xmlhttp = new XMLHttpRequest();
-  } else {
-    xmlhttp = new ActiveXObject('Microsoft.XMLHTTP'); // 兼容IE5、IE6浏览器
-  }
-  xmlhttp.open('GET', url, true);
-  xmlhttp.send();
-  // 服务端响应
-  xmlhttp.onreadystatechange = function () {
-    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-      console.log('数据返回成功：' + JSON.parse(xmlhttp.responseText));
-      success && success(xmlhttp.responseText);
-    } else {
-      // && 符号表示如果传了 fail 参数，就调用后面的 fail()；如果没传 fail 参数，就不调用后面的内容。因为 fail 参数不一定会传
-      fail && fail(new Error('接口请求失败'));
-    }
-  };
-}
-
-// 单次调用 ajax
-myAjax('a.json', (res) => {
-  console.log(res);
-});
-
-// 多次调用 ajax。接口请求顺序：a --> b --> c
-myAjax('a.json', (res) => {
-  console.log(res);
-  myAjax('b.json', (res) => {
-    console.log(res);
-    myAjax('c.json', (res) => {
-      console.log(res);
-    });
-  });
-});
-```
-
-
-
-### XML语法
-
-- **XML 声明：**
-  - `<?xml version="1.0" encoding="UTF-8"?>`
-  - （第一行的声明，指定了 XML 版本(1.0)以及使用的编码）
-- **自定义标签：**
-  - XML 中没有默认的标签，所有的标签都是我们自己已定义的（XML只有双标签）
-  - XML 中必须要有一个根节点，所有的子节点都放置在根节点下
-- **XML 解析**
-  - 因为 XML 就是标签，所以我们可以直接用**解析 Dom 元素**的方法解析 XML
-
 ### HTTP协议
 
-- http协议的特点
+> #### http协议的特点
+>
+> - 简单快速：每个资源（比如图片、页面）都通过 url 来定位，想访问什么资源，直接输入url即可。
+> - 灵活：http协议的头部有一个`数据类型`，通过http协议，就可以完成不同数据类型的传输。
+> - **无连接**：连接一次，就会断开，不会继续保持连接。
+> - **无状态**：客户端和服务器端是两种身份。第一次请求结束后就断开；第二次请求时，**服务器端并没有记住之前的状态**(记住状态的一般是session/cookies等)
+> - **一次完整的HTPP请求**需要请求头、请求体、响应头、响应体
+>
+> #### http报文组成
+>
+> ![image-20210918094312634](image/image-20210918094312634.png)
 
-  - 简单快速：每个资源（比如图片、页面）都通过 url 来定位，想访问什么资源，直接输入url即可。
-  - 灵活：http协议的头部有一个`数据类型`，通过http协议，就可以完成不同数据类型的传输。
-  - **无连接**：连接一次，就会断开，不会继续保持连接。
-  - **无状态**：客户端和服务器端是两种身份。第一次请求结束后就断开；第二次请求时，**服务器端并没有记住之前的状态**(记住状态的一般是session/cookies等)
+#### 请求头
 
-- **HTTP报文组成**
+> 请求体：指提交给服务器的数据。如果是往服务器提交数据，需要在请求头中设置`Content-Type: application/x-www-form-urlencoded`(在ajax中需要手动设置)
+>
+> ![image-20210918094409349](image/image-20210918094409349.png)
+>
+> ```bash
+> User-Agent：浏览器的具体类型　　如：User-Agent：Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0
+> 
+> Accept：浏览器支持哪些数据类型　　如：Accept: text/html,application/xhtml+xml,application/xml;q=0.9;
+> 
+> Accept-Charset：浏览器采用的是哪种编码　　如：Accept-Charset: ISO-8859-1
+> 
+> Accept-Encoding：浏览器支持解码的数据压缩格式　　如：Accept-Encoding: gzip, deflate
+> 
+> Accept-Language：浏览器的语言环境　　如：Accept-Language zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3
+> 
+> Host：请求的主机名，允许多个域名同处一个IP地址，即虚拟主机。Host:www.baidu.com
+> 
+> Connection：表示是否需要持久连接。
+> 属性值可以是Keep-Alive/close，HTTP1.1默认是持久连接，它可以利用持久连接的优点，当页面包含多个元素时（例如Applet，图片），显著地减少下载所需要的时间。
+> 要实现这一点，Servlet需要在应答中发送一个Content-Length头，最简单的实现方法是：先把内容写入ByteArrayOutputStream，然后在正式写出内容之前计算它的大小。如：Connection: Keep-Alive
+> 
+> Content-Length：表示请求消息正文的长度。对于POST请求来说Content-Length必须出现。
+> 
+> Content-Type：WEB服务器告诉浏览器自己响应的对象的类型和字符集。例如：Content-Type: text/html; charset='gb2312'
+> 
+> Content-Encoding：WEB服务器表明自己使用了什么压缩方法（gzip，deflate）压缩响应中的对象。
+> 例如：Content-Encoding：gzip
+> 
+> Content-Language：WEB服务器告诉浏览器自己响应的对象的语言。
+> 
+> Cookie：最常用的请求头，浏览器每次都会将cookie发送到服务器上，允许服务器在客户端存储少量数据。
+> 
+> Referer：包含一个URL，用户从该URL代表的页面出发访问当前请求的页面。服务器能知道你是从哪个页面过来的。
+> Referer: http://www.baidu.com/
+> ```
+>
+> 
 
-  - ![image-20210918094312634](image/image-20210918094312634.png)
-  - ![image-20210918094409349](image/image-20210918094409349.png)
-  - ![image-20210918094349901](image/image-20210918094349901.png)
+#### 响应报文
 
-- **GET/POST**
+> 响应报文是服务器返回给客户端的，组成部分有响应行(设置响应状态)、响应头(设置Cookie、缓存等)、响应主体(响应返回的js或html页面)
+>
+> ![img](image/20180228_1510.jpg)
+>
+> **常见的响应头**
+>
+> ```bash
+> Cache-Control：响应输出到客户端后，服务端通过该报文头属告诉客户端如何控制响应内容的缓存。
+> 如Cache-Control: max-age=3600 则是让客户端对响应内容缓存3600秒，也即在3600秒内如果客户再次访问该资源，则直接从客户端的缓存中返回内容给客户，不要再从服务端获取（这个功能是靠客户端实现的，服务端只是通过这个属性提示客户端从缓存中取，是否执行则还是决定于客户端，如果是自己宣称支持HTTP的客户端，则就应该这样实现）
+> 
+> ETag: "737060cd8c284d8af7ad3082f209582d"
+> 一个代表响应服务端资源（如页面）版本的报文头属性，如果某个服务端资源发生变化了，这个ETag就会相应发生变化。它是Cache-Control的有益补充，可以让客户端“更智能”地处理什么时候要从服务端取资源，什么时候可以直接从缓存中返回响应。
+> 
+> Location: http://www.google.com.hk
+> 我们在Asp.net中让页面Redirect到一个某个A页面中，其实是让客户端再发一个请求到A页面，这个需要Redirect到的A页面的URL，其实就是通过响应报文头的Location属性告知客户端的，如下的报文头属性，将使客户端redirect到iteye的首页中：
+> 
+> Set-Cookie: UserID=JohnDoe; Max-Age=3600; Version=1
+> 服务端可以设置客户端的Cookie，其原理就是通过这个响应报文头属性实现的。
+> ```
 
-  - ![image-20210918091800566](image/image-20210918091800566.png)
+#### get和post请求
 
-  - >**get是相对不隐私的，而post是相对隐私的**
+> - GET和POST本质上都是TCP链接，但由于HTTP的规定和浏览器/服务器的限制，导致他们在应用过程中体现出一些不同
+> - GET在浏览器回退是无害的，POST需要再次提交请求的表单信息
+> - GET请求参数可保留在浏览器历史记录中，其URL地址也可被收藏，而POST不会
+> - GET请求会被浏览器主动缓存，而POST需要手动设置才可
+> - GET请求只能进行url编码，而POST支持多种编码方式
+> - 因为URL地址有长度限制，所以GET请求在URL中传送的参数是有长度限制的，而post的参数信息存放在请求体，所以没有长度限制
+> - GET的参数数据类型只接受ASCII字符，而POST没有限制
+> - 因为GET参数通过URL传递，POST参数存放在请求体中，导致GET相对于POST更不安全，不能用来传递敏感信息
 
+#### HTTP状态码
 
+> ```js
+> 1xx：信息状态码，临时响应并需要请求者继续执行操作
+> 100   （继续） 请求者应当继续提出请求。 服务器返回此代码表示已收到请求的第一部分，正在等待其余部分。  
+> 101   （切换协议） 请求者已要求服务器切换协议，服务器已确认并准备切换。
+> 
+> 
+> 2xx：请求成功
+> 200     成功处理了请求，一般情况下都是返回此状态码； 
+> 201     请求成功并且服务器创建了新的资源。 
+> 202     接受请求但没创建资源； 
+> 203     返回另一资源的请求； 
+> 204     服务器成功处理了请求，但没有返回任何内容；
+> 205     服务器成功处理了请求，但没有返回任何内容；
+> 206     处理部分请求；
+> 
+> 
+> 3xx：重定向
+> 300   （多种选择）  针对请求，服务器可执行多种操作。 服务器可根据请求者 (user agent) 选择一项操作，或提供操作列表供请求者选择。 
+> 301   （永久移动）  请求的网页已永久移动到新位置。 服务器返回此响应（对 GET 或 HEAD 请求的响应）时，会自动将请求者转到新位置。 
+> 302   （临时移动）  服务器目前从不同位置的网页响应请求，但请求者应继续使用原有位置来进行以后的请求。 
+> 303   （查看其他位置） 请求者应当对不同的位置使用单独的 GET 请求来检索响应时，服务器返回此代码。 
+> 304   （未修改） 自从上次请求后，请求的网页未修改过。 服务器返回此响应时，不会返回网页内容。 
+> 305   （使用代理） 请求者只能使用代理访问请求的网页。 如果服务器返回此响应，还表示请求者应使用代理。 
+> 307   （临时重定向）  服务器目前从不同位置的网页响应请求，但请求者应继续使用原有位置来进行以后的请求。
+> 
+> 
+> 4xx：客户端请求出错
+> 400   服务器不理解请求的语法。 
+> 401   请求要求身份验证。 对于需要登录的网页，服务器可能返回此响应。 
+> 403   服务器拒绝请求。 
+> 404   服务器找不到请求的网页。 
+> 405   禁用请求中指定的方法。 
+> 406   无法使用请求的内容特性响应请求的网页。 
+> 407   此状态代码与 401类似，但指定请求者应当授权使用代理。 
+> 408   服务器等候请求时发生超时。 
+> 409   服务器在完成请求时发生冲突。 服务器必须在响应中包含有关冲突的信息。 
+> 410   如果请求的资源已永久删除，服务器就会返回此响应。 
+> 411   服务器不接受不含有效内容长度标头字段的请求。 
+> 412   服务器未满足请求者在请求中设置的其中一个前提条件。 
+> 413   服务器无法处理请求，因为请求实体过大，超出服务器的处理能力。 
+> 414   请求的 URI（通常为网址）过长，服务器无法处理。 
+> 415   请求的格式不受请求页面的支持。 
+> 416   如果页面无法提供请求的范围，则服务器会返回此状态代码。 
+> 417   服务器未满足”期望”请求标头字段的要求。
+> 
+> 
+> 5xx：服务器错误
+> 500   （服务器内部错误）  服务器遇到错误，无法完成请求。 
+> 501   （尚未实施） 服务器不具备完成请求的功能。 例如，服务器无法识别请求方法时可能会返回此代码。 
+> 502   （错误网关） 服务器作为网关或代理，从上游服务器收到无效响应。 
+> 503   （服务不可用） 服务器目前无法使用（由于超载或停机维护）。 通常，这只是暂时状态。 
+> 504   （网关超时）  服务器作为网关或代理，但是没有及时从上游服务器收到请求。 
+> 505   （HTTP 版本不受支持） 服务器不支持请求中所用的 HTTP 协议版本
+> ```
+>
+> #### 连接服务器超时
+>
+> - 服务器连接超时就是在程序默认的等待时间内没有得到服务器的响应，可能造成网络连接超时的原因
+>   1. 网络断开，不过经常显示无法连接
+>   2. 网络阻塞，导致不能在程序默认等待时间内得到回复数据包
+>   3. 网络不稳定，网络无法完整传送服务器信息
+>   4. 系统问题，系统资源过低，无法为程序提供足够的资源处理服务器信息
+>   5. 设备不稳定，如网线松动、接口没插好等等
+>   6. 网络注册时系统繁忙，无法回应
+>   7. 网速过慢，如使用BT多线程下载，在线收看视频等大量占用带宽的软件，若使用共享带宽还要防范他人恶意占用带宽
+>   8. 计算机感染了恶意软件，计算机病毒，计算机木马等
 
+#### HTTP缓存
 
-### HTTP状态码
+- 强缓存：`Expires`或`Cache-Control`
+- 协商缓存：`Last-Modified 与 If-Modified-Since`，`ETag 与 If-None-Match`
 
-```js
-1xx：信息状态码，临时响应并需要请求者继续执行操作
-100   （继续） 请求者应当继续提出请求。 服务器返回此代码表示已收到请求的第一部分，正在等待其余部分。  
-101   （切换协议） 请求者已要求服务器切换协议，服务器已确认并准备切换。
-
-
-2xx：请求成功
-200     成功处理了请求，一般情况下都是返回此状态码； 
-201     请求成功并且服务器创建了新的资源。 
-202     接受请求但没创建资源； 
-203     返回另一资源的请求； 
-204     服务器成功处理了请求，但没有返回任何内容；
-205     服务器成功处理了请求，但没有返回任何内容；
-206     处理部分请求；
-
-
-3xx：重定向
-300   （多种选择）  针对请求，服务器可执行多种操作。 服务器可根据请求者 (user agent) 选择一项操作，或提供操作列表供请求者选择。 
-301   （永久移动）  请求的网页已永久移动到新位置。 服务器返回此响应（对 GET 或 HEAD 请求的响应）时，会自动将请求者转到新位置。 
-302   （临时移动）  服务器目前从不同位置的网页响应请求，但请求者应继续使用原有位置来进行以后的请求。 
-303   （查看其他位置） 请求者应当对不同的位置使用单独的 GET 请求来检索响应时，服务器返回此代码。 
-304   （未修改） 自从上次请求后，请求的网页未修改过。 服务器返回此响应时，不会返回网页内容。 
-305   （使用代理） 请求者只能使用代理访问请求的网页。 如果服务器返回此响应，还表示请求者应使用代理。 
-307   （临时重定向）  服务器目前从不同位置的网页响应请求，但请求者应继续使用原有位置来进行以后的请求。
-
-
-4xx：客户端请求出错
-400   服务器不理解请求的语法。 
-401   请求要求身份验证。 对于需要登录的网页，服务器可能返回此响应。 
-403   服务器拒绝请求。 
-404   服务器找不到请求的网页。 
-405   禁用请求中指定的方法。 
-406   无法使用请求的内容特性响应请求的网页。 
-407   此状态代码与 401类似，但指定请求者应当授权使用代理。 
-408   服务器等候请求时发生超时。 
-409   服务器在完成请求时发生冲突。 服务器必须在响应中包含有关冲突的信息。 
-410   如果请求的资源已永久删除，服务器就会返回此响应。 
-411   服务器不接受不含有效内容长度标头字段的请求。 
-412   服务器未满足请求者在请求中设置的其中一个前提条件。 
-413   服务器无法处理请求，因为请求实体过大，超出服务器的处理能力。 
-414   请求的 URI（通常为网址）过长，服务器无法处理。 
-415   请求的格式不受请求页面的支持。 
-416   如果页面无法提供请求的范围，则服务器会返回此状态代码。 
-417   服务器未满足”期望”请求标头字段的要求。
-
-
-5xx：服务器错误
-500   （服务器内部错误）  服务器遇到错误，无法完成请求。 
-501   （尚未实施） 服务器不具备完成请求的功能。 例如，服务器无法识别请求方法时可能会返回此代码。 
-502   （错误网关） 服务器作为网关或代理，从上游服务器收到无效响应。 
-503   （服务不可用） 服务器目前无法使用（由于超载或停机维护）。 通常，这只是暂时状态。 
-504   （网关超时）  服务器作为网关或代理，但是没有及时从上游服务器收到请求。 
-505   （HTTP 版本不受支持） 服务器不支持请求中所用的 HTTP 协议版本
-```
-
-
-
-#### 连接服务器超时
-
-```
-服务器连接超时就是在程序默认的等待时间内没有得到服务器的响应。
-
-网络连接超时可能的原因有：
-1、网络断开，不过经常显示无法连接。
-
-2、网络阻塞，导致你不能在程序默认等待时间内得到回复数据包。
-
-3、网络不稳定，网络无法完整传送服务器信息。
-
-4、系统问题，系统资源过低，无法为程序提供足够的资源处理服务器信息。
-
-5、设备不稳定，如网线松动、接口没插好等等。
-
-6、网络注册时系统繁忙，无法回应。
-
-7、网速过慢，如使用BT多线程下载，在线收看视频等大量占用带宽的软件，若使用共享带宽还要防范他人恶意占用带宽。
-
-8、计算机感染了恶意软件，计算机病毒，计算机木马等。
-```
-
-### HTTP缓存
-
-- 强缓存：
-  - **`Expires`或`Cache-Control`**
-- 协商缓存：
-  - 第一对：`Last-Modified`、`If-Modified-Since`
-  - 第二对：`ETag`、`If-None-Match`
-
-- **cookie**
-  - HTTP响应通过 Set-Cookie 设置 Cookie
-  - 浏览器访问指定域名是必须带上 Cookie 作为 Request Header
-  - Cookie 一般用来记录用户信息
-- **session**
-  - Session 是服务器端的内存（数据）
-  - session 一般通过在 Cookie 里记录 SessionID 实现
-  - SessionID 一般是随机数
-- **LocalStorage 和 Cookie 的区别**
-  - 存储内容是否发送到服务器端：当设置了Cookie后，数据会发送到服务器端，造成一定的宽带浪费；web storage会将数据保存到本地，不会造成宽带浪费；
-  - 数据存储大小不同：Cookie数据不能超过4K,适用于会话标识；web storage数据存储可以达到5M;
-  - 数据存储的有效期限不同：cookie只在设置了Cookid过期时间之前一直有效，即使关闭窗口或者浏览器；sessionStorage,仅在关闭浏览器之前有效；localStorage,数据存储永久有效；
-  - 作用域不同：cookie和localStorage是在同源同窗口中都是共享的；sessionStorage不在不同的浏览器窗口中共享，即使是同一个页面；
 
 ![image-20211027104432156](image/image-20211027104432156.png)
 
-**GET 和 POST 的区别**
+### Fetch
 
-- GET和POST本质上就是TCP链接，并无差别。但是由于HTTP的规定和浏览器/服务器的限制，导致他们在应用过程中体现出一些不同。
-- 需要注意的是，web 中的 get/post 只是 http 中的 get/post 的子集。http 中的 get 与 post 只是单纯的名字上的区别，get 请求的数据也可以放在 request body 中，只是浏览器没有实现它，但是 get 并不只是在 web 中使用
+> - 通过网络获取一个 JSON 文件并将其打印到控制台。最简单的用法是只提供一个参数用来指明想 `fetch()` 到的资源路径，然后返回一个包含响应结果的promise对象。
+> - 注意：返回的数据它只是一个 HTTP 响应，而不是真的JSON。为了获取JSON的内容，一般使用`json()`方法。
+>
+> ```js
+> fetch('http://example.com/movies.json')
+>   .then(function(response) {
+>     return response.json();
+>   })
+>   .then(function(myJson) {
+>     console.log(myJson);
+>   });
+> 
+> 
+> // Example POST method implementation:
+> postData('http://example.com/answer', {answer: 42})
+>   .then(data => console.log(data)) // JSON from `response.json()` call
+>   .catch(error => console.error(error))
+> 
+> function postData(url, data) {
+>   return fetch(url, {
+>     body: JSON.stringify(data), // must match 'Content-Type' header
+>     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+>     credentials: 'same-origin', // include, same-origin, *omit
+>     headers: {
+>       'user-agent': 'Mozilla/4.0 MDN Example',
+>       'content-type': 'application/json'
+>     },
+>     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+>     mode: 'cors', // no-cors, cors, *same-origin
+>     redirect: 'follow', // manual, *follow, error
+>     referrer: 'no-referrer', // *client, no-referrer
+>   })
+>   .then(response => response.json()) // parses response to JSON
+> }
+> ```
 
+### AJAX
 
+> #### 发送AJAX请求的步骤
+>
+> 1. 创建异步对象，即 `XMLHttpRequest` 对象。
+> 2. 使用 open 方法设置请求参数。`open(method, url, async)`。
+> 3. method：请求的类型；GET 或 POST
+> 4. url：文件在服务器上的位置
+> 5. async：true(异步)或 false(同步)，不写默认为true
+> 6. 发送请求：`send()`（注意：send()仅用于 POST 请求）
+> 7. 注册事件：注册 onreadystatechange 事件，状态改变时就会调用。如果要在数据完整请求回来的时候才调用，则要手动写一些判断的逻辑。
+> 8. 服务端响应，获取返回的数据。
+>
+> **onreadystatechange 事件**
+>
+> - 注册 onreadystatechange 事件后，每当 readyState 属性改变时，就会调用 onreadystatechange 函数
+> - readyState：（存有 XMLHttpRequest 的状态）
+>   - 0: 请求未初始化
+>   - 1: 服务器连接已建立
+>   - 2: 请求已接收
+>   - 3: 请求处理中
+>   - 4: 请求已完成，且响应已就绪
+> - status：
+>   - 200: "OK"
+>   - 404: 未找到页面
+> - 在 onreadystatechange 事件中，**当 readyState 等于 4，且状态码为 200 时，表示响应已就绪**
+>
+> **服务器响应的内容**
+>
+> - responseText：获得字符串形式的响应数据
+> - responseXML：获得 XML 形式的响应数据
+>
+> **Ajax与Flash的优劣**
+>
+> - AJAX优势：可搜索性、开放性、费用、易用性、易于开发
+> - flash优势：多媒体处理、兼容性、矢量图、客户端资源调度
+> - AJAX劣势：可能破坏浏览器的后退功能、使用动态页面更新使得用户难以将某个特定的状态保存到收藏夹中
+> - flash劣势：二进制格式、格式私有、flash文件经常很大，用户第一次使用时需要忍耐较长的等待时间、性能问题
+>
+> #### 完整的AJAX请求
+>
+> ```js
+> //【发送get请求】
+> var xmlhttp1 = new XMLHttpRequest();
+> xmlhttp1.open('get', '02-ajax.php');
+> xmlhttp1.send();
+> xmlhttp1.onreadystatechange = function () {
+>   if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
+>     console.log('数据返回成功：' + JSON.stringify(xmlhttp1.responseText));
+>   }
+> };
+> 
+> 
+> // 异步对象【发送post 请求】
+> var xmlhttp2 = new XMLHttpRequest();
+> xmlhttp2.open('post', '02.post.php');
+> xmlhttp2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');  // 如果想要使用post提交数据,必须添加此行
+> xmlhttp2.send('name=fox&age=18');
+> xmlhttp2.onreadystatechange = function () {
+>   if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
+>     console.log(xmlhttp2.responseText);
+>   }
+> };
+> ```
+>
+> #### 封装AJAX
+>
+> ```js
+> // 封装 Ajax为公共函数：传入回调函数 success 和 fail
+> function myAjax(url, success, fail) {
+>   let xmlhttp;
+>   if (window.XMLHttpRequest) {
+>     xmlhttp = new XMLHttpRequest();
+>   } else {
+>     xmlhttp = new ActiveXObject('Microsoft.XMLHTTP'); // 兼容IE5、IE6浏览器
+>   }
+>   xmlhttp.open('GET', url, true);
+>   xmlhttp.send();
+>   // 服务端响应
+>   xmlhttp.onreadystatechange = function () {
+>     if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+>       console.log('数据返回成功：' + JSON.parse(xmlhttp.responseText));
+>       success && success(xmlhttp.responseText);
+>     } else {
+>       // && 符号表示如果传了 fail 参数，就调用后面的 fail()；如果没传 fail 参数，就不调用后面的内容。因为 fail 参数不一定会传
+>       fail && fail(new Error('接口请求失败'));
+>     }
+>   };
+> }
+> 
+> // 单次调用 ajax
+> myAjax('a.json', (res) => {
+>   console.log(res);
+> });
+> 
+> // 多次调用 ajax。接口请求顺序：a --> b --> c
+> myAjax('a.json', (res) => {
+>   console.log(res);
+>   myAjax('b.json', (res) => {
+>     console.log(res);
+>     myAjax('c.json', (res) => {
+>       console.log(res);
+>     });
+>   });
+> });
+> ```
+
+### XML语法
+
+> - **XML 声明：**
+>   - `<?xml version="1.0" encoding="UTF-8"?>`
+>   - （第一行的声明，指定了 XML 版本(1.0)以及使用的编码）
+> - **自定义标签：**
+>   - XML 中没有默认的标签，所有的标签都是我们自己已定义的（XML只有双标签）
+>   - XML 中必须要有一个根节点，所有的子节点都放置在根节点下
+> - **XML 解析**
+>   - 因为 XML 就是标签，所以我们可以直接用**解析 Dom 元素**的方法解析 XML
 
 ### webSocket
 
-- `WebSocket`是`HTML5`提供在单个`TCP`上连接进行 **全双工通讯**的协议
-- 很多网站为了实现数据推送，所用的技术都是ajax轮询。轮询是在特定的时间间隔，由浏览器主动发起请求，将服务器的数据拉回来。轮询需要不断的向服务器发送请求，会占用很多带宽和服务器资源。WebSocket建立TCP连接后，服务器可以主动给客户端传递数据，能够更好的节省服务器资源和带宽，实现更实时的数据通讯。
-- Node的单线程、非阻塞I/O、事件驱动机制非常适合 Socket服务器：`npm install socket.io`
+>- `WebSocket`是`HTML5`提供在单个`TCP`上连接进行 **全双工通讯**的协议
+>- 很多网站为了实现数据推送，所用的技术都是ajax轮询。轮询是在特定的时间间隔，由浏览器主动发起请求，将服务器的数据拉回来。轮询需要不断的向服务器发送请求，会占用很多带宽和服务器资源。WebSocket建立TCP连接后，服务器可以主动给客户端传递数据，能够更好的节省服务器资源和带宽，实现更实时的数据通讯。
+>- Node的单线程、非阻塞I/O、事件驱动机制非常适合 Socket服务器：`npm install socket.io`
+>
+>```js
+>// 创建 WebSocket 对象
+>var Socket = new WebSocket(url, [protocol] ); 
+>
+>// WebSocket 属性
+>Socket.readyState // 只读属性readyState表示连接状态
+>// 0 - 连接尚未建立
+>// 1 - 连接已建立，可以进行通信
+>// 2 - 连接正在进行关闭
+>// 3 - 连接已经关闭或者连接不能打开
+>
+>// WebSocket 事件
+>Socket.onopen // 连接建立时触发
+>Socket.onmessage // 客户端接收服务端数据时触发
+>Socket.onerror // 通信发生错误时触发
+>Socket.onclose // 连接关闭时触发
+>
+>// WebSocket 方法
+>Socket.send(JSON.stringify()) // 使用连接发送数据	注意：因为数据需要JSON对象格式，所以需要转换
+>Socket.close() // 关闭连接
+>```
+>
+>#### websocket请求数据渲染，导致卡顿的优化
+>
+>- 原因：websocket发送数据或者接收数据是不会卡死的，只有当接收消息时频繁更改页面数据才会造成卡顿。
+>- 优化：不要一收到数据就进行渲染，可以利用定时器每秒渲染或者使用DocumentFragment
+>  1. 降低发送频率
+>  2. 优化处理过程
+>  3. 先获取数据，定时处理
 
-```js
-// 创建 WebSocket 对象
-var Socket = new WebSocket(url, [protocol] ); 
+### 跨域
 
-// WebSocket 属性
-Socket.readyState // 只读属性readyState表示连接状态
-// 0 - 连接尚未建立
-// 1 - 连接已建立，可以进行通信
-// 2 - 连接正在进行关闭
-// 3 - 连接已经关闭或者连接不能打开
-
-// WebSocket 事件
-Socket.onopen // 连接建立时触发
-Socket.onmessage // 客户端接收服务端数据时触发
-Socket.onerror // 通信发生错误时触发
-Socket.onclose // 连接关闭时触发
-
-// WebSocket 方法
-Socket.send(JSON.stringify()) // 使用连接发送数据	注意：因为数据需要JSON对象格式，所以需要转换
-Socket.close() // 关闭连接
-```
-
-#### websocket请求数据渲染，导致卡顿的优化
-
-- 原因：websocket发送数据或者接收数据是不会卡死的，只有当接收消息时频繁更改页面数据才会造成卡顿。
-- 优化：不要一收到数据就进行渲染，可以利用定时器每秒渲染或者使用DocumentFragment
-  1. 降低发送频率
-  2. 优化处理过程
-  3. 先获取数据，定时处理
+> - 同源：同源策略是浏览器的一种安全策略，同源是指域名，协议，端口完全相同
+> - 跨域：从我自己的网站访问别人网站的内容
+>   - 出于安全性考虑，浏览器不允许ajax跨域获取数据
+>   - iframe：出于安全性考虑，浏览器的开发厂商已经禁止了这种方式。
+>   - JSONP(JSON with Padding): 利用加载 JS 文件不需要遵循同源策略的原理，使用sript标签的src属性传递数据
+>   - CORS(Cross-Origin Resource Sharing): 在服务器端返回允许跨域访问的响应头
+>   - WebSockt：利用 WebSocket 不需要遵循同源策略的原理
+>
+> ![image-20210917092605140](image/image-20210917092605140.png)
+>
+> #### JSONP
+>
+> 带补丁的 json，本质是利用了 sript标签具有可跨域的特性，由服务端返回一个预先定义好的JS函数的调用，并且将服务器数据以该函数参数的形式传递过来。此方法需要前后端配合完成
+>
+> ```js
+> function handleParam(data) {
+>   let url = '';
+>   for (let key in data) {
+>     let value = data[key] !== undefined ? data[key] : '1'
+>     url += `&${key}=${encodeURLComponent(value)}`
+>   }
+> }
+> 
+> export default function originPJSONP(option) {
+>   let count = 1;
+> 
+>   //1、从传入的option中提取URL
+>   const url = option.url;
+> 
+>   //2、在body中添加script标签
+>   const body = document.getElementsByTagName('body')[0];
+>   const script = document.createElement('script');
+> 
+>   //3、内部产生一个不重复的callback
+>   const callback = 'jsonp' + count++;
+> 
+>   //4、监听window上的jsonp的调用
+>   return new Promise((resolve, reject) => {
+>     try {
+>       window[callbak] = function (result) {
+>         body.removeChild(script);
+>         resolve(result)
+>       }
+>       const params = handleParam(option, data);
+>       script.src = url + '?callback=' + callback + params;
+>       body.appendChild(script)
+>     } catch (e) {
+>       body.removeChild(scrit);
+>       reject(e)
+>     }
+>   })
+> }
+> ```
 
 ### 前端性能优化
 
@@ -4395,67 +4469,6 @@ Socket.close() // 关闭连接
   - 提高网站速度：网站速度是搜索引擎排序的一个重要指标
   - 语义化的`HTML`代码
   - 生成针对搜索引擎友好的网站地图（包含了所有网站链接的文件，这些链接是这个网站中重要的页面，作用是让更多页面能最大化被搜索蜘蛛发现并收录）
-
-### 跨域
-
-- 同源：同源策略是浏览器的一种安全策略，同源是指域名，协议，端口完全相同
-- 跨域：从我自己的网站访问别人网站的内容，就叫跨域
-  - 出于安全性考虑，浏览器不允许ajax跨域获取数据
-  - iframe：出于安全性考虑，浏览器的开发厂商已经禁止了这种方式。
-  - JSONP：script 标签的 src 属性传递数据
-
-![image-20210917092605140](image/image-20210917092605140.png)
-
-**跨域解决**
-
-- JSONP(JSON with Padding): 利用加载 JS 文件不需要遵循同源策略的原理。
-- CORS(Cross-Origin Resource Sharing): 在服务器端返回允许跨域访问的头。
-- WebSockt：利用 WebSocket 不需要遵循同源策略的原理。
-
-#### 封装jsonp函数
-
-- 带补丁的 json，本质是利用了 `<script src=""></script>`标签具有可跨域的特性，由服务端返回一个预先定义好的JS函数的调用，并且将服务器数据以该函数参数的形式传递过来。此方法需要前后端配合完成
-- jsonp 就是 利用 src，实现的跨域 用的是 script标签
-
-```js
-function handleParam(data) {
-  let url = '';
-  for (let key in data) {
-    let value = data[key] !== undefined ? data[key] : '1'
-    url += `&${key}=${encodeURLComponent(value)}`
-  }
-}
-
-export default function originPJSONP(option) {
-  let count = 1;
-
-  //1、从传入的option中提取URL
-  const url = option.url;
-
-  //2、在body中添加script标签
-  const body = document.getElementsByTagName('body')[0];
-  const script = document.createElement('script');
-
-  //3、内部产生一个不重复的callback
-  const callback = 'jsonp' + count++;
-
-  //4、监听window上的jsonp的调用
-  return new Promise((resolve, reject) => {
-    try {
-      window[callbak] = function (result) {
-        body.removeChild(script);
-        resolve(result)
-      }
-      const params = handleParam(option, data);
-      script.src = url + '?callback=' + callback + params;
-      body.appendChild(script)
-    } catch (e) {
-      body.removeChild(script);
-      reject(e)
-    }
-  })
-}
-```
 
 # ES6
 
@@ -16971,7 +16984,7 @@ ul>li.item$@-3*5
 
 ### 缩写格式的注意事项
 
-当熟悉了Emmet的缩写语法后，可能会想要使用一些格式来生成更可读的缩写。例如，在元素和运算符之间使用空格间隔：~~(header > ul.nav > li*5) + footer~~。
+当熟悉了Emmet的缩写语法后，可能会想要使用一些格式来生成更可读的缩写。例如，在元素和运算符之间使用空格间隔：`~~(header > ul.nav > li*5) + footer~~`
 
 但是这种写法写法是错误的，因为**空格是Emmet停止缩写解析的标识符**。
 
@@ -16982,13 +16995,7 @@ ul>li.item$@-3*5
   - 变量以`$`符号开头，其后是变量的名称。大小写敏感。
   - 变量名称必须以字母或下划线开头。
 - 数据类型
-  - 字符串
-  - 整数
-  - 浮点数
-  - 布尔
-  - 数组
-  - 对象
-  - NULLL
+  - 字符串、整数、浮点数、布尔、数组、对象、NULL
   - 定义字符串时需要注意：
     - 单引号`` ：内部的内容只是作为字符串。
     - 双引号"" ：如果内部是PHP的变量,那么会将该变量的值解析。如果内部是html代码，也会解析成html。
@@ -17029,37 +17036,29 @@ echo $arr2[`name`];  //获取时，通过  key 来获取
 
 ```php
 class Fox {
-
   public $name = 'itcast';
   public $age = 10;
 }
 
 $fox = new $fox;
-// 对象属性取值
-$name = $fox -> name;
-// 对象属性赋值
-$fox -> name = '小狐狸';
+$name = $fox -> name;	// 对象属性取值
+$fox -> name = '小狐狸';	// 对象属性赋值
 ```
 
 **带构造函数的类**
 
 ```php
-// 私有属性,外部无法访问
-var $name = '小狐狸';
-// 定义方法 用来获取属性
-function Name() {
+var $name = '小狐狸';	// 私有属性,外部无法访问
+
+function Name() {	// 定义方法 用来获取属性
   return $this -> name;
 }
-// 构造函数,可以传入参数
-function fox($name) {
+function fox($name) {	// 构造函数,可以传入参数
   $this -> name = $name
 }
-}
 
-// 定义了构造函数 需要使用构造函数初始化对象
-$fox = new fox('小狐狸');
-// 调用对象方法,获取对象名
-$foxName = $fox -> Name();
+$fox = new fox('小狐狸');	// 定义了构造函数 需要使用构造函数初始化对象
+$foxName = $fox -> Name();	// 调用对象方法,获取对象名
 ```
 
 ### 内容输出
@@ -17115,12 +17114,6 @@ foreach($colors as $value) {
 { "name": "littleFox", "age": 13 } */
 ```
 
-
-
-
-
-
-
 ### 让文字不乱码
 
 ```php
@@ -17143,36 +17136,18 @@ echo "<img src='".$row['url']."' />";
 
 - ### 文件保存
 
-  我们尝试一下，把上面的例子中的`临时目录`下面的文件保存起来。这里需要用到 php 里的 `move_uploaded_file()`函数。[#](http://www.w3school.com.cn/php/func_filesystem_move_uploaded_file.asp)
-
-  格式如下：
-
-  
+  把`临时目录`下面的文件保存起来需要用到 php 里的 `move_uploaded_file(移动的文件, 目标路径)`函数：`move_uploaded_file($_FILES['photo']['tmp_name'], './images/test.jpg');`
 
   ```php
-  	move_uploaded_file($_FILES['photo']['tmp_name'], './images/test.jpg');
-  ```
-
-  参数解释：参数一：移动的文件。参数二：目标路径。
-
-  （1）index.html：（这部分的代码保持不变）
-
-  
-
-  ```php
-  	<form action="03.fileUpdate.php" method="post" enctype="multipart/form-data">
-        <label for="">照片:
-            <input type="file" name = "picture" multiple=""></label>
-        <br/>
-        <input type="submit" name="">
-    	</form>
+<form action="03.fileUpdate.php" method="post" enctype="multipart/form-data">
+  	<input type="file" name = "picture" multiple=""></label>
+  <input type="submit" >
+  </form>
   ```
 
 打开 WampServer的文件`php.ini`：修改`php.ini`中的如下内容：
 
 设置文件最大上传限制：（值的大小可以根据需求修改）
-
-
 
 ```php
 	file_uploads = On;         是否允许上传文件 On/Off 默认是On
@@ -17182,108 +17157,8 @@ echo "<img src='".$row['url']."' />";
 
 考虑网络传输快慢：这里修改一些参数：
 
-
-
 ```php
 	max_execution_time = 30000      ; 脚本最长的执行时间 单位为秒
 	max_input_time = 600            ; 接收提交的数据的时间限制 单位为秒
 	memory_limit = 1024M            ; 最大的内存消耗
 ```
-
-
-
-### 请求头
-
-```bash
-User-Agent：浏览器的具体类型　　如：User-Agent：Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0
-
-Accept：浏览器支持哪些数据类型　　如：Accept: text/html,application/xhtml+xml,application/xml;q=0.9;
-
-Accept-Charset：浏览器采用的是哪种编码　　如：Accept-Charset: ISO-8859-1
-
-Accept-Encoding：浏览器支持解码的数据压缩格式　　如：Accept-Encoding: gzip, deflate
-
-Accept-Language：浏览器的语言环境　　如：Accept-Language zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3
-
-Host：请求的主机名，允许多个域名同处一个IP地址，即虚拟主机。Host:www.baidu.com
-
-Connection：表示是否需要持久连接。
-属性值可以是Keep-Alive/close，HTTP1.1默认是持久连接，它可以利用持久连接的优点，当页面包含多个元素时（例如Applet，图片），显著地减少下载所需要的时间。
-要实现这一点，Servlet需要在应答中发送一个Content-Length头，最简单的实现方法是：先把内容写入ByteArrayOutputStream，然后在正式写出内容之前计算它的大小。如：Connection: Keep-Alive
-
-Content-Length：表示请求消息正文的长度。对于POST请求来说Content-Length必须出现。
-
-Content-Type：WEB服务器告诉浏览器自己响应的对象的类型和字符集。例如：Content-Type: text/html; charset='gb2312'
-
-Content-Encoding：WEB服务器表明自己使用了什么压缩方法（gzip，deflate）压缩响应中的对象。例如：Content-Encoding：gzip
-
-Content-Language：WEB服务器告诉浏览器自己响应的对象的语言。
-
-Cookie：最常用的请求头，浏览器每次都会将cookie发送到服务器上，允许服务器在客户端存储少量数据。
-
-Referer：包含一个URL，用户从该URL代表的页面出发访问当前请求的页面。服务器能知道你是从哪个页面过来的。Referer: http://www.baidu.com/
-```
-
-**3、请求体：**
-
-指的是提交给服务器的数据。
-
-需要注意的是，如果是往服务器提交数据，需要在请求头中设置`Content-Type: application/x-www-form-urlencoded`(在ajax中需要手动设置)。
-
-
-
-### 响应
-
-响应报文是服务器返回给客户端的。组成部分有响应行、响应头、响应主体。
-
-![img](image/20180228_1510.jpg)
-
-**1、状态行：**
-
-HTTP响应行：主要是设置响应状态等信息。
-
-**2、响应头：**
-
-Cookie、缓存等信息就是在响应头的属性中设置的。
-
-常见的响应头如下：
-
-
-
-```bash
-Cache-Control
-
-响应输出到客户端后，服务端通过该报文头属告诉客户端如何控制响应内容的缓存。
-
-下面，的设置让客户端对响应内容缓存3600秒，也即在3600秒内，如果客户再次访问该资源，直接从客户端的缓存中返回内容给客户，不要再从服务端获取（当然，这个功能是靠客户端实现的，服务端只是通过这个属性提示客户端“应该这么做”，做不做，还是决定于客户端，如果是自己宣称支持HTTP的客户端，则就应该这样实现）。
-
-Cache-Control: max-age=3600
-
-ETag
-
-一个代表响应服务端资源（如页面）版本的报文头属性，如果某个服务端资源发生变化了，这个ETag就会相应发生变化。它是Cache-Control的有益补充，可以让客户端“更智能”地处理什么时候要从服务端取资源，什么时候可以直接从缓存中返回响应。
-
-ETag: "737060cd8c284d8af7ad3082f209582d"
-
-Location
-
-我们在Asp.net中让页面Redirect到一个某个A页面中，其实是让客户端再发一个请求到A页面，这个需要Redirect到的A页面的URL，其实就是通过响应报文头的Location属性告知客户端的，如下的报文头属性，将使客户端redirect到iteye的首页中：
-
-Location: http://www.google.com.hk
-
-Set-Cookie
-
-服务端可以设置客户端的Cookie，其原理就是通过这个响应报文头属性实现的。
-
-Set-Cookie: UserID=JohnDoe; Max-Age=3600; Version=1
-```
-
-**3、HTTP响应体：**
-
-如果请求的是HTML页面，那么返回的就是HTML代码。如果是JS就是JS代码。
-
-
-
-### 抓包工具
-
-常见的抓包工具有：Fiddler、Charles。
